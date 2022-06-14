@@ -1,7 +1,7 @@
 import numpy as np
 from ..base_optimizer import LineSearchOptimizer
 import math
-class ProjectedGD(LineSearchOptimizer):
+class MirrorD(LineSearchOptimizer):
     
     '''
     Class represents projected gradient method
@@ -16,7 +16,7 @@ class ProjectedGD(LineSearchOptimizer):
         return -self._current_grad
     
     def _f_update_x_next(self, x, alpha, h):
-        return self._projector(x + alpha * h)
+        return self._projector(np.multiply(x,np.exp(alpha * h)))
     
     def check_convergence(self, tol):
         if len(self.convergence) == 1:
