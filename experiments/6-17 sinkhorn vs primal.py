@@ -8,6 +8,7 @@ import ot
 import matplotlib.pyplot as plt
 import scipy.sparse as sp
 import time
+from Plot_Function import f_speed_log,f_speed_linear,f_conv_comp
 
 plt.rc("text", usetex=True)
 fontsize = 24
@@ -16,9 +17,8 @@ import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
 
-n = 100
+n = 200
 a,b,M = making_gausses(n)
-epsilon = 0.01
 round = 5000
 tau = 100
 
@@ -112,8 +112,21 @@ def projection_simplex(x, z=a, axis=1):
         V = V.ravel().reshape(1, -1)
         return projection_simplex(V, z, axis=1).ravel()
 
+
+def marginal(t,a,b):
+    return np.linalg.norm(Hc.dot(t),ord=1)+np.linalg.norm(Hr.dot(t),ord=1)-2
+
+mar = lambda x: marginal(x, a, b)
+
+def sparsity(t):
+    return np.count_nonzero(t==0)/len(t)
+
+spa = lambda x: sparsity(x)
 #"FW": cs.FrankWolfe(f, grad, linsolver, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
 #           "PGD": cs.ProjectedGD(f, grad, projection_simplex, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
+
+
+
 methods = {
 "FISTA": cs.FISTA(f, grad, projection_simplex, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
 "AMD": cs.AMD(f, grad, kl_projection, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
@@ -122,30 +135,33 @@ methods = {
 
           }
 
+# n =100 tau =100
+# Best convergence for FISTA is 0.01
+# Best convergence for AMD is 1
+# Best convergence for AMD_E is 1
+# Best convergence for PGD is 0.001
+
 x0 = np.ones((dim_a,dim_b)).flatten()/(dim_a*dim_b)
 max_iter = 5000
-tol = 1e-5
 
-
+tollist = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6]
+time_dic = {}
 for m_name in methods:
-    print("\t", m_name)
-    time_s = time.time()
-    x = methods[m_name].solve(x0=x0, max_iter=max_iter, tol=tol, disp=1)
-    time_e = time.time()
-    print(m_name,"time costs: ", time_e - time_s, " s")
+    time_dic[m_name] =[]
+    for tol in tollist:
+        print("\t", m_name)
+        time_s = time.time()
+        x = methods[m_name].solve(x0=x0, max_iter=max_iter, tol=tol, disp=1)
+        time_e = time.time()
+        time_dic[m_name].append(time_e - time_s)
+        print(m_name,"time costs: ", time_e - time_s, " s")
 
 plt.figure(figsize=figsize)
-for m_name in methods:
-    plt.semilogy([f(x) for x in methods[m_name].get_convergence()], label=m_name)
 
-plt.legend(fontsize=fontsize)
-plt.xlabel("Number of iteration, $k$", fontsize=fontsize)
-plt.ylabel(r"$f(x_k)$", fontsize=fontsize)
-plt.xticks(fontsize=fontsize)
-_ = plt.yticks(fontsize=fontsize)
-plt.title("convergence rate")
-plt.show()
-
+f_conv_comp(methods,time_dic,tollist,"different error")
+#f_speed_log(methods,f,"f")
+#f_speed_linear(methods,mar,"marginal error")
+#f_speed_linear(methods,spa,"sparsity")
 i = 2
 
 for m_name in methods:
@@ -154,20 +170,3 @@ for m_name in methods:
     plt.title(m_name)
     plt.show()
     i+=1
-
-
-# time_s = time.time()
-# t2, t_list2, g_list2 = ot.regpath.regularization_path(a, b, M, reg=1/tau,
-#                                                       semi_relaxed=True)
-# time_e = time.time()
-# print("nips", ": ", time_e - time_s)
-#
-# plt.subplot(1, 2 + len(methods), 1 + len(methods))
-# plt.imshow(t2.reshape((dim_a, dim_b)), cmap='hot', interpolation='nearest')
-# plt.title("nips")
-# plt.show()
-
-
-
-# 貌似tau比较小的时候梯度方法表现好？
-#遇到一个有趣的事情。。。就是AMD 我之前直接用的nestrov相加，结果收敛速度还挺快，但是全局不稀疏，有个淡红色的背景，我准备改成幂上的nestrov

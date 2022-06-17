@@ -42,3 +42,25 @@ def f_speed_linear(methods,f,title):
     plt.title(title+" convergence speed")
     plt.show()
 
+def f_conv_comp(methods,time_dic,eplist,title):
+    for m_name in methods:
+        plt.plot([1/x**0.5 for x in eplist],time_dic[m_name], label=m_name)
+    plt.legend(fontsize=fontsize)
+    plt.xlabel("1/epsilon**2, $k$", fontsize=fontsize)
+    plt.ylabel("time", fontsize=fontsize)
+    plt.xticks(fontsize=fontsize)
+    _ = plt.yticks(fontsize=fontsize)
+    plt.title(title+" convergence speed")
+    plt.show()
+
+def f_time_log(methods,f,title):
+    for m_name in methods:
+        plt.semilogy(methods[m_name].get_time(),[f(x) for x in methods[m_name].get_convergence()] ,label=m_name)
+
+    plt.legend(fontsize=fontsize)
+    plt.xlabel("Number of iteration, $k$", fontsize=fontsize)
+    plt.ylabel(r"$f(x_k)$", fontsize=fontsize)
+    plt.xticks(fontsize=fontsize)
+    _ = plt.yticks(fontsize=fontsize)
+    plt.title(title+" convergence speed")
+    plt.show()

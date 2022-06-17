@@ -16,7 +16,7 @@ import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
 
-n = 10
+n = 100
 a,b,M = making_gausses(n)
 epsilon = 0.01
 round = 5000
@@ -56,7 +56,7 @@ f = lambda x: func(x, a, b, m, tau)
 
 def grad_f(t, a, b, m, tau):
 
-    return m + 2 *tau* (HcHc.dot(t)-Hcb)
+    return m + 2 *tau* (np.tile(HcHc[:dim_a,:].dot(t),dim_b)-Hcb)
 
 grad = lambda x: grad_f(x, a, b, m, tau)
 

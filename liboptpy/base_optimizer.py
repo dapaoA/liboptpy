@@ -1,10 +1,11 @@
 import numpy as np
 from collections import deque
 import math
-
+import time
 class LineSearchOptimizer(object):
     def __init__(self, f, grad, step_size, memory_size=1, **kwargs):
         self.convergence = []
+        self.time =[]
         self._f = f
         self._grad = grad
         if step_size is not None:
@@ -15,11 +16,15 @@ class LineSearchOptimizer(object):
         
     def get_convergence(self):
         return self.convergence
-    
+    def get_time(self):
+        return self.time
     def solve(self, x0, max_iter=100, tol=1e-6, disp=False):
         self.convergence = []
+        self.time =[]
         self._x_current = x0.copy()
         self.convergence.append(self._x_current)
+        start = time.time()
+        self.time.append(time.time()-start)
         iteration = 0
         self._current_grad = None
         while True:
@@ -39,6 +44,7 @@ class LineSearchOptimizer(object):
             self._update_x_next()
             self._update_x_current()
             self._append_conv()
+            self.time.append(time.time() - start)
             iteration += 1
             if iteration >= max_iter:
                 if disp > 0:
@@ -82,6 +88,7 @@ class LineSearchOptimizer(object):
 class Acc_LineSearchOptimizer(object):
     def __init__(self, f, grad, step_size, memory_size=1, **kwargs):
         self.convergence = []
+        self.time =[]
         self._f = f
         self._grad = grad
         if step_size is not None:
@@ -92,12 +99,16 @@ class Acc_LineSearchOptimizer(object):
 
     def get_convergence(self):
         return self.convergence
-
+    def get_time(self):
+        return self.time
     def solve(self, x0, max_iter=100, tol=1e-6, disp=False):
         self.convergence = []
+        self.time =[]
         self._x_current = x0.copy()
         self._y_current = x0.copy()
         self.convergence.append(self._x_current)
+        start = time.time()
+        self.time.append(time.time()-start)
         iteration = 0
         self.tk = 1
         self._current_grad = None
@@ -121,6 +132,7 @@ class Acc_LineSearchOptimizer(object):
             self._update_y_current()
             self._update_tk()
             self._append_conv()
+            self.time.append(time.time() - start)
             iteration += 1
             if iteration >= max_iter:
                 if disp > 0:

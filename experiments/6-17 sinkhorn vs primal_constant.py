@@ -1,13 +1,24 @@
 import numpy as np
-
+import liboptpy.base_optimizer as base
+import liboptpy.constr_solvers as cs
+import liboptpy.step_size as ss
+from liboptpy.data_preparing import making_mnist_with_noise
 from liboptpy.data_preparing import making_gausses
-
+import ot
+import matplotlib.pyplot as plt
 import scipy.sparse as sp
-
 import time
+from Plot_Function import f_speed_log,f_speed_linear,f_conv_comp
+
+plt.rc("text", usetex=True)
+fontsize = 24
+figsize = (8, 6)
+import seaborn as sns
+sns.set_context("talk")
+#from tqdm import tqdm
+
 n = 200
 a,b,M = making_gausses(n)
-epsilon = 0.01
 round = 5000
 tau = 100
 
@@ -36,16 +47,18 @@ def l2(x,y):
     a = x-y
     return np.dot(a,a.T)
 
-def semi_l2(t, a, b, m, tau):
+def func(t, a, b, m, tau):
 
 
     return np.dot(t,m) + tau * l2(Hc.dot(t),b)
 
+f = lambda x: func(x, a, b, m, tau)
 
-def grad_semi_l2(t, a, b, m, tau):
+def grad_f(t, a, b, m, tau):
 
-    return m + 2 *tau* (np.tile(HcHc[:dim_a,:].dot(t),(1,dim_b))-Hcb)
+    return m + 2 *tau* (HcHc.dot(t)-Hcb)
 
+grad = lambda x: grad_f(x, a, b, m, tau)
 
 
 def linsolver(gradient):
@@ -62,7 +75,11 @@ def kl_projection(t):
         new_t[i*dim_b:(i+1)*dim_b] = t[i*dim_b:(i+1)*dim_b]*a[i] /np.sum(t[i*dim_b:(i+1)*dim_b] )
     return new_t
 
-
+def projection(t):
+    new_t = np.ones_like(t)
+    for i in range(dim_a):
+        new_t[i*dim_b:(i+1)*dim_b] = t[i*dim_b:(i+1)*dim_b] /np.sum(t[i*dim_b:(i+1)*dim_b] )
+    return new_t
 
 
 def projection_simplex(x, z=a, axis=1):
@@ -105,17 +122,51 @@ def sparsity(t):
     return np.count_nonzero(t==0)/len(t)
 
 spa = lambda x: sparsity(x)
+#"FW": cs.FrankWolfe(f, grad, linsolver, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
+#           "PGD": cs.ProjectedGD(f, grad, projection_simplex, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
 
 
 
-t = np.ones(dim_a*dim_b)
+methods = {
+"FISTA": cs.FISTA(f, grad, projection_simplex, ss.ConstantInvIterStepSize(0.01)),
+"AMD": cs.AMD(f, grad, kl_projection, ss.ConstantInvIterStepSize(1)),
+"PGD": cs.ProjectedGD(f, grad, projection_simplex, ss.ConstantInvIterStepSize(0.001)),
+"MD": cs.MirrorD(f, grad, kl_projection, ss.ConstantInvIterStepSize(1)),
+"AMD-e-c1": cs.AMD_E(f, grad, kl_projection, ss.ConstantInvIterStepSize(1)),
+          }
 
-times = time.time()
-cc = HcHc.dot(t)
-timee = time.time()
-print(timee - times)
+# n =100 tau =100
+# Best convergence for FISTA is 0.01
+# Best convergence for AMD is 1
+# Best convergence for AMD_E is 1
+# Best convergence for PGD is 0.001
 
-times = time.time()
-cc = np.tile(HcHc[:dim_a,:].dot(t),(1,dim_b))
-timee = time.time()
-print(timee - times)
+x0 = np.ones((dim_a,dim_b)).flatten()/(dim_a*dim_b)
+max_iter = 5000
+
+tollist = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6]
+time_dic = {}
+for m_name in methods:
+    time_dic[m_name] =[]
+    for tol in tollist:
+        print("\t", m_name)
+        time_s = time.time()
+        x = methods[m_name].solve(x0=x0, max_iter=max_iter, tol=tol, disp=1)
+        time_e = time.time()
+        time_dic[m_name].append(time_e - time_s)
+        print(m_name,"time costs: ", time_e - time_s, " s")
+
+plt.figure(figsize=figsize)
+
+f_conv_comp(methods,time_dic,tollist,"different error")
+#f_speed_log(methods,f,"f")
+#f_speed_linear(methods,mar,"marginal error")
+#f_speed_linear(methods,spa,"sparsity")
+i = 2
+
+for m_name in methods:
+    x = methods[m_name].get_convergence()[-1]
+    plt.imshow(x.reshape((dim_a,dim_b)), cmap='hot', interpolation='nearest')
+    plt.title(m_name)
+    plt.show()
+    i+=1

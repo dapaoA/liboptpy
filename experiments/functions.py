@@ -4,30 +4,8 @@ from liboptpy.data_preparing import making_gausses
 
 import scipy.sparse as sp
 
-import time
-n = 200
-a,b,M = making_gausses(n)
-epsilon = 0.01
-round = 5000
-tau = 100
 
-dim_a = np.shape(a)[0]
-dim_b = np.shape(b)[0]
-m = M.flatten()
-jHr = np.arange(dim_a * dim_b)
-iHr = np.repeat(np.arange(dim_a), dim_b)
-jHc = np.arange(dim_a * dim_b)
-iHc = np.tile(np.arange(dim_b), dim_a)
-Hr = sp.csc_matrix((np.ones(dim_a * dim_b), (iHr, jHr)),
-                   shape=(dim_a, dim_a * dim_b))
-Hc = sp.csc_matrix((np.ones(dim_a * dim_b), (iHc, jHc)),
-                   shape=(dim_b, dim_a * dim_b))
-Hra = Hr.T.dot(a)
-Hrb = Hr.T.dot(b)
-HrHr = Hr.T.dot(Hr)
-HcHc = Hc.T.dot(Hc)
-Hca = Hc.T.dot(a)
-Hcb = Hc.T.dot(b)
+
 
 def KL(x,y):
     return np.dot(x,np.log(x/y))-x+y
@@ -36,15 +14,15 @@ def l2(x,y):
     a = x-y
     return np.dot(a,a.T)
 
-def semi_l2(t, a, b, m, tau):
+def semi_l2(t, a, b, m, tau, Hc):
 
 
     return np.dot(t,m) + tau * l2(Hc.dot(t),b)
 
 
-def grad_semi_l2(t, a, b, m, tau):
+def grad_semi_l2(t, a, b, m, tau, dim_a, dim_b, HcHc, Hcb):
 
-    return m + 2 *tau* (np.tile(HcHc[:dim_a,:].dot(t),(1,dim_b))-Hcb)
+    return m + 2 *tau* (np.tile(HcHc[:dim_a,:].dot(t),dim_b)-Hcb)
 
 
 
@@ -56,7 +34,7 @@ def linsolver(gradient):
     x[neg_grad] = np.ones(np.sum(neg_grad == True))
     return x
 
-def kl_projection(t):
+def kl_projection(t, a, b, dim_a, dim_b):
     new_t = np.ones_like(t)
     for i in range(dim_a):
         new_t[i*dim_b:(i+1)*dim_b] = t[i*dim_b:(i+1)*dim_b]*a[i] /np.sum(t[i*dim_b:(i+1)*dim_b] )
@@ -64,8 +42,7 @@ def kl_projection(t):
 
 
 
-
-def projection_simplex(x, z=a, axis=1):
+def projection_simplex(x, dim_a, dim_b, z, axis=1):
     """
     Projection of x onto the simplex, scaled by z:
         P(x; z) = argmin_{y >= 0, sum(y) = z} ||y - x||^2
@@ -96,26 +73,11 @@ def projection_simplex(x, z=a, axis=1):
         return projection_simplex(V, z, axis=1).ravel()
 
 
-def marginal(t,a,b):
+def marginal(t,a,b,Hc,Hr):
     return np.linalg.norm(Hc.dot(t),ord=1)+np.linalg.norm(Hr.dot(t),ord=1)-2
 
-mar = lambda x: marginal(x, a, b)
+
 
 def sparsity(t):
     return np.count_nonzero(t==0)/len(t)
 
-spa = lambda x: sparsity(x)
-
-
-
-t = np.ones(dim_a*dim_b)
-
-times = time.time()
-cc = HcHc.dot(t)
-timee = time.time()
-print(timee - times)
-
-times = time.time()
-cc = np.tile(HcHc[:dim_a,:].dot(t),(1,dim_b))
-timee = time.time()
-print(timee - times)
