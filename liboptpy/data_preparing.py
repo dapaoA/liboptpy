@@ -102,7 +102,7 @@ def making_mnist_with_noise(a_digit,b_digit,a_num,b_num,noise):
     row = 28
     max_rgb = 255
     # import mnist data
-    mnist = MNIST(r'D:\github\mud-game\IBP-OT\dataset\MNIST')
+    mnist = MNIST('../dataset/MNIST')
     mnist.gz = True
     x_train, y_train = mnist.load_training()  # 60000 samples
     x_test, y_test = mnist.load_testing()  # 10000 samples

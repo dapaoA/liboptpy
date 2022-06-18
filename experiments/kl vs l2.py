@@ -8,11 +8,14 @@ import ot
 import matplotlib.pyplot as plt
 import scipy.sparse as sp
 import time
-from Plot_Function import f_speed_log,f_speed_linear
+from Plot_Function import f_speed_log,f_speed_linear,f_time_log
+from functions import semi_kl, grad_semi_kl, semi_l2, grad_semi_l2,standard_ot
+from functions import projection_simplex as ps
+from functions import kl_projection as kp
 
 plt.rc("text", usetex=True)
 fontsize = 24
-figsize = (10, 8)
+figsize = (8, 6)
 import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
@@ -20,7 +23,7 @@ sns.set_context("talk")
 n = 100
 a,b,M = making_gausses(n)
 epsilon = 0.01
-round = 5000
+round = 10000
 tau = 100
 
 dim_a = np.shape(a)[0]
@@ -40,95 +43,28 @@ HrHr = Hr.T.dot(Hr)
 HcHc = Hc.T.dot(Hc)
 Hca = Hc.T.dot(a)
 Hcb = Hc.T.dot(b)
-optimal = ot.lp.emd(a,b,M)
-optimal = optimal.flatten()
-
-
-def KL(x,y):
-    return np.sum(np.dot(x,np.log(x/y))-x+y)
-
-def l2(x,y):
-    a = x-y
-    return np.dot(a,a.T)
-
-def func(t, a, b, m, tau):
-
-
-    return np.dot(t,m) + tau * l2(Hc.dot(t),b)
-
-
-def grad_f(t, a, b, m, tau):
-
-    return m + 2 *tau* (HcHc.dot(t)-Hcb)
 
 
 
-
-def func2(t, a, b, m, tau):
-
-
-    return np.dot(t,m) + tau * KL(Hc.dot(t),b)
+f_opt = lambda x: standard_ot(x, m,)
 
 
 
-def grad_f2(t, a, b, m, tau):
-
-    return m + tau* Hc.T.dot(np.log(Hc.dot(t)-b))
-
-
-def linsolver(gradient):
-    x = np.zeros(gradient.shape[0])
-    pos_grad = gradient > 0
-    neg_grad = gradient < 0
-    x[pos_grad] = np.zeros(np.sum(pos_grad == True))
-    x[neg_grad] = np.ones(np.sum(neg_grad == True))
-    return x
-
-def kl_projection(t):
-    new_t = np.ones_like(t)
-    for i in range(dim_a):
-        new_t[i*dim_b:(i+1)*dim_b] = t[i*dim_b:(i+1)*dim_b]*a[i] /np.sum(t[i*dim_b:(i+1)*dim_b] )
-    return new_t
-
-def projection(t):
-    new_t = np.ones_like(t)
-    for i in range(dim_a):
-        new_t[i*dim_b:(i+1)*dim_b] = t[i*dim_b:(i+1)*dim_b] /np.sum(t[i*dim_b:(i+1)*dim_b] )
-    return new_t
+# linear programming
+times = time.time()
+G0 = ot.emd(a, b, M)
+timee = time.time()
+print("lp time: ",timee-times)
+opt = f_opt(G0.flatten())
 
 
-def projection_simplex(x, z=a, axis=1):
-    """
-    Projection of x onto the simplex, scaled by z:
-        P(x; z) = argmin_{y >= 0, sum(y) = z} ||y - x||^2
-    z: float or array
-        If array, len(z) must be compatible with V
-    axis: None or int
-        axis=None: project V by P(V.ravel(); z)
-        axis=1: project each V[i] by P(V[i]; z[i])
-        axis=0: project each V[:, j] by P(V[:, j]; z[j])
-    """
-    V = np.reshape(x, (dim_a, dim_b))
-    if axis == 1:
-        n_features = V.shape[1]
-        U = np.sort(V, axis=1)[:, ::-1]
-        z = np.ones(len(V)) * z
-        cssv = np.cumsum(U, axis=1) - z[:, np.newaxis]
-        ind = np.arange(n_features) + 1
-        cond = U - cssv / ind > 0
-        rho = np.count_nonzero(cond, axis=1)
-        theta = cssv[np.arange(len(V)), rho - 1] / rho
-        return np.maximum(V - theta[:, np.newaxis], 0).flatten()
 
-    elif axis == 0:
-        return projection_simplex(V.T, z, axis=1)
+projection_simplex = lambda x: ps(x, dim_a, dim_b, a, axis=1)
 
-    else:
-        V = V.ravel().reshape(1, -1)
-        return projection_simplex(V, z, axis=1).ravel()
+kl_projection = lambda x: kp(x, a, b, dim_a, dim_b)
 
 
-def marginal(t,a,b):
+def marginal(t,a,b,Hc,Hr):
     return np.linalg.norm(Hc.dot(t),ord=1)+np.linalg.norm(Hr.dot(t),ord=1)-2
 
 mar = lambda x: marginal(x, a, b)
@@ -139,23 +75,26 @@ def sparsity(t):
 spa = lambda x: sparsity(x)
 #"FW": cs.FrankWolfe(f, grad, linsolver, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
 #           "PGD": cs.ProjectedGD(f, grad, projection_simplex, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
-def Error(t,optimal):
-    return np.linalg.norm(optimal-t,ord=1)
 
-err = lambda x: Error(x,optimal)
 
-f_kl = lambda x: func2(x, a, b, m, tau)
-f_l2 = lambda x: func(x, a, b, m, tau)
-grad_kl = lambda x: grad_f2(x, a, b, m, tau)
-grad_l2 = lambda x: grad_f(x, a, b, m, tau)
+
+f_kl = lambda x: semi_kl(x, a, b, m, tau,Hc)
+grad_kl = lambda x: grad_semi_kl(x, a, b, m, tau,Hc,dim_a,dim_b)
+f_l2 = lambda x: semi_l2(x, a, b, m, tau, Hc)
+grad_l2 = lambda x: grad_semi_l2(x, a, b, m, tau, dim_a, dim_b, HcHc, Hcb)
+
 methods = {
 #"FISTA": cs.FISTA(f, grad, projection_simplex, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
 #"AMD": cs.AMD(f, grad, kl_projection, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
 #"PGD": cs.ProjectedGD(f, grad, projection_simplex, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
-"MD-kl": cs.MirrorD(f_kl, grad_kl, kl_projection, ss.ConstantStepSize(0.01)),
-"MD-l2": cs.MirrorD(f_l2, grad_l2, kl_projection, ss.ConstantStepSize(0.01)),
-"PGD": cs.ProjectedGD(f_, grad, projection_simplex, ss.ConstantStepSize(0.01)),
-"MD": cs.MirrorD(f, grad, kl_projection, ss.ConstantStepSize(0.01)),
+# "FISTAd-l2": cs.FISTA(f_l2, grad_l2, projection_simplex, ss.D_Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
+# "AMDd-l2": cs.AMD(f_l2, grad_l2, kl_projection, ss.D_Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
+# "PGDd-l2": cs.ProjectedGD(f_l2, grad_l2, projection_simplex, ss.D_Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
+# "MDd-l2": cs.MirrorD(f_l2, grad_l2, kl_projection, ss.D_Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
+
+"MD-kl": cs.MirrorD(f_kl, grad_kl, kl_projection, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=0.01)),
+"AMD-kl": cs.AMD(f_kl, grad_kl, kl_projection, ss.D_Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
+"AMD-e-kl": cs.AMD_E(f_kl, grad_kl, kl_projection, ss.ConstantStepSize(0.01)),
           }
 
 # n =100 tau =100
@@ -179,9 +118,11 @@ for m_name in methods:
 plt.figure(figsize=figsize)
 
 #f_speed_log(methods,f,"f")
-f_speed_linear(methods,mar,"marginal error")
-f_speed_linear(methods,spa,"sparsity")
-f_speed_linear(methods,err,"err")
+#f_speed_linear(methods,mar,"marginal error")
+#f_speed_linear(methods,spa,"sparsity")
+#f_speed_log(methods,f,"f")
+f_speed_log(methods,f_opt,"opt")
+f_time_log(methods,f_opt,"time")
 i = 2
 
 for m_name in methods:

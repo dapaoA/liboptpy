@@ -5,10 +5,14 @@ from liboptpy.data_preparing import making_gausses
 import scipy.sparse as sp
 
 
+def standard_ot(t, m):
+
+
+    return np.dot(t,m)
 
 
 def KL(x,y):
-    return np.dot(x,np.log(x/y))-x+y
+    return np.dot(x,np.log(x)-np.log(y))-np.sum(x-y)
 
 def l2(x,y):
     a = x-y
@@ -24,6 +28,16 @@ def grad_semi_l2(t, a, b, m, tau, dim_a, dim_b, HcHc, Hcb):
 
     return m + 2 *tau* (np.tile(HcHc[:dim_a,:].dot(t),dim_b)-Hcb)
 
+def semi_kl(t, a, b, m, tau, Hc):
+
+
+    return np.dot(t,m) + tau * KL(Hc.dot(t),b)
+
+
+
+def grad_semi_kl(t, a, b, m, tau, Hc, dim_a,dim_b):
+
+    return m + tau* np.tile(Hc.T[:dim_a,:].dot(np.log(Hc.dot(t))-np.log(b)),dim_b)
 
 
 def linsolver(gradient):
