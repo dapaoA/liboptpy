@@ -28,6 +28,11 @@ def grad_semi_l2(t, a, b, m, tau, dim_a, dim_b, HcHc, Hcb):
 
     return m + 2 *tau* (np.tile(HcHc[:dim_a,:].dot(t),dim_b)-Hcb)
 
+def sto_grad_semi_l2(t, a, b, m, tau, Hc, i):
+
+    return m + 2 *tau* Hc[i,:].T.dot((Hc[i,:].dot(t)-b[i]))
+
+
 def semi_kl(t, a, b, m, tau, Hc):
 
 
