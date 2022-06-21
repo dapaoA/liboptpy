@@ -11,7 +11,7 @@ import time
 
 plt.rc("text", usetex=True)
 fontsize = 24
-figsize = (8, 6)
+figsize = (14, 10)
 import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm

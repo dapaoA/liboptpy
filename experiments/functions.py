@@ -30,8 +30,11 @@ def grad_semi_l2(t, a, b, m, tau, dim_a, dim_b, HcHc, Hcb):
 
 def sto_grad_semi_l2(t, a, b, m, tau, Hc, i):
 
-    return m + 2 *tau* Hc[i,:].T.dot((Hc[i,:].dot(t)-b[i]))
+    return m + 2 *tau* Hc[i,:].T.dot((Hc[i,:].dot(t)-b[i]))/i.shape[0]
 
+def sto_grads_semi_l2(t, a, b, m, tau, Hc, i):
+
+    return m + 2 *tau* Hc[i,:].T.dot((Hc[i,:].dot(t)-b[i]))/i.shape[0]
 
 def semi_kl(t, a, b, m, tau, Hc):
 

@@ -15,7 +15,7 @@ from functions import kl_projection as kp
 
 plt.rc("text", usetex=True)
 fontsize = 24
-figsize = (8, 6)
+figsize = (15, 12)
 import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
@@ -87,11 +87,11 @@ spa = lambda x: sparsity(x)
 
 
 methods = {
-#"FISTA": cs.FISTA(f, grad, projection_simplex, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
+"FISTA": cs.FISTA(f, grad, projection_simplex, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
 #"AMD": cs.AMD(f, grad, kl_projection, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
 #"PGD": cs.ProjectedGD(f, grad, projection_simplex, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
 #"MD": cs.MirrorD(f, grad, kl_projection, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
-"sMD": cs.Sto_MirrorD(f, sto_grad, kl_projection, ss.ConstantStepSize(0.1),dim_a,batch=5),
+"sMD": cs.Sto_MirrorD(f, sto_grad, kl_projection, ss.ConstantStepSize(1),dim_a,batch=5),
 #"AMD-e-c2": cs.AMD_E(f, grad, kl_projection, ss.ConstantInvIterStepSize(1)),
 #"AMD-e-c1": cs.AMD_E(f, grad, kl_projection, ss.Backtracking_Bregman_Nestrov(rule_type="Armijo", rho=0.5, beta=0.0001, init_alpha=1.)),
           }
@@ -103,7 +103,7 @@ methods = {
 # Best convergence for PGD is 0.001
 
 x0 = np.ones((dim_a,dim_b)).flatten()/(dim_a*dim_b)
-max_iter = 5000
+max_iter = 10000
 tol = 1e-6
 
 
