@@ -77,11 +77,14 @@ class Sag_MirrorD(Sto_Var_LineSearchOptimizer):
         self._projector = projector
 
     def get_direction(self, x, id):
-        self._current_grad = self._grad(x, id)
-        return -self._current_grad
+        return self._grad(x, id)
 
-    def _f_update_x_next(self, x, alpha, h):
-        return self._projector(np.multiply(x, np.exp(alpha * h)))
+    def updating_part(self, h,sum_grad,saved_grad,id,dim_a):
+        return (h.sum(axis=1) + saved_grad[:, id].sum(axis=1))/h.shape[1] - sum_grad / dim_a * (dim_a + 1)
+
+    def _f_update_x_next(self, x,alpha,_current_grad):
+        return self._projector(np.multiply(x, np.exp(alpha * _current_grad)))
+
 
     def check_convergence(self, tol):
         if len(self.convergence) == 1:
