@@ -68,3 +68,16 @@ def f_time_log(methods,f,title,opt=0,xlabel= "Time, $s$",
     _ = plt.yticks(fontsize=fontsize)
     plt.title(title+" convergence speed")
     plt.show()
+
+def f_log_time_log(methods,f,title,opt=0,xlabel= "Time, $s$",
+                ylabel=r"$f(x_k)$"):
+    for m_name in methods:
+        plt.loglog(methods[m_name].get_time(),np.fabs([f(x)-opt for x in methods[m_name].get_convergence()]) ,label=m_name)
+
+    plt.legend(fontsize=fontsize)
+    plt.xlabel(xlabel, fontsize=fontsize)
+    plt.ylabel(ylabel, fontsize=fontsize)
+    plt.xticks(fontsize=fontsize)
+    _ = plt.yticks(fontsize=fontsize)
+    plt.title(title+" convergence speed")
+    plt.show()

@@ -20,7 +20,7 @@ import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
 
-n = 1000
+n = 500
 a,b,M = making_gausses(n)
 epsilon = 0.01
 round = 10000

@@ -21,7 +21,7 @@ sns.set_context("talk")
 #from tqdm import tqdm
 
 n = 100
-a,b,M = making_gausses(n)
+a,b,M = making_mnist_with_noise("1","3",3,4,0.001)
 epsilon = 0.01
 round = 10000
 tau = 100

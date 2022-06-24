@@ -34,7 +34,7 @@ def sto_grad_semi_l2(t, a, b, m, tau, Hc, i):
 
 def sto_grads_semi_l2(t, a, b, m, tau, Hc, i):
 
-    return np.asarray(np.tile(m,(i.shape[0],1)).T/len(a) + 2 *tau* Hc[i,:].T.multiply((Hc[i,:].dot(t)-b[i])))
+    return np.asarray(np.tile(m/len(a),(i.shape[0],1)).T + 2 *tau* Hc[i,:].T.multiply((Hc[i,:].dot(t)-b[i])))
 
 def semi_kl(t, a, b, m, tau, Hc):
 

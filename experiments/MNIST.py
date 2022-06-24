@@ -15,7 +15,7 @@ from functions import kl_projection as kp
 
 plt.rc("text", usetex=True)
 fontsize = 24
-figsize = (8, 6)
+figsize = (15, 12)
 import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
@@ -105,7 +105,7 @@ methods = {
 
 x0 = np.ones((dim_a,dim_b)).flatten()/(dim_a*dim_b)
 max_iter = 5000
-tol = 1e-5
+tol = 1e-6
 
 
 for m_name in methods:
