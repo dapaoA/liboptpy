@@ -79,8 +79,8 @@ class Sag_MirrorD(Sto_Var_LineSearchOptimizer):
     def get_direction(self, x, id):
         return self._grad(x, id)
 
-    def updating_part(self, h,sum_grad,saved_grad,id,dim_a):
-        return (h.sum(axis=1) + saved_grad[:, id].sum(axis=1))/h.shape[1] - sum_grad / dim_a * (dim_a + 1)
+    def variance_reduction(self, h,sum_grad,saved_grad,id,dim_a):
+        return -((h.mean(axis=1) - saved_grad[:, id].mean(axis=1)) + sum_grad / dim_a )
 
     def _f_update_x_next(self, x,alpha,_current_grad):
         return self._projector(np.multiply(x, np.exp(alpha * _current_grad)))

@@ -17,49 +17,53 @@ sns.set_context("talk")
 #from tqdm import tqdm
 
 
-def f_speed_log(methods,f,title):
+def f_speed_log(methods,f,title,opt = 0,xlabel= "Number of iteration, $k$",
+                ylabel=r"$f(x_k)$"):
     for m_name in methods:
-        plt.semilogy([f(x) for x in methods[m_name].get_convergence()], label=m_name)
+        plt.semilogy(np.fabs([f(x)-opt for x in methods[m_name].get_convergence()]), label=m_name)
 
     plt.legend(fontsize=fontsize)
-    plt.xlabel("Number of iteration, $k$", fontsize=fontsize)
-    plt.ylabel(r"$f(x_k)$", fontsize=fontsize)
+    plt.xlabel(xlabel, fontsize=fontsize)
+    plt.ylabel(ylabel, fontsize=fontsize)
     plt.xticks(fontsize=fontsize)
     _ = plt.yticks(fontsize=fontsize)
     plt.title(title+" convergence speed")
     plt.show()
 
 
-def f_speed_linear(methods,f,title):
+def f_speed_linear(methods,f,title,opt = 0,xlabel= "Number of iteration, $k$",
+                ylabel=r"$f(x_k)$"):
     for m_name in methods:
-        plt.plot([f(x) for x in methods[m_name].get_convergence()], label=m_name)
+        plt.plot(np.fabs([f(x)-opt for x in methods[m_name].get_convergence()]), label=m_name)
 
     plt.legend(fontsize=fontsize)
-    plt.xlabel("Number of iteration, $k$", fontsize=fontsize)
-    plt.ylabel(r"$f(x_k)$", fontsize=fontsize)
+    plt.xlabel(xlabel, fontsize=fontsize)
+    plt.ylabel(ylabel, fontsize=fontsize)
     plt.xticks(fontsize=fontsize)
     _ = plt.yticks(fontsize=fontsize)
     plt.title(title+" convergence speed")
     plt.show()
 
 def f_conv_comp(methods,time_dic,eplist,title):
+    plt.rcParams['text.usetex'] = True
     for m_name in methods:
         plt.plot([1/x**0.5 for x in eplist],time_dic[m_name], label=m_name)
     plt.legend(fontsize=fontsize)
-    plt.xlabel("1/epsilon**2, $k$", fontsize=fontsize)
+    plt.xlabel("r'\frac{1}{sqrt{epsilon}}', $k$", fontsize=fontsize)
     plt.ylabel("time", fontsize=fontsize)
     plt.xticks(fontsize=fontsize)
     _ = plt.yticks(fontsize=fontsize)
     plt.title(title+" convergence speed")
     plt.show()
 
-def f_time_log(methods,f,title):
+def f_time_log(methods,f,title,opt=0,xlabel= "Time, $s$",
+                ylabel=r"$f(x_k)$"):
     for m_name in methods:
-        plt.semilogy(methods[m_name].get_time(),[f(x) for x in methods[m_name].get_convergence()] ,label=m_name)
+        plt.semilogy(methods[m_name].get_time(),np.fabs([f(x)-opt for x in methods[m_name].get_convergence()]) ,label=m_name)
 
     plt.legend(fontsize=fontsize)
-    plt.xlabel("Number of iteration, $k$", fontsize=fontsize)
-    plt.ylabel(r"$f(x_k)$", fontsize=fontsize)
+    plt.xlabel(xlabel, fontsize=fontsize)
+    plt.ylabel(ylabel, fontsize=fontsize)
     plt.xticks(fontsize=fontsize)
     _ = plt.yticks(fontsize=fontsize)
     plt.title(title+" convergence speed")

@@ -9,10 +9,19 @@ import matplotlib.pyplot as plt
 import scipy.sparse as sp
 import time
 from Plot_Function import f_speed_log,f_speed_linear,f_time_log
-from functions import semi_l2, grad_semi_l2,sto_grad_semi_l2,sto_grads_semi_l2
+from functions import semi_l2, grad_semi_l2
 from functions import projection_simplex as ps
 from functions import kl_projection as kp
 
+class Sinkhornalg:
+    def __init__(self,log):
+        self.log = log
+    def get_convergence(self):
+        return self.log['primal']
+    def get_time(self):
+        return self.log['time']
+
+# 这个是看看让armoji起始搜索速率可以变化会不会加快收敛的，，，
 plt.rc("text", usetex=True)
 fontsize = 24
 figsize = (15, 12)
@@ -20,7 +29,7 @@ import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
 
-n = 100
+n = 500
 a,b,M = making_gausses(n)
 epsilon = 0.01
 round = 10000
@@ -65,8 +74,8 @@ f = lambda x: semi_l2(x, a, b, m, tau, Hc)
 
 
 grad = lambda x: grad_semi_l2(x, a, b, m, tau, dim_a, dim_b, HcHc, Hcb)
-sto_grad = lambda x,i: sto_grad_semi_l2(x, a, b, m, tau, Hc,i)
-sto_grads = lambda x,i: sto_grads_semi_l2(x, a, b, m, tau, Hc,i)
+
+
 projection_simplex = lambda x: ps(x, dim_a, dim_b, a, axis=1)
 
 kl_projection = lambda x: kp(x, a, b, dim_a, dim_b)
@@ -87,28 +96,23 @@ spa = lambda x: sparsity(x)
 
 
 methods = {
-"FISTA": cs.FISTA(f, grad, projection_simplex, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
-#"AMD": cs.AMD(f, grad, kl_projection, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
+#"FISTA": cs.FISTA(f, grad, projection_simplex, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
+#"AMD": cs.AMD(f, grad, kl_projection, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
 #"PGD": cs.ProjectedGD(f, grad, projection_simplex, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
-#"MD": cs.MirrorD(f, grad, kl_projection, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
-#"MDc": cs.MirrorD(f, grad, kl_projection, ss.ConstantStepSize(1)),
-#"sMD": cs.Sto_MirrorD(f, sto_grad, kl_projection, ss.ConstantStepSize(1),dim_a,batch=10),
-"Saga-md-1-10": cs.Sag_MirrorD(f, sto_grads, kl_projection, ss.ConstantStepSize(1),dim_a,batch=10),
-"Saga-md-2-10": cs.Sag_MirrorD(f, sto_grads, kl_projection, ss.ConstantStepSize(3),dim_a,batch=10),
-"Saga-md-1-1": cs.Sag_MirrorD(f, sto_grads, kl_projection, ss.ConstantStepSize(0.3),dim_a,batch=1),
-#"sMD0.1": cs.Sto_MirrorD(f, sto_grad, kl_projection, ss.ConstantStepSize(0.1),dim_a,batch=100),
+#"MD": cs.MirrorD(f, grad, kl_projection, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
+"FISTAd": cs.FISTA(f, grad, projection_simplex, ss.D_Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
+"AMDd": cs.AMD(f, grad, kl_projection, ss.D_Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
+"PGDd": cs.ProjectedGD(f, grad, projection_simplex, ss.D_Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
+"MDd": cs.MirrorD(f, grad, kl_projection, ss.D_Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
 #"AMD-e-c2": cs.AMD_E(f, grad, kl_projection, ss.ConstantInvIterStepSize(1)),
 #"AMD-e-c1": cs.AMD_E(f, grad, kl_projection, ss.Backtracking_Bregman_Nestrov(rule_type="Armijo", rho=0.5, beta=0.0001, init_alpha=1.)),
           }
 
 # n =100 tau =100
-# Best convergence for FISTA is 0.01
-# Best convergence for AMD is 1
-# Best convergence for AMD_E is 1
-# Best convergence for PGD is 0.001
+
 
 x0 = np.ones((dim_a,dim_b)).flatten()/(dim_a*dim_b)
-max_iter = 10000
+max_iter = 5000
 tol = 1e-6
 
 
@@ -119,13 +123,42 @@ for m_name in methods:
     time_e = time.time()
     print(m_name,"time costs: ", time_e - time_s, " s")
 
-plt.figure(figsize=figsize)
-
-f_speed_log(methods,f,"f")
-f_speed_log(methods,f_opt,"opt")
+f_speed_log(methods,f,"f",ylabel=r'f_{l2}')
 f_time_log(methods,f,"time")
+
+alpha = tau  # Unbalanced KL relaxation parameter
+epsilon = 0.01
+times = time.time()
+Gs,log = ot.unbalanced.sinkhorn_unbalanced(a, b, M, epsilon, alpha,numItermax=1000,stopThr=tol, verbose=True,log=True)
+timee = time.time()
+print("uot time: ",timee-times)
+nx = ot.backend.get_backend(M, a, b)
+K = nx.exp(M / (-epsilon))
+log['primal'] = []
+for i in range(len(log['u'])):
+    log['primal'].append((log['u'][i][:, None] * K * log['v'][i][None, :]).flatten())
+
+methods['uot-2'] = Sinkhornalg(log)
+
+epsilon = 0.001
+times = time.time()
+Gs,log = ot.unbalanced.sinkhorn_unbalanced(a, b, M, epsilon, alpha,numItermax=1000,stopThr=tol, verbose=True,log=True)
+timee = time.time()
+print("uot time: ",timee-times)
+nx = ot.backend.get_backend(M, a, b)
+K = nx.exp(M / (-epsilon))
+log['primal'] = []
+for i in range(len(log['u'])):
+    log['primal'].append((log['u'][i][:, None] * K * log['v'][i][None, :]).flatten())
+
+methods['uot-3'] = Sinkhornalg(log)
+
+plt.figure(figsize=figsize)
+f_speed_log(methods,f,"f",opt=opt,ylabel=r'$f_{l2}-f^{*}$')
+f_speed_log(methods,f_opt,"opt",opt=opt,ylabel=r'$f-f^{*}$')
+f_time_log(methods,f,"time",opt=opt)
 #f_speed_linear(methods,mar,"marginal error")
-#f_speed_linear(methods,spa,"sparsity")
+f_speed_linear(methods,spa,"sparsity")
 i = 2
 
 for m_name in methods:
@@ -134,3 +167,15 @@ for m_name in methods:
     plt.title(m_name)
     plt.show()
     i+=1
+
+
+# time_s = time.time()
+# t2, t_list2, g_list2 = ot.regpath.regularization_path(a, b, M, reg=1/tau,
+#                                                       semi_relaxed=True)
+# time_e = time.time()
+# print("nips", ": ", time_e - time_s)
+#
+# plt.subplot(1, 2 + len(methods), 1 + len(methods))
+# plt.imshow(t2.reshape((dim_a, dim_b)), cmap='hot', interpolation='nearest')
+# plt.title("nips")
+# plt.show()

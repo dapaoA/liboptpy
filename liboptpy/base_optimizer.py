@@ -25,8 +25,9 @@ class LineSearchOptimizer(object):
         self.time =[]
         self._x_current = x0.copy()
         self.convergence.append(self._x_current)
-        start = time.time()
-        self.time.append(time.time()-start)
+        timestartaga = time.time()
+        timeacc = 0
+        self.time.append(timeacc)
         iteration = 0
         self._current_grad = None
         while True:
@@ -43,10 +44,13 @@ class LineSearchOptimizer(object):
                 print("Current function val =", self._f(self._x_current))
                 self._print_info()
             self._alpha = self.get_stepsize()
+            timewithoutsave = time.time() - timestartaga
+            timeacc += timewithoutsave
             self._update_x_next()
             self._update_x_current()
             self._append_conv()
-            self.time.append(time.time() - start)
+            timestartaga = time.time()
+            self.time.append(timeacc)
             iteration += 1
             if iteration >= max_iter:
                 if disp > 0:
@@ -109,8 +113,9 @@ class Acc_LineSearchOptimizer(object):
         self._x_current = x0.copy()
         self._y_current = x0.copy()
         self.convergence.append(self._x_current)
-        start = time.time()
-        self.time.append(time.time()-start)
+        timestartaga = time.time()
+        timeacc = 0
+        self.time.append(timeacc)
         iteration = 0
         self.tk = 1
         self._current_grad = None
@@ -128,13 +133,16 @@ class Acc_LineSearchOptimizer(object):
                 print("Current function val =", self._f(self._x_current))
                 self._print_info()
             self._alpha = self.get_stepsize()
+            timewithoutsave = time.time() - timestartaga
+            timeacc += timewithoutsave
             self._update_x_next()
             self._update_y_next()
             self._update_x_current()
             self._update_y_current()
             self._update_tk()
             self._append_conv()
-            self.time.append(time.time() - start)
+            timestartaga = time.time()
+            self.time.append(timeacc)
             iteration += 1
             if iteration >= max_iter:
                 if disp > 0:
@@ -206,8 +214,9 @@ class Sto_LineSearchOptimizer(object):
         self.time = []
         self._x_current = x0.copy()
         self.convergence.append(self._x_current)
-        start = time.time()
-        self.time.append(time.time() - start)
+        timestartaga = time.time()
+        timeacc = 0
+        self.time.append(timeacc)
         iteration = 0
         self._current_grad = None
         np.random.seed(42)
@@ -227,11 +236,14 @@ class Sto_LineSearchOptimizer(object):
                 print("Current function val =", self._f(self._x_current))
                 self._print_info()
             self._alpha = self.get_stepsize()
+            timewithoutsave = time.time() - timestartaga
+            timeacc += timewithoutsave
             self._update_x_next()
             self._update_x_current()
             if(iteration%(self._dim_a//self._batch)==0):
                 self._append_conv()
-                self.time.append(time.time() - start)
+                self.time.append(timeacc)
+            timestartaga = time.time()
             iteration += 1
             if iteration >= max_iter:
                 if disp > 0:
@@ -297,8 +309,9 @@ class Sto_Var_LineSearchOptimizer(object):
         self.time = []
         self._x_current = x0.copy()
         self.convergence.append(self._x_current)
-        start = time.time()
-        self.time.append(time.time() - start)
+        timestartaga = time.time()
+        timeacc = 0
+        self.time.append(timestartaga)
         iteration = 0
         self._current_grad = None
         np.random.seed(42)
@@ -311,10 +324,8 @@ class Sto_Var_LineSearchOptimizer(object):
         while True:
             self._id = np.random.choice(ids,self._batch,replace=False)
             self._h = self.get_direction(self._x_current, self._id)
-            self._sum_grad -= self._saved_gradient[:,self._id].sum(axis=0)
-            self._current_grad = self.updating_part()
-            self._alpha = self.get_stepsize()
-            self._update_x_next()
+            self.updating_part()
+            self._sum_grad -= self._saved_gradient[:,self._id].sum(axis=1)
             if self._current_grad is None:
                 raise ValueError("Variable self._current_grad has to be initialized in method get_direction()!")
             self._grad_mem.append(self._current_grad)
@@ -326,12 +337,17 @@ class Sto_Var_LineSearchOptimizer(object):
                 print("Iteration {}/{}".format(iteration, max_iter))
                 print("Current function val =", self._f(self._x_current))
                 self._print_info()
+            self._alpha = self.get_stepsize()
+            timewithoutsave = time.time() - timestartaga
+            timeacc += timewithoutsave
+            self._update_x_next()
             self._saved_gradient[:,self._id] = self._h
-            self._sum_grad += self._h.sum(axis=0)
+            self._sum_grad += self._h.sum(axis=1)
             self._update_x_current()
             if(iteration%(self._dim_a//self._batch)==0):
                 self._append_conv()
-                self.time.append(time.time() - start)
+                self.time.append(timeacc)
+            timestartaga = time.time()
             iteration += 1
             if iteration >= max_iter:
                 if disp > 0:
@@ -345,9 +361,8 @@ class Sto_Var_LineSearchOptimizer(object):
 
     def get_direction(self, x):
         raise NotImplementedError("You have to provide method for finding direction!")
-    def updating_part(self,x):
-        self._current_grad = self.variance_reduction(self.x, self.alpha, self.h,self._sum_grad,self._saved_gradient,self._id,self._dim_a)
-        raise NotImplementedError("You have to provide method for finding direction!")
+    def updating_part(self):
+        self._current_grad = self.variance_reduction( self._h,self._sum_grad,self._saved_gradient,self._id,self._dim_a)
 
     def _update_x_current(self):
         self._x_current = self._x_next
@@ -358,7 +373,8 @@ class Sto_Var_LineSearchOptimizer(object):
     def _f_update_x_next(self, x, alpha, h):
         return x + alpha * h
 
-    def variance_reduction(self,x, alpha, h,sum_grad,saved_grad,id,dim_a):
+    def variance_reduction(self, h,sum_grad,saved_grad,id,dim_a):
+        return 0
     # this function has been reloaded in the specific optimizor function。。。
 
     def check_convergence(self, tol):

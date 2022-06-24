@@ -87,8 +87,8 @@ methods = {
 #"FISTA": cs.FISTA(f, grad, projection_simplex, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
 #"AMD": cs.AMD(f, grad, kl_projection, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
 #"PGD": cs.ProjectedGD(f, grad, projection_simplex, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
-# "FISTAd-l2": cs.FISTA(f_l2, grad_l2, projection_simplex, ss.D_Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
-# "AMDd-l2": cs.AMD(f_l2, grad_l2, kl_projection, ss.D_Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
+"FISTAd-l2": cs.FISTA(f_l2, grad_l2, projection_simplex, ss.D_Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
+"AMDd-l2": cs.AMD(f_l2, grad_l2, kl_projection, ss.D_Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
 # "PGDd-l2": cs.ProjectedGD(f_l2, grad_l2, projection_simplex, ss.D_Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
 # "MDd-l2": cs.MirrorD(f_l2, grad_l2, kl_projection, ss.D_Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=10.)),
 
@@ -123,6 +123,7 @@ plt.figure(figsize=figsize)
 #f_speed_log(methods,f,"f")
 f_speed_log(methods,f_opt,"opt")
 f_time_log(methods,f_opt,"time")
+f_speed_log(methods,f_opt,"opt",opt=opt,ylabel=r'$f-f^{*}$')
 i = 2
 
 for m_name in methods:

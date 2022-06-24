@@ -23,7 +23,7 @@ sns.set_context("talk")
 n = 100
 a,b,M = making_gausses(n)
 epsilon = 0.01
-round = 10000
+round = 1000
 tau = 100
 
 dim_a = np.shape(a)[0]
@@ -90,10 +90,12 @@ methods = {
 "FISTA": cs.FISTA(f, grad, projection_simplex, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
 #"AMD": cs.AMD(f, grad, kl_projection, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
 #"PGD": cs.ProjectedGD(f, grad, projection_simplex, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
-"MD": cs.MirrorD(f, grad, kl_projection, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
-"MDc": cs.MirrorD(f, grad, kl_projection, ss.ConstantStepSize(1)),
-"sMD": cs.Sto_MirrorD(f, sto_grad, kl_projection, ss.ConstantStepSize(1),dim_a,batch=10),
-"sMD0.1": cs.Sto_MirrorD(f, sto_grad, kl_projection, ss.ConstantStepSize(0.1),dim_a,batch=100),
+#"MD": cs.MirrorD(f, grad, kl_projection, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
+#"MDc": cs.MirrorD(f, grad, kl_projection, ss.ConstantStepSize(1)),
+"sMD": cs.Sto_MirrorD(f, sto_grad, kl_projection, ss.ConstantStepSize(0.01),dim_a,batch=1),
+#"sMD1": cs.Sto_MirrorD(f, sto_grad, kl_projection, ss.ConstantStepSize(1),dim_a,batch=100),
+#"sMD0.1": cs.Sto_MirrorD(f, sto_grad, kl_projection, ss.ConstantStepSize(0.1),dim_a,batch=100),
+"sMD0.1-10": cs.Sto_MirrorD(f, sto_grad, kl_projection, ss.ConstantStepSize(0.1),dim_a,batch=5),
 #"AMD-e-c2": cs.AMD_E(f, grad, kl_projection, ss.ConstantInvIterStepSize(1)),
 #"AMD-e-c1": cs.AMD_E(f, grad, kl_projection, ss.Backtracking_Bregman_Nestrov(rule_type="Armijo", rho=0.5, beta=0.0001, init_alpha=1.)),
           }

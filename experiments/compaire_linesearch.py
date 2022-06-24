@@ -18,7 +18,7 @@ from functions import kl_projection as kp
 # 这个是看看让armoji起始搜索速率可以变化会不会加快收敛的，，，
 plt.rc("text", usetex=True)
 fontsize = 24
-figsize = (8, 6)
+figsize = (15, 12)
 import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
