@@ -63,10 +63,11 @@ opt = f_opt(G0.flatten())
 
 f = lambda x: semi_l2(x, a, b, m, tau, Hc)
 
+mdiv = m/dim_a
 
 grad = lambda x: grad_semi_l2(x, a, b, m, tau, dim_a, dim_b, HcHc, Hcb)
-sto_grad = lambda x,i: sto_grad_semi_l2(x, a, b, m, tau, Hc,i)
-sto_grads = lambda x,i: sto_grads_semi_l2(x, a, b, m, tau, Hc,i)
+sto_grad = lambda x,i: sto_grad_semi_l2(x, a, b, mdiv , tau,dim_a,dim_b, Hc,i)
+sto_grads = lambda x,i: sto_grads_semi_l2(x, a, b, mdiv , tau,dim_a,dim_b, Hc,i)
 projection_simplex = lambda x: ps(x, dim_a, dim_b, a, axis=1)
 
 kl_projection = lambda x: kp(x, a, b, dim_a, dim_b)
@@ -87,15 +88,15 @@ spa = lambda x: sparsity(x)
 
 
 methods = {
-"FISTA": cs.FISTA(f, grad, projection_simplex, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
-#"AMD": cs.AMD(f, grad, kl_projection, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
+#"FISTA": cs.FISTA(f, grad, projection_simplex, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
+"AMD": cs.AMD(f, grad, kl_projection, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
 #"PGD": cs.ProjectedGD(f, grad, projection_simplex, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
 #"MD": cs.MirrorD(f, grad, kl_projection, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
 #"MDc": cs.MirrorD(f, grad, kl_projection, ss.ConstantStepSize(1)),
-#"sMD": cs.Sto_MirrorD(f, sto_grad, kl_projection, ss.ConstantStepSize(1),dim_a,batch=10),
-"Saga-md-1-10": cs.Sag_MirrorD(f, sto_grads, kl_projection, ss.ConstantStepSize(1),dim_a,batch=10),
-"Saga-md-2-10": cs.Sag_MirrorD(f, sto_grads, kl_projection, ss.ConstantStepSize(3),dim_a,batch=10),
-"Saga-md-1-1": cs.Sag_MirrorD(f, sto_grads, kl_projection, ss.ConstantStepSize(0.3),dim_a,batch=1),
+"sMD": cs.Sto_MirrorD(f, sto_grad, kl_projection, ss.ConstantStepSize(10),dim_a,batch=10),
+"Saga-md-1-1": cs.Sag_MirrorD(f, sto_grads, kl_projection, ss.ConstantStepSize(1),dim_a,batch=1),
+#"Saga-md-3-10": cs.Sag_MirrorD(f, sto_grads, kl_projection, ss.ConstantStepSize(3),dim_a,batch=10),
+"Saga-md-5-10": cs.Sag_MirrorD(f, sto_grads, kl_projection, ss.ConstantStepSize(5),dim_a,batch=10),
 #"sMD0.1": cs.Sto_MirrorD(f, sto_grad, kl_projection, ss.ConstantStepSize(0.1),dim_a,batch=100),
 #"AMD-e-c2": cs.AMD_E(f, grad, kl_projection, ss.ConstantInvIterStepSize(1)),
 #"AMD-e-c1": cs.AMD_E(f, grad, kl_projection, ss.Backtracking_Bregman_Nestrov(rule_type="Armijo", rho=0.5, beta=0.0001, init_alpha=1.)),
