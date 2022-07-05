@@ -36,6 +36,10 @@ def sto_grads_semi_l2(t, a, b, mdiv, tau,dim_a,dim_b,Hc, i):
 
     return np.asarray(np.tile(mdiv,(i.shape[0],1)).T + 2 *tau * Hc[i,:].T.multiply((Hc[i,:].dot(t)-b[i])))
 
+
+def coord_grads_semi_l2(t,id,a,b,m,tau,Hc,dim_b):
+    t[id*(dim_b):(id+1)*(dim_b)] =
+
 def semi_kl(t, a, b, m, tau, Hc):
 
 
@@ -62,7 +66,10 @@ def kl_projection(t, a, b, dim_a, dim_b):
         new_t[i*dim_b:(i+1)*dim_b] = t[i*dim_b:(i+1)*dim_b]*a[i] /np.sum(t[i*dim_b:(i+1)*dim_b] )
     return new_t
 
-
+def coor_kl_projection(t,id, a, b, dim_a, dim_b):
+    new_t = t
+    new_t[id*dim_b:(id+1)*dim_b] = t[id*dim_b:(id+1)*dim_b]*a[id] /np.sum(t[id*dim_b:(id+1)*dim_b] )
+    return new_t
 
 def projection_simplex(x, dim_a, dim_b, z, axis=1):
     """
