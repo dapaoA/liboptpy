@@ -38,7 +38,8 @@ def sto_grads_semi_l2(t, a, b, mdiv, tau,dim_a,dim_b,Hc, i):
 
 
 def coord_grads_semi_l2(t,id,a,b,m,tau,Hc,dim_b):
-    t[id*(dim_b):(id+1)*(dim_b)] =
+    t[id*(dim_b):(id+1)*(dim_b)] = 0
+
 
 def semi_kl(t, a, b, m, tau, Hc):
 
@@ -51,6 +52,17 @@ def grad_semi_kl(t, a, b, m, tau, Hc, dim_a,dim_b):
 
     return m + tau* np.tile(Hc.T[:dim_a,:].dot(np.log(Hc.dot(t))-np.log(b)),dim_b)
 
+def UOT_kl(t,a,b,m,tau,Hc,Hr):
+
+    return np.dot(t,m)+ tau * (KL(Hc.dot(t),b)+KL(Hr.dot(t),a))
+
+def grad_uot_kl(t, a, b, m, tau, Hc, dim_a,dim_b):
+
+    return m + tau* np.tile(Hc.T[:dim_a,:].dot(np.log(Hc.dot(t))-np.log(b)),dim_b)
+
+def ot_projection(t, a, b, m, tau, Hc, dim_a,dim_b):
+
+    return m + tau* np.tile(Hc.T[:dim_a,:].dot(np.log(Hc.dot(t))-np.log(b)),dim_b)
 
 def linsolver(gradient):
     x = np.zeros(gradient.shape[0])
