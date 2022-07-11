@@ -56,13 +56,26 @@ def UOT_kl(t,a,b,m,tau,Hc,Hr):
 
     return np.dot(t,m)+ tau * (KL(Hc.dot(t),b)+KL(Hr.dot(t),a))
 
-def grad_uot_kl(t, a, b, m, tau, Hc, dim_a,dim_b):
+def grad_uot_kl(t, a, b,  Hc,Hr, dim_a,dim_b):
+# proximal algorithm don't contain c^T t part!!!!!!!!!!!!!
+    return   (np.tile(Hc.T[:dim_a,:].dot(np.log(Hc.dot(t))-np.log(b)),dim_b)+np.repeat(Hr.T[::dim_b,:].dot(np.log(Hr.dot(t))-np.log(a)),dim_a,axis=0))
 
-    return m + tau* np.tile(Hc.T[:dim_a,:].dot(np.log(Hc.dot(t))-np.log(b)),dim_b)
+def uot_kl_proximal_B_entropy(ctau,x,h,grad):
 
-def ot_projection(t, a, b, m, tau, Hc, dim_a,dim_b):
+    return x/(1+h*np.multiply(ctau-grad,x))
 
-    return m + tau* np.tile(Hc.T[:dim_a,:].dot(np.log(Hc.dot(t))-np.log(b)),dim_b)
+
+def uot_kl_proximal_K_entropy(ctau, x, h, grad):
+    return x / np.exp(h*(ctau-grad))
+
+
+def UOT_l2(t,a,b,m,tau,Hc,Hr):
+
+    return np.dot(t,m)+ tau * ( l2(Hc.dot(t),b)+(l2(Hr.dot(t),a)))
+
+def grad_uot_l2(t, a, b, HcHc,HrHr,Hcb,Hra, dim_a,dim_b):
+    # proximal algorithm don't contain c^T t part!!!!!!!!!!!!!
+    return 2* (np.tile(HcHc[:dim_a,:].dot(t),dim_b)+np.repeat(HrHr[::dim_b,:].dot(t),dim_b,axis=0)-Hcb-Hra)
 
 def linsolver(gradient):
     x = np.zeros(gradient.shape[0])
