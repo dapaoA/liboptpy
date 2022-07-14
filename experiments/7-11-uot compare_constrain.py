@@ -21,7 +21,7 @@ import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
 
-n = 100
+n = 10
 a,b,M = making_gausses(n)
 epsilon = 0.01
 round = 10000
@@ -109,26 +109,41 @@ max_iter = 10000
 tol = 1e-6
 
 
-for m_name in methods:
-    print("\t", m_name)
-    time_s = time.time()
-    x = methods[m_name].solve(x0=x0, max_iter=max_iter, tol=tol, disp=1)
-    time_e = time.time()
-    print(m_name,"time costs: ", time_e - time_s, " s")
+# for m_name in methods:
+#     print("\t", m_name)
+#     time_s = time.time()
+#     x = methods[m_name].solve(x0=x0, max_iter=max_iter, tol=tol, disp=1)
+#     time_e = time.time()
+#     print(m_name,"time costs: ", time_e - time_s, " s")
 
 
 
 epsilon = 1e-3 # entropy parameter
 alpha = 1000.  # Unbalanced KL relaxation parameter
+round = 10000
 times = time.time()
-Gs,logeuot = ot.unbalanced.sinkhorn_unbalanced(a, b, M, epsilon, alpha, numItermax=10000, stopThr=tol, verbose=True,log=True)
+Gs = ot.unbalanced.sinkhorn_unbalanced(a, b, M, epsilon, alpha, numItermax=round, stopThr=tol, verbose=True)
 timee = time.time()
 print("uot time: ", timee - times)
 
 time_s = time.time()
-G1kl,log50 = ot.unbalanced.mm_unbalanced(a, b, M, tau, 'kl',numItermax=10000,log=True)
+G1kl,log50 = ot.unbalanced.mm_unbalanced(a, b, M, tau, 'kl',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
+time_s = time.time()
+G1kla,log50a = ot.unbalanced.mm_unbalanced_revised_nestrov(a, b, M, tau,l_rate=0.5,div= 'kl',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+time_s = time.time()
+G1klr,log50r = ot.unbalanced.mm_unbalanced_revised_scale(a, b, M, tau,l_rate=0.5,div= 'kl',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+
+time_s = time.time()
+G1klar,log50ar = ot.unbalanced.mm_unbalanced_revised_nestrov_scale(a, b, M, tau,l_rate=0.5,div= 'kl',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+
 
 
 # time_s = time.time()
@@ -137,39 +152,62 @@ print( "time costs: ", time_e - time_s, " s")
 # print(m_name, "time costs: ", time_e - time_s, " s")
 
 time_s = time.time()
-Gmykl25,log25 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau,l_rate=0.25, div='kl',numItermax=10000,log=True)
+Gmykl25,log25 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau,l_rate=0.25, div='kl',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+time_s = time.time()
+Gmykl25a,log25a = ot.unbalanced.mm_unbalanced_revised_nestrov(a, b, M, tau,l_rate=0.25, div='kl',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+time_s = time.time()
+Gmykl25r,log25r = ot.unbalanced.mm_unbalanced_revised_nestrov_scale(a, b, M, tau,l_rate=0.25, div='kl',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+time_s = time.time()
+Gmykl10,log10 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau,l_rate=0.1, div='kl',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
 time_s = time.time()
-Gmykl10,log10 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau,l_rate=0.1, div='kl',numItermax=10000,log=True)
+Gmykl10a,log10a = ot.unbalanced.mm_unbalanced_revised_nestrov(a, b, M, tau,l_rate=0.1, div='kl',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+time_s = time.time()
+Gmykl10r,log10r = ot.unbalanced.mm_unbalanced_revised_nestrov_scale(a, b, M, tau,l_rate=0.1, div='kl',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
-time_s = time.time()
-Gmykl03,log03 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau,l_rate=0.03, div='kl',numItermax=10000,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-time_s = time.time()
-Gmykl01,log01 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau,l_rate=0.01, div='kl',numItermax=10000,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-pot_names = {'uot-entropy':Gs,
-                'mmkl':G1kl,
-                'myrevise25':Gmykl25,
-             'myrevise10': Gmykl10,
-             'myrevise03': Gmykl03,
-             'myrevise01': Gmykl01,
+convergence = {'mmkl':log50,
+             'mmkla': log50a,
+               'mmklr':log50r,
+               'mmklar': log50ar,
+                'myrevise25':log25,
+             'myrevise25a': log25a,
+            'myrevise25r': log25r,
+             'myrevise10': log10,
+             'myrevise10a':log10a,
+               'myrevise10r': log10r
              }
-plt.figure(figsize=figsize)
-plt.plot([np.log(f(x.flatten())) for x in log01['G'][::100]],label='01')
-plt.plot([np.log(f(x.flatten())) for x in log03['G'][::100]],label='03')
-plt.plot([np.log(f(x.flatten())) for x in log10['G'][::100]],label='10')
-plt.plot([np.log(f(x.flatten())) for x in log25['G'][::100]],label='25')
-plt.plot([np.log(f(x.flatten())) for x in log50['G'][::100]],label='50')
+
+
+pot_names = {
+                'mmkl':G1kl,
+             'mmkla': G1kla,
+            'mmklr': G1klr,
+            'mmklar': G1klar,
+                'myrevise25':Gmykl25,
+             'myrevise25a': Gmykl25a,
+                'myrevise25ar': Gmykl25r,
+             'myrevise10': Gmykl10,
+             'myrevise10a':Gmykl10a,
+    'myrevise10ar': Gmykl10r
+             }
+
+for con in convergence:
+    plt.plot([np.log(f(x.flatten())) for x in convergence[con]['G'][::100]], label=con)
 plt.legend()
 plt.show()
+
 
 f_speed_log(methods,f,"f")
 f_speed_log(methods,f_opt,"opt")
@@ -178,12 +216,12 @@ f_time_log(methods,f,"time")
 #f_speed_linear(methods,spa,"sparsity")
 i = 2
 
-for m_name in methods:
-    x = methods[m_name].get_convergence()[-1]
-    plt.imshow(x.reshape((dim_a,dim_b)), cmap='hot', interpolation='nearest')
-    plt.title(m_name)
-    plt.show()
-    i+=1
+# for m_name in methods:
+#     x = methods[m_name].get_convergence()[-1]
+#     plt.imshow(x.reshape((dim_a,dim_b)), cmap='hot', interpolation='nearest')
+#     plt.title(m_name)
+#     plt.show()
+#     i+=1
 for m_name in pot_names:
     x = pot_names[m_name]
     plt.imshow(x, cmap='hot', interpolation='nearest')
