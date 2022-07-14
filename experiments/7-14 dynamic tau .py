@@ -34,7 +34,7 @@ n = 100
 a,b,M = making_gausses(n)
 epsilon = 0.01
 round = 10000
-tau = 10
+tau = 100
 
 dim_a = np.shape(a)[0]
 dim_b = np.shape(b)[0]
@@ -137,59 +137,43 @@ print("uot time: ", timee - times)
 nx = ot.backend.get_backend(M, a, b)
 K = nx.exp(M / (-epsilon))
 loguot['G'] = []
-for i in range(len(loguot['logu'])):
+for i in range(len(loguot['u'])):
      loguot['G'].append((loguot['u'][i][:, None] * K * loguot['v'][i][None, :]).flatten())
 
 time_s = time.time()
-G1kl,log50 = ot.unbalanced.mm_unbalanced(a, b, M, tau, 'kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-time_s = time.time()
-G1kla,log50a = ot.unbalanced.mm_unbalanced_revised_nestrov(a, b, M, tau,l_rate=0.5,div= 'kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-time_s = time.time()
-G1klr,log50r = ot.unbalanced.mm_unbalanced_revised_scale(a, b, M, tau,l_rate=0.5,div= 'kl',numItermax=round,log=True)
+G1kl,log50 = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
+balanced = 2
 time_s = time.time()
-G1klar,log50ar = ot.unbalanced.mm_unbalanced_revised_nestrov_scale(a, b, M, tau,l_rate=0.5,div= 'kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-time_s = time.time()
-G1klea,log50ea = ot.unbalanced.mm_unbalanced_revised_Enestrov(a, b, M, tau,l_rate=0.5,div= 'kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-time_s = time.time()
-G1klear,log50ear = ot.unbalanced.mm_unbalanced_revised_Enestrov_scale(a, b, M, tau,l_rate=0.5,div= 'kl',numItermax=round,log=True)
+G2,log2 = ot.unbalanced.mm_unbalanced_balanced(a, b, M, tau,balanced, div='kl',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
+
+balanced = 2
+time_s = time.time()
+G3,log3 = ot.unbalanced.mm_unbalanced_balanced(a, b, M, tau,balanced,l_rate=0.3, div='kl',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
 
 
 
 convergence = {
     'uot':loguot,
     'mmkl':log50,
-             'mmkla': log50a,
-               'mmklr':log50r,
-               'mmklar': log50ar,
-    'mmklear': log50ear,
-    'mmklea': log50ea,
+    "mmkl-tau2":log2,
+    "mmkl-tau3": log3,
 
              }
 
 
 pot_names = {
     'uot': Gs,
-                'mmkl':G1kl,
-             'mmkla': G1kla,
-            'mmklr': G1klr,
-            'mmklar': G1klar,
-    'mmklear': G1klear,
-    'mmklea': G1klea,
-
+    'mmkl':G1kl,
+    "mmkl-tau2": G2,
+    "mmkl-tau3": G3,
              }
 
 for con in convergence:

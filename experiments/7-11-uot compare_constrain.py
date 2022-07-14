@@ -21,11 +21,11 @@ import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
 
-n = 10
+n = 100
 a,b,M = making_gausses(n)
 epsilon = 0.01
 round = 10000
-tau = 1000
+tau = 100
 
 dim_a = np.shape(a)[0]
 dim_b = np.shape(b)[0]
