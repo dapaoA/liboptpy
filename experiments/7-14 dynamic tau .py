@@ -25,7 +25,7 @@ class Sinkhornalg:
 
 plt.rc("text", usetex=True)
 fontsize = 24
-figsize = (8, 6)
+figsize = (15, 12)
 import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
@@ -128,7 +128,7 @@ tol = 1e-6
 
 
 epsilon = 1e-3 # entropy parameter
-alpha = 10.  # Unbalanced KL relaxation parameter
+alpha = 100.  # Unbalanced KL relaxation parameter
 round = 10000
 times = time.time()
 Gs,loguot = ot.unbalanced.sinkhorn_unbalanced(a, b, M, epsilon, alpha, numItermax=1000, stopThr=tol, verbose=True,log=True)
@@ -145,16 +145,10 @@ G1kl,log50 = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl',numItermax=round
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
-balanced = 2
-time_s = time.time()
-G2,log2 = ot.unbalanced.mm_unbalanced_balanced(a, b, M, tau,balanced, div='kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
 
 
-balanced = 2
 time_s = time.time()
-G3,log3 = ot.unbalanced.mm_unbalanced_balanced(a, b, M, tau,balanced,l_rate=0.3, div='kl',numItermax=round,log=True)
+G3,log3 = ot.unbalanced.mm_unbalanced_dynamic(a, b, M, tau, div='kl',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
@@ -162,26 +156,32 @@ print( "time costs: ", time_e - time_s, " s")
 
 convergence = {
     'uot':loguot,
-    'mmkl':log50,
-    "mmkl-tau2":log2,
-    "mmkl-tau3": log3,
+    'mmkl-specific-tau':log50,
+
+    "mmkl-dynamic-tau": log3,
 
              }
 
 
 pot_names = {
     'uot': Gs,
-    'mmkl':G1kl,
-    "mmkl-tau2": G2,
-    "mmkl-tau3": G3,
+    'mmkl-specific-tau':G1kl,
+
+    "mmkl-dynamic-tau": G3,
              }
 
 for con in convergence:
     plt.plot([np.log(f(x.flatten())) for x in convergence[con]['G'][::100]], label=con)
+    plt.xlabel('iterations')
+    plt.ylabel(r'$\ln{(f(x)+D(Mx,b)+D(Nx,a))}$')
+    plt.title(r'$\tau = 100$')
 plt.legend()
 plt.show()
 for con in convergence:
     plt.plot([np.log(f_opt(x.flatten())) for x in convergence[con]['G'][::100]], label=con)
+    plt.xlabel('iterations')
+    plt.ylabel(r'$\ln{f(x)}$')
+    plt.title(r'$\tau = 100$')
 plt.legend()
 plt.show()
 
