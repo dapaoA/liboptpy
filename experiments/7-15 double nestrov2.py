@@ -36,7 +36,7 @@ n = 100
 a,b,M = making_gausses(n)
 epsilon = 0.01
 round = 10000
-tau = 100
+tau = 1000
 
 dim_a = np.shape(a)[0]
 dim_b = np.shape(b)[0]
@@ -129,10 +129,10 @@ tol = 1e-6
 
 
 epsilon = 1e-3 # entropy parameter
-alpha = 100.  # Unbalanced KL relaxation parameter
+  # Unbalanced KL relaxation parameter
 round = 10000
 times = time.time()
-Gs,loguot = ot.unbalanced.sinkhorn_unbalanced(a, b, M, epsilon, alpha, numItermax=1000, stopThr=tol, verbose=True,log=True)
+Gs,loguot = ot.unbalanced.sinkhorn_unbalanced(a, b, M, epsilon, tau, numItermax=10000, stopThr=tol, verbose=True,log=True)
 timee = time.time()
 print("uot time: ", timee - times)
 
@@ -142,107 +142,105 @@ loguot['G'] = []
 for i in range(len(loguot['u'])):
      loguot['G'].append((loguot['u'][i][:, None] * K * loguot['v'][i][None, :]).flatten())
 
-time_s = time.time()
-G1kl100,log100 = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
 
 time_s = time.time()
-G1_100,log1_100 = ot.unbalanced.mm_unbalanced_dynamic(a, b, M, 1,tau, div='kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-time_s = time.time()
-G1_1000,log1_1000 = ot.unbalanced.mm_unbalanced_dynamic(a, b, M,1,1000, div='kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-time_s = time.time()
-G5_100,log5_100 = ot.unbalanced.mm_unbalanced_dynamic(a, b, M,5, tau, div='kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-time_s = time.time()
-G10_100,log10_100 = ot.unbalanced.mm_unbalanced_dynamic(a, b, M,10, tau, div='kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-time_s = time.time()
-G50_100,log50_100 = ot.unbalanced.mm_unbalanced_dynamic(a, b, M,50, tau, div='kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-tau = 10
-time_s = time.time()
-G1kl10,log10 = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl',numItermax=round,log=True)
+Gtau,log_tau = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
 
-tau = 1000
+stopThr = 1e-15
+
 time_s = time.time()
-G1kl1000,log1000 = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl',numItermax=round,log=True)
+G1_tau_100_2,log1_tau_100_2 = ot.unbalanced.mm_unbalanced_dynamic2(a, b, M,1, tau,100,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
 
+time_s = time.time()
+G1_tau_100_15,log1_tau_100_15 = ot.unbalanced.mm_unbalanced_dynamic2(a, b, M,1, tau,100,1.5, div='kl',numItermax=round,log=True,stopThr=stopThr)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+
+time_s = time.time()
+G1_tau_50_22,log1_tau_50_22 = ot.unbalanced.mm_unbalanced_dynamic2(a, b, M,1, tau,50,np.sqrt(2), div='kl',numItermax=round,log=True,stopThr=stopThr)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
 
 
+time_s = time.time()
+G1_tau_25_2222,log1_tau_25_2222 = ot.unbalanced.mm_unbalanced_dynamic2(a, b, M,1,tau,25, np.sqrt(np.sqrt(2)), div='kl',numItermax=round,log=True,stopThr=stopThr)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+
+time_s = time.time()
+G1_tau_25_2222a,log1_tau_25_2222a = ot.unbalanced.mm_unbalanced_dynamic2_nestrov(a, b, M,1, tau,25, np.sqrt(np.sqrt(2)), div='kl',numItermax=round,log=True,stopThr=stopThr)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+time_s = time.time()
+G1_tau_50_22a,log1_tau_50_22a = ot.unbalanced.mm_unbalanced_dynamic2_nestrov(a, b, M,1, tau,100,1.2, div='kl',numItermax=round,log=True,stopThr=stopThr)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
 convergence = {
-    'uot':loguot,
-    'mmkl-tau-10':log10,
-    'mmkl-tau-100': log100,
-    'mmkl-tau-1000': log1000,
-    "mmkl-dynamic-1-100": log1_100,
-    "mmkl-dynamic-1-1000": log1_1000,
-    "mmkl-dynamic-5-100": log5_100,
-    "mmkl-dynamic-10-100": log10_100,
-    "mmkl-dynamic-50-100": log50_100,
+    'uot-(tau)':loguot,
+    'mmkl-tau': log_tau,
+    "mmkl-1-tau-100-2": log1_tau_100_2,
+    "mmkl-1-tau-100-15": log1_tau_100_15,
+    "mmkl-1-tau-50-22": log1_tau_50_22,
+    "mmkl-1-tau-50-22a": log1_tau_50_22a,
+    "mmkl-1-tau-25-2222": log1_tau_25_2222,
+    "mmkl-1-tau-25-2222a": log1_tau_25_2222a,
+
              }
 
 
 pot_names = {
-    'uot': Gs,
-    'mmkl-tau-10':G1kl10,
-    'mmkl-tau-100': G1kl100,
-    'mmkl-tau-1000': G1kl1000,
-    "mmkl-dynamic-1-100": G1_100,
-    "mmkl-dynamic-1-1000": G1_1000,
-    "mmkl-dynamic-5-100": G5_100,
-    "mmkl-dynamic-10-100": G10_100,
-    "mmkl-dynamic-50-100": G50_100,
+    'uot-tau': Gs,
+
+    'mmkl-tau': Gtau,
+    "mmkl-1-tau-100-2": G1_tau_100_2,
+    "mmkl-1-tau-100-15": G1_tau_100_15,
+    "mmkl-1-tau-50-22": G1_tau_50_22,
+    "mmkl-1-tau-50-22a": G1_tau_50_22a,
+    "mmkl-1-tau-25-2222": G1_tau_25_2222,
+    "mmkl-1-tau-25-2222a": G1_tau_25_2222a,
+
              }
 plt.figure(figsize=(13,10))
 
 for con in convergence:
-    plt.plot([np.log(f(x.flatten())) for x in convergence[con]['G'][::100]], label=con)
-    plt.xlabel('iterations')
-    plt.ylabel(r'$\ln{(f(x)+\tau(D(Mx,b)+D(Nx,a)))}$')
-    plt.title('Convergence spped')
+    plt.loglog([f(x.flatten()) for x in convergence[con]['G'][::100]], label=con)
+
+    plt.xlabel(r'$iterations \times 100$')
+    plt.ylabel(r'$(f(x)+\tau(D(Mx,b)+D(Nx,a))$')
+    plt.title(r'Convergence spped for $\tau=1000$')
 plt.legend()
 plt.show()
 plt.figure(figsize=(13,10))
 
 for con in convergence:
-    plt.plot([np.log(f_opt(x.flatten())) for x in convergence[con]['G'][::100]], label=con)
-    plt.xlabel('iterations')
-    plt.ylabel(r'$\ln{f(x)}$')
-    plt.title('Convergence spped')
+    plt.loglog([f_opt(x.flatten()) for x in convergence[con]['G'][::100]], label=con)
+
+    plt.xlabel(r'$iterations \times 100$')
+    plt.ylabel(r'$f(x)$')
+    plt.title(r'Convergence spped for $\tau=1000$')
 plt.legend()
 plt.show()
 plt.figure(figsize=(13,10))
 for con in convergence:
-    plt.plot([np.log(mkl(x.flatten())) for x in convergence[con]['G'][::100]], label=con)
-    plt.xlabel('iterations')
-    plt.ylabel(r'$\ln{(D_h(Mt,b)+D_h(Nt,a))}$')
+    plt.loglog([mkl(x.flatten()) for x in convergence[con]['G'][::100]], label=con)
+
+    plt.xlabel(r'$iterations \times 100$')
+    plt.ylabel(r'$D_h(Mt,b)+D_h(Nt,a)$')
     plt.title(r'$h=\frac{x^2}{2}$')
 plt.legend()
 plt.show()
 plt.figure(figsize=(13,10))
 for con in convergence:
-    plt.plot([np.log(ml2(x.flatten())) for x in convergence[con]['G'][::100]], label=con)
-    plt.xlabel('iterations')
-    plt.ylabel(r'$\ln{(D_h(Mt,b)+D_h(Nt,a))}$')
+    plt.loglog([ml2(x.flatten()) for x in convergence[con]['G'][::100]], label=con)
+
+    plt.xlabel(r'$iterations \times 100$')
+    plt.ylabel(r'$D_h(Mt,b)+D_h(Nt,a)$')
     plt.title(r'$h=x(\ln{x}-1)$')
 plt.legend()
 plt.show()
@@ -264,11 +262,11 @@ i = 2
 #     plt.title(m_name)
 #     plt.show()
 #     i+=1
-# for m_name in pot_names:
-#     x = pot_names[m_name]
-#     plt.imshow(x, cmap='hot', interpolation='nearest')
-#     plt.title(m_name)
-#     plt.show()
+for m_name in pot_names:
+    x = pot_names[m_name]
+    plt.imshow(x, cmap='hot', interpolation='nearest')
+    plt.title(m_name)
+    plt.show()
 # time_s = time.time()
 # t2, t_list2, g_list2 = ot.regpath.regularization_path(a, b, M, reg=1/tau,
 #                                                       semi_relaxed=True)

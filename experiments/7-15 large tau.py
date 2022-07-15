@@ -36,7 +36,7 @@ n = 100
 a,b,M = making_gausses(n)
 epsilon = 0.01
 round = 10000
-tau = 100
+tau = 100000
 
 dim_a = np.shape(a)[0]
 dim_b = np.shape(b)[0]
@@ -129,10 +129,10 @@ tol = 1e-6
 
 
 epsilon = 1e-3 # entropy parameter
-alpha = 100.  # Unbalanced KL relaxation parameter
+  # Unbalanced KL relaxation parameter
 round = 10000
 times = time.time()
-Gs,loguot = ot.unbalanced.sinkhorn_unbalanced(a, b, M, epsilon, alpha, numItermax=1000, stopThr=tol, verbose=True,log=True)
+Gs,loguot = ot.unbalanced.sinkhorn_unbalanced(a, b, M, epsilon, tau/10, numItermax=10000, stopThr=tol, verbose=True,log=True)
 timee = time.time()
 print("uot time: ", timee - times)
 
@@ -142,99 +142,84 @@ loguot['G'] = []
 for i in range(len(loguot['u'])):
      loguot['G'].append((loguot['u'][i][:, None] * K * loguot['v'][i][None, :]).flatten())
 
-time_s = time.time()
-G1kl100,log100 = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
+
+
+
+
+
 
 time_s = time.time()
-G1_100,log1_100 = ot.unbalanced.mm_unbalanced_dynamic(a, b, M, 1,tau, div='kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-time_s = time.time()
-G1_1000,log1_1000 = ot.unbalanced.mm_unbalanced_dynamic(a, b, M,1,1000, div='kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-time_s = time.time()
-G5_100,log5_100 = ot.unbalanced.mm_unbalanced_dynamic(a, b, M,5, tau, div='kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-time_s = time.time()
-G10_100,log10_100 = ot.unbalanced.mm_unbalanced_dynamic(a, b, M,10, tau, div='kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-time_s = time.time()
-G50_100,log50_100 = ot.unbalanced.mm_unbalanced_dynamic(a, b, M,50, tau, div='kl',numItermax=round,log=True)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-tau = 10
-time_s = time.time()
-G1kl10,log10 = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl',numItermax=round,log=True)
+Gtau,log_tau = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
 
-tau = 1000
 time_s = time.time()
-G1kl1000,log1000 = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl',numItermax=round,log=True)
+G1_tau,log1_tau = ot.unbalanced.mm_unbalanced_dynamic(a, b, M,1,tau, div='kl',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
+
+time_s = time.time()
+G5_tau,log5_tau = ot.unbalanced.mm_unbalanced_dynamic(a, b, M,5, tau, div='kl',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+
+time_s = time.time()
+G10_tau,log10_tau = ot.unbalanced.mm_unbalanced_dynamic(a, b, M,10, tau, div='kl',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+
+time_s = time.time()
+G50_tau,log50_tau = ot.unbalanced.mm_unbalanced_dynamic(a, b, M,50, tau, div='kl',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+
 
 
 
 
 convergence = {
-    'uot':loguot,
-    'mmkl-tau-10':log10,
-    'mmkl-tau-100': log100,
-    'mmkl-tau-1000': log1000,
-    "mmkl-dynamic-1-100": log1_100,
-    "mmkl-dynamic-1-1000": log1_1000,
-    "mmkl-dynamic-5-100": log5_100,
-    "mmkl-dynamic-10-100": log10_100,
-    "mmkl-dynamic-50-100": log50_100,
+    'uot-(tau/10)':loguot,
+    'mmkl-tau': log_tau,
+    "mmkl-dynamic-1-tau": log1_tau,
+    "mmkl-dynamic-5-tau": log5_tau,
+    "mmkl-dynamic-10-tau": log10_tau,
+    "mmkl-dynamic-50-tau": log50_tau,
              }
 
 
 pot_names = {
-    'uot': Gs,
-    'mmkl-tau-10':G1kl10,
-    'mmkl-tau-100': G1kl100,
-    'mmkl-tau-1000': G1kl1000,
-    "mmkl-dynamic-1-100": G1_100,
-    "mmkl-dynamic-1-1000": G1_1000,
-    "mmkl-dynamic-5-100": G5_100,
-    "mmkl-dynamic-10-100": G10_100,
-    "mmkl-dynamic-50-100": G50_100,
+    'uot-tau/10': Gs,
+
+    'mmkl-tau-tau': Gtau,
+    "mmkl-dynamic-1-tau": G1_tau,
+    "mmkl-dynamic-5-tau": G5_tau,
+    "mmkl-dynamic-10-tau": G10_tau,
+    "mmkl-dynamic-50-tau": G50_tau,
              }
 plt.figure(figsize=(13,10))
 
 for con in convergence:
-    plt.plot([np.log(f(x.flatten())) for x in convergence[con]['G'][::100]], label=con)
+    plt.loglog([f(x.flatten()) for x in convergence[con]['G'][::100]], label=con)
     plt.xlabel('iterations')
-    plt.ylabel(r'$\ln{(f(x)+\tau(D(Mx,b)+D(Nx,a)))}$')
-    plt.title('Convergence spped')
+    plt.ylabel(r'$(f(x)+\tau(D(Mx,b)+D(Nx,a))$')
+    plt.title(r'Convergence spped for $\tau=1000$')
 plt.legend()
 plt.show()
 plt.figure(figsize=(13,10))
 
 for con in convergence:
-    plt.plot([np.log(f_opt(x.flatten())) for x in convergence[con]['G'][::100]], label=con)
+    plt.loglog([f_opt(x.flatten()) for x in convergence[con]['G'][::100]], label=con)
     plt.xlabel('iterations')
-    plt.ylabel(r'$\ln{f(x)}$')
-    plt.title('Convergence spped')
+    plt.ylabel(r'$f(x)$')
+    plt.title(r'Convergence spped for $\tau=1000$')
 plt.legend()
 plt.show()
 plt.figure(figsize=(13,10))
 for con in convergence:
-    plt.plot([np.log(mkl(x.flatten())) for x in convergence[con]['G'][::100]], label=con)
+    plt.loglog([mkl(x.flatten()) for x in convergence[con]['G'][::100]], label=con)
     plt.xlabel('iterations')
-    plt.ylabel(r'$\ln{(D_h(Mt,b)+D_h(Nt,a))}$')
+    plt.ylabel(r'$D_h(Mt,b)+D_h(Nt,a)$')
     plt.title(r'$h=\frac{x^2}{2}$')
 plt.legend()
 plt.show()
@@ -264,11 +249,11 @@ i = 2
 #     plt.title(m_name)
 #     plt.show()
 #     i+=1
-# for m_name in pot_names:
-#     x = pot_names[m_name]
-#     plt.imshow(x, cmap='hot', interpolation='nearest')
-#     plt.title(m_name)
-#     plt.show()
+for m_name in pot_names:
+    x = pot_names[m_name]
+    plt.imshow(x, cmap='hot', interpolation='nearest')
+    plt.title(m_name)
+    plt.show()
 # time_s = time.time()
 # t2, t_list2, g_list2 = ot.regpath.regularization_path(a, b, M, reg=1/tau,
 #                                                       semi_relaxed=True)
