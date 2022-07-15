@@ -127,8 +127,11 @@ def projection_simplex(x, dim_a, dim_b, z, axis=1):
         return projection_simplex(V, z, axis=1).ravel()
 
 
-def marginal(t,a,b,Hc,Hr):
-    return np.linalg.norm(Hc.dot(t),ord=1)+np.linalg.norm(Hr.dot(t),ord=1)-2
+def marginal_l2(t,a,b,Hc,Hr):
+    return l2(Hc.dot(t),b)+l2(Hr.dot(t),a)
+
+def marginal_kl(t,a,b,Hc,Hr):
+    return KL(Hc.dot(t),b)+KL(Hr.dot(t),a)
 
 
 
