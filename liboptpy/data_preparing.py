@@ -20,6 +20,22 @@ def making_gausses(n):
     M /= M.max()
     return a,b,M
 
+def making_uot_gausses(n):
+
+    # bin positions
+    x = np.arange(n, dtype=np.float64)
+
+    # Gaussian distributions
+    a = gauss(n, m=n/5, s=n/5)  # m= mean, s= std
+    b = gauss(n, m=n/5 *3, s=n/2)/2
+
+    # make distributions unbalanced
+
+    # loss matrix
+    M = ot.dist(x.reshape((n, 1)), x.reshape((n, 1)))
+    M /= M.max()
+    return a,b,M
+
 def err_cal(a,b, M,reg,err):
     K = np.empty_like(M)
     np.divide(M, -reg, out=K)
