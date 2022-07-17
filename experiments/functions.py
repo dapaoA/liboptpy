@@ -71,11 +71,13 @@ def uot_kl_proximal_K_entropy(ctau, x, h, grad):
 
 def UOT_l2(t,a,b,m,tau,Hc,Hr):
 
-    return np.dot(t,m)+ tau * ( l2(Hc.dot(t),b)+(l2(Hr.dot(t),a)))
+    return np.dot(t,m)+ tau/2 * ( l2(Hc.dot(t),b)+(l2(Hr.dot(t),a)))
 
 def grad_uot_l2(t, a, b, HcHc,HrHr,Hcb,Hra, dim_a,dim_b):
     # proximal algorithm don't contain c^T t part!!!!!!!!!!!!!
-    return 2* (np.tile(HcHc[:dim_a,:].dot(t),dim_b)+np.repeat(HrHr[::dim_b,:].dot(t),dim_b,axis=0)-Hcb-Hra)
+    return  (np.tile(HcHc[:dim_a,:].dot(t),dim_b)+np.repeat(HrHr[::dim_b,:].dot(t),dim_b,axis=0)-Hcb-Hra)
+def uot_l2_proximal_l2(ctau,x,h,grad):
+    return np.maximum(x + h *grad -h*ctau,0)
 
 def linsolver(gradient):
     x = np.zeros(gradient.shape[0])
