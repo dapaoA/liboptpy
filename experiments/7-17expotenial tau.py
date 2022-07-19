@@ -190,6 +190,11 @@ time_s = time.time()
 Gexptau_100_2,logexptau_100_2 = ot.unbalanced.mm_unbalanced_dynamic3(a, b, M,1, tau, div='kl',numItermax=round,log=True,stopThr=stopThr)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
+
+time_s = time.time()
+Gexptau_100_2,logexptau_100_2 = ot.unbalanced.mm_unbalanced_dynamic3(a, b, M,1, tau, div='kl',numItermax=round,log=True,stopThr=stopThr)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
 convergence = {
     'uot-(tau)':loguot,
     'mmkl-tau': log_tau,
