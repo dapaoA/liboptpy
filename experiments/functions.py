@@ -140,3 +140,19 @@ def marginal_kl(t,a,b,Hc,Hr):
 def sparsity(t):
     return np.count_nonzero(t==0)/len(t)
 
+
+def sparse_initialization(a,b,M):
+
+    dim_a, dim_b = M.shape
+
+    if len(a) == 0:
+        a = np.ones(dim_a, type_as=M) / dim_a
+    if len(b) == 0:
+        b = np.ones(dim_b, type_as=M) / dim_b
+    G0 = np.zeros((dim_a,dim_b))
+    for i in range(dim_a):
+        for j in range(dim_b):
+            G()
+
+
+
