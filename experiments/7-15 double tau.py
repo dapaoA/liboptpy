@@ -215,7 +215,16 @@ pot_names = {
 plt.figure(figsize=(13,10))
 
 for con in convergence:
-    plt.loglog([f(x.flatten()) for x in convergence[con]['G'][::100]], label=con)
+    plt.plot([np.log(f(x.flatten())) for x in convergence[con]['G'][::10]], label=con)
+    plt.xlabel(r'$iterations \times 100$')
+    plt.ylabel(r'$\ln((f(x)+\tau(D(Mx,b)+D(Nx,a)))$')
+    plt.title(r'Convergence spped for $\tau=1000$')
+plt.legend()
+plt.show()
+plt.figure(figsize=(13,10))
+
+for con in convergence:
+    plt.loglog([f(x.flatten()) for x in convergence[con]['G'][::10]], label=con)
     plt.xlabel(r'$iterations \times 100$')
     plt.ylabel(r'$(f(x)+\tau(D(Mx,b)+D(Nx,a))$')
     plt.title(r'Convergence spped for $\tau=1000$')
@@ -224,7 +233,7 @@ plt.show()
 plt.figure(figsize=(13,10))
 
 for con in convergence:
-    plt.loglog([f_opt(x.flatten()) for x in convergence[con]['G'][::100]], label=con)
+    plt.loglog([f_opt(x.flatten()) for x in convergence[con]['G'][::10]], label=con)
     plt.xlabel(r'$iterations \times 100$')
     plt.ylabel(r'$f(x)$')
     plt.title(r'Convergence spped for $\tau=1000$')
@@ -232,7 +241,7 @@ plt.legend()
 plt.show()
 plt.figure(figsize=(13,10))
 for con in convergence:
-    plt.loglog([mkl(x.flatten()) for x in convergence[con]['G'][::100]], label=con)
+    plt.loglog([mkl(x.flatten()) for x in convergence[con]['G'][::10]], label=con)
     plt.xlabel(r'$iterations \times 100$')
     plt.ylabel(r'$D_h(Mt,b)+D_h(Nt,a)$')
     plt.title(r'$h=\frac{x^2}{2}$')
@@ -240,10 +249,41 @@ plt.legend()
 plt.show()
 plt.figure(figsize=(13,10))
 for con in convergence:
-    plt.plot([np.log(ml2(x.flatten())) for x in convergence[con]['G'][::100]], label=con)
+    plt.plot([np.log(ml2(x.flatten())) for x in convergence[con]['G'][::10]], label=con)
     plt.xlabel(r'$iterations \times 100$')
     plt.ylabel(r'$\ln{(D_h(Mt,b)+D_h(Nt,a))}$')
     plt.title(r'$h=x(\ln{x}-1)$')
+plt.legend()
+plt.show()
+
+plt.figure(figsize=(13,10))
+for con in convergence:
+    plt.plot([np.log(f_opt(x.flatten())) for x in convergence[con]['G'][::10]], label=con)
+    plt.xlabel(r'$iterations \times 100$')
+    plt.ylabel(r'$\ln f(x)$')
+    plt.title(r'Convergence spped for $\tau=1000$')
+plt.legend()
+plt.ylim(-2.8,-2.2)
+plt.xlim(0,150)
+plt.show()
+
+
+plt.figure(figsize=(13,10))
+for con in convergence:
+    plt.plot([np.log(f(x.flatten())) for x in convergence[con]['G'][::10]], label=con)
+    plt.xlabel(r'$iterations \times 100$')
+    plt.ylabel(r'$\ln((f(x)+\tau(D(Mx,b)+D(Nx,a)))$')
+    plt.title(r'Convergence spped for $\tau=1000$')
+plt.legend()
+plt.show()
+
+
+plt.figure(figsize=(13,10))
+for con in convergence:
+    plt.plot([spa(x.flatten()) for x in convergence[con]['G'][::10]], label=con)
+    plt.xlabel(r'$iterations \times 100$')
+    plt.ylabel(r'$\ln((f(x)+\tau(D(Mx,b)+D(Nx,a)))$')
+    plt.title(r'Convergence spped for $\tau=1000$')
 plt.legend()
 plt.show()
 # plt.figure(figsize=(13,10))

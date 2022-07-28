@@ -113,6 +113,69 @@ def making_mnist(a_digit,b_digit,a_num,b_num):
     M = mm / mm.max()
     return a,b,M
 
+
+def making_mnist_uot(a_digit,b_digit,a_num,b_num):
+    col = 28
+    row = 28
+    max_rgb = 255
+    # import mnist data
+    mnist = MNIST(r'D:\github\mud-game\IBP-OT\dataset\MNIST')
+    mnist.gz = True
+    x_train, y_train = mnist.load_training()  # 60000 samples
+    x_test, y_test = mnist.load_testing()  # 10000 samples
+
+    # 1: choose the MNIST
+    dic = {}
+    for i in range(10):
+        dic[str(i)] = [x_train[k] for k in [j for j, x in enumerate(y_train) if x == i]]  # it is useful
+    example_list_1 = dic[a_digit][a_num]
+    example_list_2 = dic[b_digit][b_num]
+
+    def trans2img(example):
+        return np.asarray(example).astype(np.float32).reshape((row, col)) / max_rgb
+
+    def trans2img_normalize(example):
+        a = np.asarray(example).astype(np.float32).reshape((row, col))
+        return a
+
+    example_img_1 = trans2img(example_list_1)
+    example_img_2 = trans2img(example_list_2)
+
+    del x_test, y_test
+    del x_train, y_train
+
+    def cost_fun(img_a, img_b):
+        a = img_a.flatten()
+        b = img_b.flatten()
+        x_a = np.ones((len(example_list_1), 2))
+        x_b = np.ones((len(example_list_2), 2))
+        j = 0
+        for i in range(len(example_list_1)):
+            if a[i] != 0:
+                x_a[j, 0] = i // col
+                x_a[j, 1] = i % col
+                j += 1
+        x_a = x_a[:j]
+        j = 0
+        for i in range(len(example_list_2)):
+            if b[i] != 0:
+                x_b[j, 0] = i // col
+                x_b[j, 1] = i % col
+                j += 1
+        x_b = x_b[:j]
+        a = a[a != 0]
+        b = b[b != 0]
+        M = ot.dist(x_a, x_b)
+        M /= M.max()
+        return a, b, M
+
+    aa, bb, mm = cost_fun(example_img_1, example_img_2)
+    # 除去a中等于0的数
+    a = aa
+    b = bb
+    M = mm / mm.max()
+    return a,b,M
+
 def making_mnist_with_noise(a_digit,b_digit,a_num,b_num,noise):
     col = 28
     row = 28
@@ -174,6 +237,69 @@ def making_mnist_with_noise(a_digit,b_digit,a_num,b_num,noise):
     # 除去a中等于0的数
     a = aa / aa.sum()
     b = bb / bb.sum()
+    M = mm / mm.max()
+    return a,b,M
+
+def making_mnist_uot_with_noise(a_digit,b_digit,a_num,b_num,noise):
+    col = 28
+    row = 28
+    max_rgb = 255
+    # import mnist data
+    mnist = MNIST('../dataset/MNIST')
+    mnist.gz = True
+    x_train, y_train = mnist.load_training()  # 60000 samples
+    x_test, y_test = mnist.load_testing()  # 10000 samples
+
+    # 1: choose the MNIST
+    dic = {}
+    for i in range(10):
+        dic[str(i)] = [x_train[k] for k in [j for j, x in enumerate(y_train) if x == i]]  # it is useful
+    example_list_1 = dic[a_digit][a_num]
+    example_list_2 = dic[b_digit][b_num]
+    def trans2img(example):
+        return np.asarray(example).astype(np.float32).reshape((row, col)) / max_rgb
+
+    def trans2img_normalize(example):
+        a = np.asarray(example).astype(np.float32).reshape((row, col))
+        return a
+
+    example_img_1 = trans2img(example_list_1)
+    example_img_2 = trans2img(example_list_2)
+    n_img_a = example_img_1 + noise * np.random.rand(row, col)
+    n_img_b = example_img_2 + noise * np.random.rand(row, col)
+
+    del x_test, y_test
+    del x_train, y_train
+
+    def cost_fun(img_a, img_b):
+        a = img_a.flatten()
+        b = img_b.flatten()
+        x_a = np.ones((len(example_list_1), 2))
+        x_b = np.ones((len(example_list_2), 2))
+        j = 0
+        for i in range(len(example_list_1)):
+            if a[i] != 0:
+                x_a[j, 0] = i // col
+                x_a[j, 1] = i % col
+                j += 1
+        x_a = x_a[:j]
+        j = 0
+        for i in range(len(example_list_2)):
+            if b[i] != 0:
+                x_b[j, 0] = i // col
+                x_b[j, 1] = i % col
+                j += 1
+        x_b = x_b[:j]
+        a = a[a != 0]
+        b = b[b != 0]
+        M = ot.dist(x_a, x_b)
+        M /= M.max()
+        return a, b, M
+
+    aa, bb, mm = cost_fun(n_img_a, n_img_b)
+    # 除去a中等于0的数
+    a = aa
+    b = bb
     M = mm / mm.max()
     return a,b,M
 
