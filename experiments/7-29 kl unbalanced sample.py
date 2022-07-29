@@ -161,121 +161,41 @@ loguot2['G'] = []
 for i in range(len(loguot['u'])):
      loguot2['G'].append((loguot2['u'][i][:, None] * K * loguot2['v'][i][None, :]).flatten())
 
+epsilon = 1e-1
+times = time.time()
+Gs3,loguot3 = ot.unbalanced.sinkhorn_unbalanced(a, b, M, epsilon, tau, numItermax=round, stopThr=tol, verbose=True,log=True)
+timee = time.time()
+print("uot time: ", timee - times)
+
+nx = ot.backend.get_backend(M, a, b)
+K = nx.exp(M / (-epsilon))
+loguot3['G'] = []
+for i in range(len(loguot['u'])):
+     loguot3['G'].append((loguot3['u'][i][:, None] * K * loguot3['v'][i][None, :]).flatten())
+
+time_s = time.time()
+G01_0001a,log01_0001a = ot.unbalanced.mm_unbalanced_dynamic2_stop_nestrov2(a, b, M,0.1,tau,0.0001,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+time_s = time.time()
+G01_0001,log01_0001 = ot.unbalanced.mm_unbalanced_dynamic2_stop(a, b, M,0.1,tau,0.0001,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
 
 time_s = time.time()
 Gtau,log_tau = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
-
-time_s = time.time()
-G1_tau_100_2,log1_tau_100_2 = ot.unbalanced.mm_unbalanced_dynamic2(a, b, M,1, tau,100,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-
-
-time_s = time.time()
-G1_q000005,log_q000005 = ot.unbalanced.mm_unbalanced_dynamic2_stop(a, b, M,1,tau,0.00005,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-time_s = time.time()
-
-
-time_s = time.time()
-G1_q000005a,log_q000005a = ot.unbalanced.mm_unbalanced_dynamic2_stop_nestrov(a, b, M,1,tau,0.00005,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-time_s = time.time()
-
-time_s = time.time()
-G1_q000005a2,log_q000005a2 = ot.unbalanced.mm_unbalanced_dynamic2_stop_nestrov2(a, b, M,1,tau,0.00005,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-time_s = time.time()
-
-time_s = time.time()
-G1_q00001,log_q00001 = ot.unbalanced.mm_unbalanced_dynamic2_stop(a, b, M,1,tau,0.0001,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-time_s = time.time()
-
-
-time_s = time.time()
-G1_q00002a,log_q00002a = ot.unbalanced.mm_unbalanced_dynamic2_stop_nestrov(a, b, M,1,tau,0.0002,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-time_s = time.time()
-
-time_s = time.time()
-G1_q00001a2,log_q00001a2 = ot.unbalanced.mm_unbalanced_dynamic2_stop_nestrov2(a, b, M,1,tau,0.0001,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-time_s = time.time()
-
-
-time_s = time.time()
-G1_q00001x,log_q00001x = ot.unbalanced.mm_unbalanced_dynamic2_stop(a, b, M,0.1,tau,0.0001,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-time_s = time.time()
-G1_q00001xa,log_q00001xa = ot.unbalanced.mm_unbalanced_dynamic2_stop_nestrov(a, b, M,0.1,tau,0.0001,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-time_s = time.time()
-G1_q00001xa2,log_q00001xa2 = ot.unbalanced.mm_unbalanced_dynamic2_stop_nestrov2(a, b, M,0.1,tau,0.0001,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-time_s = time.time()
-G1_q00001y,log_q00001y = ot.unbalanced.mm_unbalanced_dynamic2_stop(a, b, M,0.01,tau,0.0001,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-
 convergence = {
-    'uot-(tau)':loguot,
-    'uot-(tau)2': loguot2,
-    'mmkl-tau': log_tau,
-    "mmkl-1-tau-100-2": log1_tau_100_2,
-
-    "q000005": log_q000005,
-    "q000005a": log_q000005a,
-    "q000005a2": log_q000005a2,
-    "q00001": log_q00001,
-    "q00002a": log_q00002a,
-    "q00001a2": log_q00001a2,
-
-    "q00001x": log_q00001x,
-    "q00001xa": log_q00001xa,
-    "q00001xa2": log_q00001xa2,
-    "q00001y": log_q00001y,
-
+    'Sinkhorn-1e-3':loguot,
+    'Sinkhorn-1e-2': loguot2,
+    'Sinkhorn-1e-1': loguot3,
+    'MMkl':log_tau,
+    'dynamic-0.1-tau': log01_0001,
+    'dynamic-0.1-tau-nesterov':log01_0001a,
              }
 
-
-pot_names = {
-    'uot-tau': Gs,
-    'uot-tau2': Gs2,
-    'mmkl-tau-tau': Gtau,
-    "mmkl-1-tau-100-2": G1_tau_100_2,
-
-    "q000005": G1_q000005,
-    "q000005a": G1_q000005a,
-    "q000005a2": G1_q000005a2,
-
-    "q00001": G1_q00001,
-    "q00002a": G1_q00002a,
-    "q00001a2": G1_q00001a2,
-
-    "q00001x": G1_q00001x,
-    "q00001xa": G1_q00001xa,
-    "q00001xa2": G1_q00001xa2,
-    "q00001y": G1_q00001y,
-
-             }
 
 plt.figure(figsize=(13,10))
 
@@ -290,6 +210,17 @@ plt.legend()
 plt.show()
 plt.figure(figsize=(13,10))
 
+
+plt.figure(figsize=(13,10))
+for con in convergence:
+    plt.loglog([f(x.flatten()) for x in convergence[con]['G'][::paint_iteration]], label=con)
+    plt.xlabel(r'$iterations \times$ %i' %paint_iteration)
+    plt.ylabel(r'$\ln((f(x)+\tau(D(Mx,b)+D(Nx,a)))$')
+    plt.title(r'Convergence spped for $\tau=$ %i' %tau)
+plt.legend()
+plt.show()
+
+plt.figure(figsize=(13,10))
 for con in convergence:
     plt.plot([np.log(f(x.flatten())) for x in convergence[con]['G'][::paint_iteration]], label=con)
     plt.xlabel(r'$iterations \times$ %i' %paint_iteration)
@@ -310,10 +241,11 @@ plt.show()
 # plt.show()
 plt.figure(figsize=(13,10))
 for con in convergence:
-    plt.loglog([ml2(x.flatten()) for x in convergence[con]['G'][::paint_iteration]], label=con)
+    plt.loglog([mkl(x.flatten()) for x in convergence[con]['G'][::paint_iteration]], label=con)
     plt.xlabel(r'$iterations \times$ %i' %paint_iteration)
     plt.ylabel(r'$D_h(Mt,b)+D_h(Nt,a)$')
-    plt.title(r'$h=\frac{x^2}{2}$')
+    #plt.title(r'$h=\frac{x^2}{2}$')
+    plt.title(r'$h=x\ln{x}$')
 plt.legend()
 plt.show()
 
@@ -345,9 +277,9 @@ i = 2
 #     plt.title(m_name)
 #     plt.show()
 #     i+=1
-for m_name in pot_names:
-    x = pot_names[m_name]
-    plt.imshow(x, cmap='hot', interpolation='nearest')
+for m_name in convergence:
+    x = convergence[m_name]
+    plt.imshow(x['G'][-1].reshape(n,n), cmap='hot', interpolation='nearest',vmin=0,vmax=0.002)
     plt.title(m_name)
     plt.show()
 # time_s = time.time()
