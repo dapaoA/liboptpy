@@ -34,7 +34,7 @@ n = 100
 a,b,M = making_gausses(n)
 epsilon = 0.01
 round = 10000
-tau = 10
+tau = 1000
 
 dim_a = np.shape(a)[0]
 dim_b = np.shape(b)[0]

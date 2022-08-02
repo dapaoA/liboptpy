@@ -20,14 +20,14 @@ def making_gausses(n):
     M /= M.max()
     return a,b,M
 
-def making_uot_gausses(n):
+def making_uot_gausses(n,vol_of_a=1,vol_of_b=0.5):
 
     # bin positions
     x = np.arange(n, dtype=np.float64)
 
     # Gaussian distributions
     a = gauss(n, m=n/5, s=n/5)  # m= mean, s= std
-    b = gauss(n, m=n/5 *3, s=n/2)/2
+    b = gauss(n, m=n/5 *3, s=n/2)*(vol_of_b/vol_of_a)
 
     # make distributions unbalanced
 
@@ -245,7 +245,7 @@ def making_mnist_uot_with_noise(a_digit,b_digit,a_num,b_num,noise):
     row = 28
     max_rgb = 255
     # import mnist data
-    mnist = MNIST('../dataset/MNIST')
+    mnist = MNIST('./dataset/MNIST')
     mnist.gz = True
     x_train, y_train = mnist.load_training()  # 60000 samples
     x_test, y_test = mnist.load_testing()  # 10000 samples
