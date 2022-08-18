@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 
 from liboptpy.data_preparing import making_gausses
@@ -153,6 +155,69 @@ def sparse_initialization(a,b,M):
     for i in range(dim_a):
         for j in range(dim_b):
             G()
+
+
+
+def initial_c(a,b,M):
+# for the screening method, we cant allow a parameter without panlty, which means a c_ij=0 is forbidden
+# we have to dinimish the miner one in a and b ,then their would be no c_ij = 0
+    zero_ids = np.where(M==0)
+    a_copy = copy.copy(a)
+    b_copy = copy.copy(b)
+    a_exist_id = np.ones_like(a)
+    b_exist_id = np.ones_like(b)
+    for i in range(zero_ids):
+        if(a[i[0]]<b[i[1]]):
+            a_exist_id[i[0]] = 1
+        elif(a[i[0]]>b[i[1]])
+            b_exist_id[i[0]] = 1
+        else:
+            a_exist_id[i[0]] = 1
+            b_exist_id[i[0]] = 1
+
+
+    a_copy[np.where(b_exist_id=1)] = a_copy[np.where(b_exist_id=1)]-b[np.where(b_exist_id=1)]
+    b_copy[np.where(a_exist_id=1)] = b_copy[np.where(a_exist_id=1)]-a[np.where(a_exist_id=1)]
+    a_copy = np.delete(a, np.where(a_exist_id=1))
+    b_copy = np.delete(b, np.where(a_exist_id=1))
+    return a_copy,b_copy, M[np.where(a_exist_id=0),np.where(b_exist_id=0)],a_exist_id,b_exist_id
+
+
+def reconstructe_c(a,b,M)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
