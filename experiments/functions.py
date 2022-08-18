@@ -156,9 +156,7 @@ def sparse_initialization(a,b,M):
     if len(b) == 0:
         b = np.ones(dim_b, type_as=M) / dim_b
     G0 = np.zeros((dim_a,dim_b))
-    for i in range(dim_a):
-        for j in range(dim_b):
-            G()
+
 
 
 
@@ -168,26 +166,37 @@ def initial_c(a,b,M):
     zero_ids = np.where(M==0)
     a_copy = copy.copy(a)
     b_copy = copy.copy(b)
-    a_exist_id = np.ones_like(a)
-    b_exist_id = np.ones_like(b)
-    for i in range(zero_ids):
-        if(a[i[0]]<b[i[1]]):
-            a_exist_id[i[0]] = 1
-        elif(a[i[0]]>b[i[1]])
-            b_exist_id[i[0]] = 1
+    a_exist_id = np.zeros_like(a)
+    b_exist_id = np.zeros_like(b)
+    T_def = sp.lil_matrix(M.shape)
+    for i,j in zip(zero_ids[0],zero_ids[1]):
+        if(a[i]<b[j]):
+            a_exist_id[i] = 1
+            T_def[i,j] = a[i]
+        elif(a[i]>b[j]):
+            b_exist_id[j] = 1
+            T_def[i,j] = b[j]
         else:
-            a_exist_id[i[0]] = 1
-            b_exist_id[i[0]] = 1
+            a_exist_id[i] = 1
+            b_exist_id[j] = 1
+            T_def[i, j] = a[i]
 
 
-    a_copy[np.where(b_exist_id=1)] = a_copy[np.where(b_exist_id=1)]-b[np.where(b_exist_id=1)]
-    b_copy[np.where(a_exist_id=1)] = b_copy[np.where(a_exist_id=1)]-a[np.where(a_exist_id=1)]
-    a_copy = np.delete(a, np.where(a_exist_id=1))
-    b_copy = np.delete(b, np.where(a_exist_id=1))
-    return a_copy,b_copy, M[np.where(a_exist_id=0),np.where(b_exist_id=0)],a_exist_id,b_exist_id
+    a_copy[np.where(b_exist_id==1)] = a_copy[np.where(b_exist_id==1)]-b[np.where(b_exist_id==1)]
+    b_copy[np.where(a_exist_id==1)] = b_copy[np.where(a_exist_id==1)]-a[np.where(a_exist_id==1)]
+    a_copy = np.delete(a, np.where(a_exist_id==1))
+    b_copy = np.delete(b, np.where(b_exist_id==1))
+# M[np.ix_(np.where(a_exist_id==0),np.where(b_exist_id==0))]
+    return a_copy,b_copy, M[np.ix_(np.where(a_exist_id==0)[0],np.where(b_exist_id==0)[0])] ,a_exist_id,b_exist_id,T_def
 
 
-def reconstructe_c(a,b,M)
+def reconstructe_c(a,b,Gs,a_exist_id,b_exist_id,T_def):
+    T_new = np.zeros((a_exist_id.shape[0],b_exist_id.shape[0]))
+    T_new[np.ix_(np.where(a_exist_id==0)[0],np.where(b_exist_id==0)[0])] = Gs
+    T_new = T_new+ T_def
+    return np.asarray(T_new).squeeze()
+
+
 
 
 

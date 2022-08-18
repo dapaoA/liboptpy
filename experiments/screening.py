@@ -16,6 +16,9 @@ from functions import uot_kl_proximal_K_entropy as pk
 from functions import uot_kl_proximal_B_entropy as pb
 from functions import marginal_kl as makl
 from functions import marginal_l2 as mal2
+from functions import initial_c
+from functions import reconstructe_c as rc
+import liboptpy.screening.screenning as sc
 
 #this file is used to disscuss about the convergence of the algorithm according to the tau
 # 关于nestrov加速要不要重启
@@ -35,11 +38,11 @@ import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
 
-n = 100
+n = 10
 a,b,M = making_uot_gausses(n)
-epsilon = 0.01
-round = 10000
-tau = 1000
+epsilon = 0.1
+round = 100
+tau = 100
 
 dim_a = np.shape(a)[0]
 dim_b = np.shape(b)[0]
@@ -94,3 +97,43 @@ def sparsity(t):
     return np.count_nonzero(t==0)/len(t)
 
 spa = lambda x: sparsity(x)
+
+
+
+tau = 0.1
+trans1 = sc.safe_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
+trans1_m = trans1.update()
+
+plt.imshow(trans1_m.reshape(10,10))
+plt.show()
+
+
+tau = 0.5
+trans1 = sc.safe_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
+trans1_m = trans1.update()
+
+plt.imshow(trans1_m.reshape(10,10))
+plt.show()
+# a_copy,b_copy,M_new,a_exist_id,b_exist_id,M_def = initial_c(a,b,M)
+#
+# Gs = ot.unbalanced.sinkhorn_unbalanced(a_copy,b_copy,M_new,epsilon,tau)
+Gs_org = ot.unbalanced.sinkhorn_unbalanced(a,b,M,epsilon,tau)
+#
+# Gs_re = rc(a_copy,b_copy,Gs,a_exist_id,b_exist_id,M_def)
+#
+#
+plt.plot(a)
+plt.plot(b)
+plt.show()
+# plt.imshow(Gs)
+# plt.show()
+# plt.imshow(Gs_re)
+# plt.show()
+plt.imshow(Gs_org)
+plt.show()
+#
+#
+# print("value of f_uot of initial method is: ",f(Gs_re.flatten().squeeze()))
+# print("value of f_uot of sinkhorn method is: ",f(Gs_org.flatten()))
+# print("value of f_opt of initial method is: ",f_opt(Gs_re.flatten()))
+# print("value of f_opt of sinkhorn method is: ",f_opt(Gs_org.flatten()))
