@@ -1,19 +1,17 @@
 import numpy as np
-
 from liboptpy.data_preparing import making_gausses
-
 import scipy.sparse as sp
+import liboptpy.screening.screenning as sc
 
-import time
-n = 2
-a = np.asarray([1.0,3.0])
-b = np.asarray([1.0,3.0])
+n = 10
+a,b,M = making_gausses(n)
 epsilon = 0.01
-round = 5000
-tau = 100
+round = 10000
+tau = 1000
 
 dim_a = np.shape(a)[0]
 dim_b = np.shape(b)[0]
+m = M.flatten()
 jHr = np.arange(dim_a * dim_b)
 iHr = np.repeat(np.arange(dim_a), dim_b)
 jHc = np.arange(dim_a * dim_b)
@@ -22,13 +20,17 @@ Hr = sp.csc_matrix((np.ones(dim_a * dim_b), (iHr, jHr)),
                    shape=(dim_a, dim_a * dim_b))
 Hc = sp.csc_matrix((np.ones(dim_a * dim_b), (iHc, jHc)),
                    shape=(dim_b, dim_a * dim_b))
+Hra = Hr.T.dot(a)
+Hrb = Hr.T.dot(b)
+HrHr = Hr.T.dot(Hr)
+HcHc = Hc.T.dot(Hc)
+Hca = Hc.T.dot(a)
+Hcb = Hc.T.dot(b)
 
+X = sp.vstack((Hc,Hr))
+y = np.concatenate((a,b),axis=0)
 
-x1 = np.asarray([1.0,3.0,1.0,3.0])
-x2 = np.asarray([1.0,3.0,1.0,3.0])
+sc1 = sc.safe_screening(0,0,0,X,y,1/tau,reg="l1")
 
-def KL(x,y):
-    return np.dot(x,np.log(x/y))-x.sum()+y.sum()
-
-KL(Hr.dot(x1),Hr.dot(x2))+KL(Hc.dot(x1),Hc.dot(x2)) - KL(x1,x2)
+sc1.update(np.zeros(100))
 
