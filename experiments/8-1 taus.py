@@ -2,8 +2,8 @@ import numpy as np
 import liboptpy.base_optimizer as base
 import liboptpy.constr_solvers as cs
 import liboptpy.step_size as ss
-from liboptpy.data_preparing import making_mnist_uot_with_noise
-from liboptpy.data_preparing import making_mnist_uot
+from liboptpy.data_preparing import making_mnist_with_noise
+from liboptpy.data_preparing import making_uot_gausses
 import ot
 import matplotlib.pyplot as plt
 import scipy.sparse as sp
@@ -16,7 +16,6 @@ from functions import uot_kl_proximal_B_entropy as pb
 from functions import marginal_kl as makl
 from functions import marginal_l2 as mal2
 
-# sys.path.extend(['/Users/xunsu/Documents/GitHub/liboptpy/experiments','Users\\xunsu\\Documents\\GitHub\\liboptpy\\experiments'])
 #this file is used to disscuss about the convergence of the algorithm according to the tau
 # 关于nestrov加速要不要重启
 #貌似重启了下降快，但是不准，不重启下降慢，但是准。。。
@@ -35,9 +34,10 @@ import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
 
-a,b,M = a,b,M = making_mnist_uot_with_noise("1","3",3,4,0.001)
+n = 100
+a,b,M = making_uot_gausses(n)
 epsilon = 0.01
-round = 5000
+round = 10000
 tau = 1000
 
 dim_a = np.shape(a)[0]
@@ -51,9 +51,19 @@ Hr = sp.csc_matrix((np.ones(dim_a * dim_b), (iHr, jHr)),
                    shape=(dim_a, dim_a * dim_b))
 Hc = sp.csc_matrix((np.ones(dim_a * dim_b), (iHc, jHc)),
                    shape=(dim_b, dim_a * dim_b))
+Hra = Hr.T.dot(a)
+Hrb = Hr.T.dot(b)
+HrHr = Hr.T.dot(Hr)
+HcHc = Hc.T.dot(Hc)
+Hca = Hc.T.dot(a)
+Hcb = Hc.T.dot(b)
 
 
-# linear programming
+def func_opt(t, m):
+
+
+    return np.dot(t,m)
+
 
 f = lambda x: UOT_kl(x,a,b,m,tau,Hc,Hr)
 
@@ -75,21 +85,6 @@ def sparsity(t):
 spa = lambda x: sparsity(x)
 #"FW": cs.FrankWolfe(f, grad, linsolver, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
 #           "PGD": cs.ProjectedGD(f, grad, projection_simplex, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.1, init_alpha=1.)),
-
-
-
-methods = {
-#"FISTA": cs.FISTA(f, grad, projection_simplex, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
-#"AMD": cs.AMD(f, grad, kl_projection, ss.Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
-#"PGD": cs.ProjectedGD(f, grad, projection_simplex, ss.Backtracking(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=1.)),
-"MD-KLb": cs.MirrorD_gen(f, grad, proximalB, ss.ConstantStepSize(0.25)),
-"MD-KLk": cs.MirrorD_gen(f, grad, proximalK, ss.ConstantStepSize(0.5)),
-#"AMD-KLb": cs.AMD_gen(f, grad, proximalB, ss.D_Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=0.01)),
-#"AMD-KLk": cs.AMD_gen(f, grad, proximalK, ss.D_Backtracking_Nestrov(rule_type="Armijo", rho=0.5, beta=0.001, init_alpha=0.01)),
-#"AMD-e-c2": cs.AMD_E(f, grad, kl_projection, ss.ConstantInvIterStepSize(1)),
-#"AMD-e-c1": cs.AMD_E(f, grad, kl_projection, ss.Backtracking_Bregman_Nestrov(rule_type="Armijo", rho=0.5, beta=0.0001, init_alpha=1.)),
-          }
-
 # n =100 tau =100
 # Best convergence for FISTA is 0.01
 # Best convergence for AMD is 1
@@ -100,6 +95,21 @@ x0 = np.ones((dim_a,dim_b)).flatten()/(dim_a*dim_b)
 max_iter = 4000
 tol = 1e-6
 
+
+# for m_name in methods:
+#     print("\t", m_name)
+#     time_s = time.time()
+#     x = methods[m_name].solve(x0=x0, max_iter=max_iter, tol=tol, disp=1)
+#     time_e = time.time()
+#     print(m_name,"time costs: ", time_e - time_s, " s")
+
+
+
+epsilon = 1e-3 # entropy parameter
+  # Unbalanced KL relaxation parameter
+round = 5000
+
+stopThr = 1e-15
 
 
 times = time.time()
@@ -228,6 +238,14 @@ plt.ylim(-2.5,-2.1)
 plt.legend()
 plt.show()
 
+plt.figure(figsize=(13,10))
+for con in convergence:
+    plt.loglog([f_opt(x.flatten()) for x in convergence[con]['G'][::paint_iteration]], label=con)
+    plt.xlabel(r'$iterations \times$ %i' %paint_iteration)
+    plt.ylabel(r'$f(x)$')
+    plt.title(r'Convergence spped for $\tau=$ %i' %tau)
+plt.legend()
+plt.show()
 plt.figure(figsize=(13,10))
 for con in convergence:
     plt.loglog([ml2(x.flatten()) for x in convergence[con]['G'][::paint_iteration]], label=con)

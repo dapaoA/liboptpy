@@ -137,7 +137,11 @@ def marginal_l2(t,a,b,Hc,Hr):
 def marginal_kl(t,a,b,Hc,Hr):
     return KL(Hc.dot(t),b)+KL(Hr.dot(t),a)
 
+def marginal_kl_a(t,a,Hr):
+    return KL(Hr.dot(t),a)
 
+def marginal_kl_b(t,a,b,Hc,Hr):
+    return KL(Hc.dot(t),b)+KL(Hr.dot(t),a)
 
 def sparsity(t):
     return np.count_nonzero(t==0)/len(t)
