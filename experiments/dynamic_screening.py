@@ -100,7 +100,7 @@ spa = lambda x: sparsity(x)
 m+=0.1
 M+=0.1
 
-tau = 0.2
+tau = 0.5
 trans1 = sc.safe_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
 trans1_m = trans1.update()
 
@@ -110,31 +110,16 @@ plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
              orientation='horizontal', extend='both')
 plt.show()
 
-Gs_org = ot.unbalanced.sinkhorn_unbalanced(a,b,M,epsilon,tau)
+trans1 = sc.dynamic_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
+trans1_m = trans1.update(np.concatenate((a,b)))
 
-plt.imshow(Gs_org)
-plt.title('sinkhorn-0.2')
+plt.imshow(trans1_m.reshape(10,10))
+plt.title('sc-0.2')
 plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
              orientation='horizontal', extend='both')
 plt.show()
 
-time_s = time.time()
-G01_0001,log01_0001 = ot.unbalanced.mm_unbalanced_dynamic2_stop(a, b, M,0.01,tau,0.0001,2, div='l2_2',numItermax=round,log=True,stopThr=1e-9)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-plt.imshow(G01_0001)
-plt.title('mu-l2-0.2')
-plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
-             orientation='horizontal', extend='both')
-plt.show()
-
-f = lambda x: UOT_l2(x,a,b,m,tau,Hc,Hr)
-print("value f(x): ",f(Gs_org.flatten())," usinkhirn ")
-print("value f(x): ",f(G01_0001.flatten())," MU ")
-print("value f(x): ",f(np.zeros_like(Gs_org).flatten())," 0 ")
-
-
-tau = 0.5
+tau = 4
 trans1 = sc.safe_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
 trans1_m = trans1.update()
 
@@ -143,41 +128,15 @@ plt.title('sc-0.5')
 plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
              orientation='horizontal', extend='both')
 plt.show()
-# a_copy,b_copy,M_new,a_exist_id,b_exist_id,M_def = initial_c(a,b,M)
-#
-# Gs = ot.unbalanced.sinkhorn_unbalanced(a_copy,b_copy,M_new,epsilon,tau)
-Gs_org = ot.unbalanced.sinkhorn_unbalanced(a,b,M,epsilon,tau)
 
-plt.imshow(Gs_org)
-plt.title('u-sinhorn-0.5')
-plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
-             orientation='horizontal', extend='both')
-plt.show()
-
-
-tau = 0.7
-trans1 = sc.safe_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
-trans1_m = trans1.update()
+trans1 = sc.dynamic_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
+trans1_m = trans1.update(np.concatenate((a,b)))
 
 plt.imshow(trans1_m.reshape(10,10))
-plt.title('sc-0.7')
+plt.title('sc-0.5')
 plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
              orientation='horizontal', extend='both')
 plt.show()
-# a_copy,b_copy,M_new,a_exist_id,b_exist_id,M_def = initial_c(a,b,M)
-#
-# Gs = ot.unbalanced.sinkhorn_unbalanced(a_copy,b_copy,M_new,epsilon,tau)
-Gs_org = ot.unbalanced.sinkhorn_unbalanced(a,b,M,epsilon,tau)
-
-plt.imshow(Gs_org)
-plt.title('usinkhorn-0.7')
-plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
-             orientation='horizontal', extend='both')
-plt.show()
-# Gs_re = rc(a_copy,b_copy,Gs,a_exist_id,b_exist_id,M_def)
-#
-#
-
 
 
 plt.plot(a)
