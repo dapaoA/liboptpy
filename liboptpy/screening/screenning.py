@@ -1,5 +1,5 @@
 import numpy as np
-
+import math
 
 
 class screener(object):
@@ -83,3 +83,33 @@ class dynamic_screening(screener):
                 self.countzeros += 1
         print("screening percent is: ",self.countzeros/self.w_screening.shape[0])
         return self.w_screening
+
+
+class sasvi_screening(screener):
+    def __init__(self, w, X, y, c, lam, reg="l1"):
+        super().__init__(w, X, y, c, lam, reg="l1")
+
+    def update(self,w):
+        self.w = w
+        self.theta_hat = self.X.dot(self.w) -self.y
+        self.Xw = self.X.dot(self.w)
+        self.r = 0.5 * np.linalg.norm(self.theta_hat-self.y)
+        self.theta_o = 0.5*(self.theta_hat + self.y)
+        self.delta = self.lam *np.dot(self.c,self.w) - np.dot(self.theta_o,self.X.dot(self.w))
+        self.w_screening = np.ones_like(self.w)
+
+        for i in range(self.w_screening.shape[0]):
+            xiXw = np.dot(self.X[:, i], self.Xw)
+            if (self.r* xiXw<=self.delta):
+                if (self.X[:, i].dot(self.theta_o) +self.r*np.linalg.norm(self.X[:,i])> 1):
+                    self.w_screening[i] = 1
+                    self.countzeros += 1
+            else:
+                if (self.X[:, i].dot(self.theta_o)+xiXw/np.dot(self.Xw,self.Xw) + np.linalg.norm(self.X[:,i]
+                    - xiXw/np.dot(self.Xw,self.Xw)*self.Xw)*math.sqrt(self.r**2-1/(np.dot(self.Xw,self.Xw)*self.delta**2)) > 1):
+                    self.w_screening[i] = 1
+                    self.countzeros += 1
+
+        print("screening percent is: ", self.countzeros / self.w_screening.shape[0])
+        return self.w_screening
+
