@@ -119,7 +119,7 @@ plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
 plt.show()
 
 time_s = time.time()
-G01_0001,log01_0001 = ot.unbalanced.mm_unbalanced_dynamic2_stop(a, b, M,0.01,tau,0.0001,2, div='l2_2',numItermax=round,log=True,stopThr=1e-9)
+G01_0001,log_2_tau9 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 plt.imshow(G01_0001)
@@ -154,6 +154,20 @@ plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
              orientation='horizontal', extend='both')
 plt.show()
 
+time_s = time.time()
+G01_0001,log_2_tau9 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+plt.imshow(G01_0001)
+plt.title('mu-l2-0.5')
+plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+             orientation='horizontal', extend='both')
+
+plt.show()
+f = lambda x: UOT_l2(x,a,b,m,tau,Hc,Hr)
+print("value f(x): ",f(Gs_org.flatten())," usinkhirn ")
+print("value f(x): ",f(G01_0001.flatten())," MU ")
+print("value f(x): ",f(np.zeros_like(Gs_org).flatten())," 0 ")
 
 tau = 0.7
 trans1 = sc.safe_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
@@ -174,6 +188,55 @@ plt.title('usinkhorn-0.7')
 plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
              orientation='horizontal', extend='both')
 plt.show()
+
+time_s = time.time()
+G01_0001,log_2_tau9 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+plt.imshow(G01_0001)
+plt.title('mu-l2-0.7')
+plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+             orientation='horizontal', extend='both')
+
+plt.show()
+f = lambda x: UOT_l2(x,a,b,m,tau,Hc,Hr)
+print("value f(x): ",f(Gs_org.flatten())," usinkhirn ")
+print("value f(x): ",f(G01_0001.flatten())," MU ")
+print("value f(x): ",f(np.zeros_like(Gs_org).flatten())," 0 ")
+tau = 10
+trans1 = sc.safe_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
+trans1_m = trans1.update()
+
+plt.imshow(trans1_m.reshape(10,10))
+plt.title('sc-10')
+plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+             orientation='horizontal', extend='both')
+plt.show()
+# a_copy,b_copy,M_new,a_exist_id,b_exist_id,M_def = initial_c(a,b,M)
+#
+# Gs = ot.unbalanced.sinkhorn_unbalanced(a_copy,b_copy,M_new,epsilon,tau)
+Gs_org = ot.unbalanced.sinkhorn_unbalanced(a,b,M,epsilon,tau)
+
+plt.imshow(Gs_org)
+plt.title('usinkhorn-10')
+plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+             orientation='horizontal', extend='both')
+plt.show()
+
+time_s = time.time()
+G01_0001,log_2_tau9 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=round,log=True)
+time_e = time.time()
+print( "time costs: ", time_e - time_s, " s")
+plt.imshow(G01_0001)
+plt.title('mu-l2-10')
+plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+             orientation='horizontal', extend='both')
+
+plt.show()
+f = lambda x: UOT_l2(x,a,b,m,tau,Hc,Hr)
+print("value f(x): ",f(Gs_org.flatten())," usinkhirn ")
+print("value f(x): ",f(G01_0001.flatten())," MU ")
+print("value f(x): ",f(np.zeros_like(Gs_org).flatten())," 0 ")
 # Gs_re = rc(a_copy,b_copy,Gs,a_exist_id,b_exist_id,M_def)
 #
 #

@@ -102,32 +102,14 @@ M+=0.1
 
 tau = 0.5
 stopThr = 1e-9
-trans1 = sc.safe_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
-trans1_m = trans1.update()
-
-plt.imshow(trans1_m.reshape(10,10))
-plt.title('sc-0.5')
-plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
-             orientation='horizontal', extend='both')
-plt.show()
-
 trans1 = sc.sasvi_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
-trans1_m = trans1.update(np.zeros((10,10)).flatten())
-
-plt.imshow(trans1_m.reshape(10,10))
-plt.title('sc-savia-0.5')
-plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
-             orientation='horizontal', extend='both')
-plt.show()
-
 time_s = time.time()
-G1_q00001,log_q00001 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=round,log=True)
+G1_q00001,log_q00001 = ot.unbalanced.mm_unbalanced_revised_screening(a, b, M, tau, l_rate=1/(2*n),screening=trans1,div='l2_2',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 time_s = time.time()
-
 plt.imshow(G1_q00001)
-plt.title('uot_mm_solution')
+plt.title('uot_mm_solution_05')
 plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
              orientation='horizontal', extend='both')
 plt.show()
@@ -143,13 +125,13 @@ plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
 plt.show()
 
 time_s = time.time()
-G1_q00001,log_q00001 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=round,log=True)
+G1_q00001,log_q00001 = ot.unbalanced.mm_unbalanced_revised_screening(a, b, M, tau, l_rate=1/(2*n),screening=trans1,div='l2_2',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 time_s = time.time()
 
 plt.imshow(G1_q00001)
-plt.title('uot_mm_solution')
+plt.title('uot_mm_solution_5')
 plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
              orientation='horizontal', extend='both')
 plt.show()
@@ -165,7 +147,7 @@ plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
 plt.show()
 
 time_s = time.time()
-G1_q00001,log_q00001 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=round,log=True)
+G1_q00001,log_q00001 = ot.unbalanced.mm_unbalanced_revised_screening(a, b, M, tau, l_rate=1/(2*n),screening=trans1,div='l2_2',numItermax=round,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 time_s = time.time()
