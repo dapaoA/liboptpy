@@ -95,8 +95,12 @@ class sasvi_screening(screener):
     def update(self,w):
         self.w = w
         self.Xw = self.X.dot(self.w)
-        self.theta_hat = self.lam * min(self.c)*(self.y - self.Xw)/max(1,np.max(self.X.T.dot(self.y-self.Xw)))
         self.Xw_norm2 = np.dot(self.Xw,self.Xw)
+        self.theta_hat = self.y - self.Xw
+        self.g = self.lam *np.dot(self.c,self.w)
+        if(self.g-self.Xw.dot(self.theta_hat)<0):
+            self.theta_hat += (self.g - np.dot(self.theta_hat,self.Xw))/self.Xw_norm2 *self.Xw
+#        self.theta_hat = self.lam * min(self.c)*(self.y - self.Xw)/max(1,np.max(self.X.T.dot(self.y-self.Xw)))
 
         self.r = 0.5 * np.linalg.norm(self.theta_hat-self.y)
         self.theta_o = 0.5*(self.theta_hat + self.y)
@@ -112,7 +116,7 @@ class sasvi_screening(screener):
                     self.countzeros += 1
             else:
                 if (self.X[:, i].T.dot(self.theta_o)[0]+xiXw/self.Xw_norm2*self.delta + np.linalg.norm(self.X[:,i].toarray()
-                        - xiXw/self.Xw_norm2*self.Xw)*math.sqrt(self.r**2-1/(self.Xw_norm2)*self.delta**2) < self.lam*self.c[i]):
+                        - xiXw/self.Xw_norm2*self.Xw)*math.sqrt(max(self.r**2-1/(self.Xw_norm2)*self.delta**2,0)) < self.lam*self.c[i]):
                     self.w_screening[i] = 0
                     self.countzeros += 1
         if(self.countzeros!=0):
@@ -120,7 +124,7 @@ class sasvi_screening(screener):
                 self.sratio = self.countzeros / self.w_screening.shape[0]
                 print("screening percent is: ", self.countzeros / self.w_screening.shape[0])
                 print("running")
-                plt.imshow(self.w_screening.reshape(10, 10))
+                plt.imshow(self.w_screening.reshape(math.floor(self.theta_o.shape[0]/2), math.floor(self.theta_o.shape[0]/2)))
                 plt.title('running!')
                 plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
                          orientation='horizontal', extend='both')

@@ -97,12 +97,12 @@ def sparsity(t):
 
 spa = lambda x: sparsity(x)
 
-m+=0.1
-M+=0.1
+
 
 tau = 0.5
 stopThr = 1e-9
-trans1 = sc.sasvi_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
+xx = sp.vstack((Hc,Hr)).tocsc()
+trans1 = sc.sasvi_screening(np.ones_like(m),xx,np.concatenate((a,b)),m,1/tau)
 time_s = time.time()
 G1_q00001,log_q00001 = ot.unbalanced.mm_unbalanced_revised_screening(a, b, M, tau, l_rate=1/(2*n),screening=trans1,div='l2_2',numItermax=round,log=True)
 time_e = time.time()
@@ -115,10 +115,10 @@ plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
 plt.show()
 
 tau = 5
-trans1 = sc.sasvi_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
-trans1_m = trans1.update(np.zeros((10,10)).flatten())
+trans1 = sc.sasvi_screening(np.ones_like(m),xx,np.concatenate((a,b)),m,1/tau)
+trans1_m = trans1.update(np.zeros((n,n)).flatten())
 
-plt.imshow(trans1_m.reshape(10,10))
+plt.imshow(trans1_m.reshape(n,n))
 plt.title('sc-savia-5')
 plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
              orientation='horizontal', extend='both')
@@ -137,10 +137,10 @@ plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
 plt.show()
 
 tau = 50
-trans1 = sc.sasvi_screening(np.ones_like(m),sp.vstack((Hc,Hr)),np.concatenate((a,b)),m,1/tau)
-trans1_m = trans1.update(np.zeros((10,10)).flatten())
+trans1 = sc.sasvi_screening(np.ones_like(m),xx,np.concatenate((a,b)),m,1/tau)
+trans1_m = trans1.update(np.zeros((n,n)).flatten())
 
-plt.imshow(trans1_m.reshape(10,10))
+plt.imshow(trans1_m.reshape(n,n))
 plt.title('sc-savia-50')
 plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
              orientation='horizontal', extend='both')

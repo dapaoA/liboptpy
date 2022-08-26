@@ -63,7 +63,7 @@ def func_opt(t, m):
 
 
     return np.dot(t,m)
-
+f_opt = lambda x: func_opt(x, m)
 
 f = lambda x: UOT_kl(x,a,b,m,tau,Hc,Hr)
 
