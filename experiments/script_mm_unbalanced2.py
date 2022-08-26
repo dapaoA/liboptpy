@@ -4182,7 +4182,7 @@ def mm_unbalanced_revised_coord(a, b, M, reg_m,batch, l_rate=0.5, div='kl', G0=N
     else:
         return G
 
-def mm_unbalanced_revised_screening(a, b, M, reg_m, l_rate=0.5, div='kl', G0=None, numItermax=1000,
+def mm_unbalanced_revised_screening(a, b, M, reg_m, l_rate=0.5,screening=None, div='kl', G0=None, numItermax=1000,
                   stopThr=1e-15, verbose=False, log=False):
     r"""
     Solve the unbalanced optimal transport problem and return the OT plan.
@@ -4286,11 +4286,6 @@ def mm_unbalanced_revised_screening(a, b, M, reg_m, l_rate=0.5, div='kl', G0=Non
                        nx.zeros((dim_a, dim_b), type_as=M))
     elif div == 'l2_2':
         K = (a[:, None] + b[None, :] - M / reg_m)
-        lamdamax = nx.max(a) + nx.max(b)
-        ab = (a[:,None]+b[None,:]).flatten()
-        cc = nx.concatenate((a, b))
-        normout = nx.norm(cc)
-
     else:
         warnings.warn("The div parameter should be either equal to 'kl' or \
                       'l2': it has been set to 'kl'.")
@@ -4299,6 +4294,7 @@ def mm_unbalanced_revised_screening(a, b, M, reg_m, l_rate=0.5, div='kl', G0=Non
 
     for i in range(numItermax):
         Gprev = G
+        screening.update(G.flatten())
 
         if div == 'kl':
             u = nx.power(a / (nx.sum(G, 1) + 1e-16),l_rate)
@@ -4308,8 +4304,6 @@ def mm_unbalanced_revised_screening(a, b, M, reg_m, l_rate=0.5, div='kl', G0=Non
             Gd = nx.sum(G, 0, keepdims=True) + nx.sum(G, 1, keepdims=True) + 1e-16
             G = G * K / Gd
         elif div == 'l2_2':
-
-
             G = nx.maximum(G-l_rate*(nx.tile(nx.sum(G, 0, keepdims=True),(a.shape[0],1)) + nx.tile(nx.sum(G, 1, keepdims=True),(1,b.shape[0]))-K),0)
 
         err = nx.sqrt(nx.sum((G - Gprev) ** 2))
@@ -4327,7 +4321,7 @@ def mm_unbalanced_revised_screening(a, b, M, reg_m, l_rate=0.5, div='kl', G0=Non
     else:
         return G
 
-def mm_unbalanced_revised_screening(a, b, M, reg_m, l_rate=0.5,screening=None, div='kl', G0=None, numItermax=1000,
+def mm_unbalanced_revised_screening_fortest(a, b, M, reg_m, l_rate=0.5,screening=None, div='kl', G0=None, numItermax=1000,
                   stopThr=1e-15, verbose=False, log=False):
     r"""
     Solve the unbalanced optimal transport problem and return the OT plan.
