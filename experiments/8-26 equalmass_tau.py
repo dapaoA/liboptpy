@@ -39,9 +39,9 @@ sns.set_context("talk")
 #from tqdm import tqdm
 
 n = 30
-a,b,M = making_uot_gausses(n)
+a,b,M = making_gausses(n)
 epsilon = 0.001
-round = 100000
+round = 10000
 tau = 100
 
 dim_a = np.shape(a)[0]
@@ -144,7 +144,7 @@ xx = sp.vstack((Hr,Hc)).tocsc()
 
 
 
-tau =200
+tau =20
 m += 0.01
 M += 0.01
 G1= ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=10*round,stopThr=stopThr)

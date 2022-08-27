@@ -98,9 +98,7 @@ class sasvi_screening(screener):
         self.Xw_norm2 = np.dot(self.Xw,self.Xw)
         self.theta_hat = self.y - self.Xw
         self.g = self.lam *np.dot(self.c,self.w)
-        if(self.g-self.Xw.dot(self.theta_hat)<0):
-            self.theta_hat += (self.g - np.dot(self.theta_hat,self.Xw))/self.Xw_norm2 *self.Xw
-#        self.theta_hat = self.lam * min(self.c)*(self.y - self.Xw)/max(1,np.max(self.X.T.dot(self.y-self.Xw)))
+        self.theta_hat = self.lam * min(self.c)*(self.y - self.Xw)/max(1,np.max(self.X.T.dot(self.y-self.Xw)))
 
         self.r = 0.5 * np.linalg.norm(self.theta_hat-self.y)
         self.theta_o = 0.5*(self.theta_hat + self.y)
@@ -142,14 +140,36 @@ class sasvi_screening_test(screener):
         self.Xw_norm2 = np.dot(self.Xw,self.Xw)
         self.theta_hat = self.y - self.Xw
         self.g = self.lam *np.dot(self.c,self.w)
+        # if (self.g - self.Xw.dot(self.theta_hat) < 0):
+        #     self.theta_hat += (self.g - np.dot(self.theta_hat, self.Xw)) / self.Xw_norm2 * self.Xw
+        #
         # print('primal: ',np.linalg.norm(self.solution-self.w))
         # self.theta_best = self.y - self.X.dot(self.solution)
         # print('dual before projection: ',np.linalg.norm(self.theta_hat-self.theta_best))
-        if(self.g-self.Xw.dot(self.theta_hat)<0):
-            self.theta_hat += (self.g - np.dot(self.theta_hat,self.Xw))/self.Xw_norm2 *self.Xw
-            print('project!')
-#        self.theta_hat = self.lam * min(self.c)*(self.y - self.Xw)/max(1,np.max(self.X.T.dot(self.y-self.Xw)))
+        # beilv = self.X.T.dot(self.y-self.Xw)/(self.lam * min(self.c))
+
+        rank = math.floor(self.theta_hat.shape[0] / 2)
+        beilv = (self.X.T.dot(self.theta_hat) / (self.lam * self.c)).reshape(rank,rank)
+        self.theta_hat[:rank] = (self.y - self.Xw)[:rank]/np.where(beilv.max(axis=1)>1,beilv.max(axis=1),1.0)
+        self.theta_hat[rank:] = (self.y - self.Xw)[rank:]/np.where(beilv.max(axis=0)>1,beilv.max(axis=0),1.0)
+        print('max ratio',max(1,np.max(beilv)))
+        print('increase ratio',((self.y - self.Xw)/self.theta_hat).min())
+
+        plt.imshow(beilv)
+        plt.title('ratio!')
+        plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+                     orientation='horizontal', extend='both')
+        plt.show()
 #         print('dual after projection: ',np.linalg.norm(self.theta_hat-self.theta_best))
+
+        #ggg = self.X.T.dot(self.theta_hat)
+        #fff = self.lam * self.c
+        #gfr = (ggg - fff).reshape((30, 30))
+        #plt.imshow(np.where(gfr < 0, gfr, -1))
+        #plt.title('running!')
+        #plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+        #             orientation='horizontal', extend='both')
+        #plt.show()
 
         self.r = 0.5 * np.linalg.norm(self.theta_hat-self.y)
         self.theta_o = 0.5*(self.theta_hat + self.y)
@@ -180,3 +200,126 @@ class sasvi_screening_test(screener):
                              orientation='horizontal', extend='both')
                 plt.show()
         return self.w_screening
+
+class sasvi_screening_zero_test(screener):
+    def __init__(self, w, X, y, c, lam, reg="l1",sratio=0,solution=None):
+        super().__init__(w, X, y, c, lam, reg="l1")
+        self.sratio = 0
+        self.solution = solution
+    def update(self,w):
+        self.w = w
+        self.Xw = self.X.dot(self.w)
+        self.Xw_norm2 = np.dot(self.Xw,self.Xw)
+        self.theta_hat = self.y - self.Xw
+        self.g = self.lam *np.dot(self.c,self.w)
+        # print('primal: ',np.linalg.norm(self.solution-self.w))
+        # self.theta_best = self.y - self.X.dot(self.solution)
+        # print('dual before projection: ',np.linalg.norm(self.theta_hat-self.theta_best))
+        self.theta_hat = self.lam * min(self.c)*(self.y - self.Xw)/max(1,np.max(self.X.T.dot(self.y-self.Xw)))
+        self.theta_hat = -self.theta_hat
+#         print('dual after projection: ',np.linalg.norm(self.theta_hat-self.theta_best))
+
+        #ggg = self.X.T.dot(self.theta_hat)
+        #fff = self.lam * self.c
+        #gfr = (ggg - fff).reshape((30, 30))
+        #plt.imshow(np.where(gfr < 0, gfr, -1))
+        #plt.title('running!')
+        #plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+        #             orientation='horizontal', extend='both')
+        #plt.show()
+
+        self.r = 0.5 * np.linalg.norm(self.theta_hat-self.y)
+        self.theta_o = 0.5*(self.theta_hat + self.y)
+        self.delta = self.lam *np.dot(self.c,self.w) - np.dot(self.theta_o,self.Xw )
+        self.w_screening = np.ones_like(self.w)
+        self.countzeros = 0
+        for i in range(self.w_screening.shape[0]):
+            xiXw = self.X[:, i].T.dot(self.Xw)[0]
+            xi_norm = math.sqrt(self.X[:, i].T.dot(self.X[:, i]).toarray()[0][0])
+            if (self.r/xi_norm* xiXw<=self.delta):
+                if (self.X[:, i].T.dot(self.theta_o)[0] +self.r*xi_norm< self.lam*self.c[i]):
+                    self.w_screening[i] = 0
+                    self.countzeros += 1
+            else:
+                if (self.X[:, i].T.dot(self.theta_o)[0]+xiXw/self.Xw_norm2*self.delta + np.linalg.norm(self.X[:,i].toarray()
+                        - xiXw/self.Xw_norm2*self.Xw)*math.sqrt(max(self.r**2-1/(self.Xw_norm2)*self.delta**2,0)) < self.lam*self.c[i]):
+                    self.w_screening[i] = 0
+                    self.countzeros += 1
+        if (self.countzeros != 0):
+            if (self.countzeros / self.w_screening.shape[0] > self.sratio):
+                self.sratio = self.countzeros / self.w_screening.shape[0]
+                print("screening percent is: ", self.countzeros / self.w_screening.shape[0])
+                print("running")
+                plt.imshow(self.w_screening.reshape(math.floor(self.theta_o.shape[0] / 2),
+                                                        math.floor(self.theta_o.shape[0] / 2)))
+                plt.title('running!')
+                plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+                             orientation='horizontal', extend='both')
+                plt.show()
+        return self.w_screening
+
+class sasvi_screening_c_trans_test(screener):
+    def __init__(self, w, X, y, c, lam, reg="l1",sratio=0,solution=None):
+        super().__init__(w, X, y, c, lam, reg="l1")
+        self.sratio = 0
+        self.solution = solution
+    def update(self,w):
+        self.w = w
+        self.Xw = self.X.dot(self.w)
+        self.Xw_norm2 = np.dot(self.Xw,self.Xw)
+        self.theta_hat = self.y - self.Xw
+        self.g = self.lam *np.dot(self.c,self.w)
+        # if (self.g - self.Xw.dot(self.theta_hat) < 0):
+        #     self.theta_hat += (self.g - np.dot(self.theta_hat, self.Xw)) / self.Xw_norm2 * self.Xw
+        #
+        # print('primal: ',np.linalg.norm(self.solution-self.w))
+        # self.theta_best = self.y - self.X.dot(self.solution)
+        # print('dual before projection: ',np.linalg.norm(self.theta_hat-self.theta_best))
+        self.theta_hat = self.y-self.Xw
+        rank = int(self.theta_hat.shape[0]/2)
+        for i in range(rank):
+            self.theta_hat[i] = self.lam * (self.c[i*rank:(i+1)*rank]- self.theta_hat[rank:]).min()
+#         print('dual after projection: ',np.linalg.norm(self.theta_hat-self.theta_best))
+
+        #ggg = self.X.T.dot(self.theta_hat)
+        #fff = self.lam * self.c
+        #gfr = (ggg - fff).reshape((30, 30))
+        #plt.imshow(np.where(gfr < 0, gfr, -1))
+        #plt.title('running!')
+        #plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+        #             orientation='horizontal', extend='both')
+        #plt.show()
+
+        self.r = 0.5 * np.linalg.norm(self.theta_hat-self.y)
+        self.theta_o = 0.5*(self.theta_hat + self.y)
+        self.delta = self.lam *np.dot(self.c,self.w) - np.dot(self.theta_o,self.Xw )
+        self.w_screening = np.ones_like(self.w)
+        self.countzeros = 0
+        for i in range(self.w_screening.shape[0]):
+            xiXw = self.X[:, i].T.dot(self.Xw)[0]
+            xi_norm = math.sqrt(self.X[:, i].T.dot(self.X[:, i]).toarray()[0][0])
+            if (self.r/xi_norm* xiXw<=self.delta):
+                if (self.X[:, i].T.dot(self.theta_o)[0] +self.r*xi_norm< self.lam*self.c[i]):
+                    self.w_screening[i] = 0
+                    self.countzeros += 1
+            else:
+                if (self.X[:, i].T.dot(self.theta_o)[0]+xiXw/self.Xw_norm2*self.delta + np.linalg.norm(self.X[:,i].toarray()
+                        - xiXw/self.Xw_norm2*self.Xw)*math.sqrt(max(self.r**2-1/(self.Xw_norm2)*self.delta**2,0)) < self.lam*self.c[i]):
+                    self.w_screening[i] = 0
+                    self.countzeros += 1
+        if (self.countzeros != 0):
+            if (self.countzeros / self.w_screening.shape[0] > self.sratio):
+                self.sratio = self.countzeros / self.w_screening.shape[0]
+                print("screening percent is: ", self.countzeros / self.w_screening.shape[0])
+                print("running")
+                plt.imshow(self.w_screening.reshape(math.floor(self.theta_o.shape[0] / 2),
+                                                        math.floor(self.theta_o.shape[0] / 2)))
+                plt.title('running!')
+                plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+                             orientation='horizontal', extend='both')
+                plt.show()
+        return self.w_screening
+
+
+def dual(theta,y):
+    return -0.5* np.dot(theta,theta)+np.dot(y,theta)
