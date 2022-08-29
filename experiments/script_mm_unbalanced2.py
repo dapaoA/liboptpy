@@ -4294,7 +4294,9 @@ def mm_unbalanced_revised_screening(a, b, M, reg_m, l_rate=0.5,screening=None, d
 
     for i in range(numItermax):
         Gprev = G
-        screening.update(G.flatten())
+        if(i%10000==1):
+
+            screening.update(G.flatten())
 
         if div == 'kl':
             u = nx.power(a / (nx.sum(G, 1) + 1e-16),l_rate)
