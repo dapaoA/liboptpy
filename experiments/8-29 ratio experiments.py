@@ -41,7 +41,6 @@ sns.set_context("talk")
 n = 30
 a,b,M = making_uot_gausses(n)
 epsilon = 0.001
-round = 100000
 tau = 20
 
 dim_a = np.shape(a)[0]
@@ -144,10 +143,11 @@ xx = sp.vstack((Hr,Hc)).tocsc()
 
 
 
-tau =500
-m += 0.001
-M += 0.001
-G1= ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=round,stopThr=stopThr)
+tau =50
+round = 1000
+m += 0.01
+M += 0.01
+G1= ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=1*round,stopThr=stopThr)
 plt.imshow(G1)
 plt.title('uot_mm_solution_5')
 plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
@@ -157,37 +157,72 @@ plt.show()
 trans1 = sc.sasvi_screening_ratio_pic_test(np.ones_like(m),xx,np.concatenate((a,b)),m,1/tau,solution=G1.flatten())
 
 time_s = time.time()
-G1_q00001,log= ot.unbalanced.mm_unbalanced_revised_screening_for_pic(a, b, M, tau, l_rate=1/(2*n),screening=trans1,div='l2_2',numItermax=round,stopThr=stopThr,log=True)
+G1_q00001,log= ot.unbalanced.mm_unbalanced_revised_screening_for_pic(a, b, M, tau,saveround=10, l_rate=1/(2*n),screening=trans1,div='l2_2',numItermax=round,stopThr=stopThr,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
-import matplotlib.animation as animation
-fig = plt.figure()
-ax = fig.add_subplot(111)
-#Line2D objectを入れるリスト
-ims = []
-
-
-for i in range(len(log['w_screening'])):
-    ax.colorbar(aspect=40, pad=0.08, shrink=0.6,
-                     orientation='horizontal', extend='both')
-    ax.title('Screening Process')
-    im=ax.imshow(log['w_screening'][i])
-
-    ims.append(im) #各フレーム画像をimsに追加
-
-#アニメの生成
-ani = animation.ArtistAnimation(fig, ims, interval=100, blit=True, repeat_delay=1000)
-
-#保存
-ani.save("sample.gif", writer="pillow")
-
-
-plt.imshow(G1_q00001)
-plt.title('uot_mm_solution_5')
-plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
-             orientation='horizontal', extend='both')
+plt.figure(figsize=(13,10))
+plt.plot(log["opt_alg"],label=r'$\hat{\theta} \sim \theta^{k}$')
+plt.plot(log["opt_proj1"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{1}$')
+plt.plot(log["opt_proj2"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{2}$', linestyle='dashed')
+plt.plot(log["alg_proj1"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{1}$')
+plt.plot(log["alg_proj2"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{2}$', linestyle='dashed')
+plt.yscale('log')
+plt.title("Distances")
+plt.xlabel("rounds")
+plt.legend()
 plt.show()
+
+plt.figure(figsize=(13,10))
+plt.plot(log["opt_proj1"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{1}$')
+plt.plot(log["opt_proj2"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{2}$', linestyle='dashed')
+plt.plot(log["alg_proj1"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{1}$')
+plt.plot(log["alg_proj2"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{2}$', linestyle='dashed')
+plt.xlabel("rounds")
+plt.title("Distances")
+plt.legend()
+plt.show()
+
+plt.figure(figsize=(13,10))
+plt.plot(log["screening_area1"],label=r'$R(\tilde{\theta}^{k}_{1})$')
+plt.plot(log["screening_area2"],label=r'$R(\tilde{\theta}^{k}_{2})$', linestyle='dashed')
+plt.plot(log["screening_ps"],label=r'$\hat{\theta}$')
+plt.plot(log["screening_p1"],label=r'$\tilde{\theta}^{k}_{1}$')
+plt.plot(log["screening_p2"],label=r'$\tilde{\theta}^{k}_{2}$', linestyle='dashed')
+plt.title("Sparsity")
+plt.xlabel("rounds")
+plt.legend()
+plt.show()
+
+
+
+# import matplotlib.animation as animation
+# fig = plt.figure()
+# ax = fig.add_subplot(111)
+# #Line2D objectを入れるリスト
+# ims = []
+#
+#
+# for i in range(len(log['w_screening'])):
+#     ax.colorbar(aspect=40, pad=0.08, shrink=0.6,
+#                      orientation='horizontal', extend='both')
+#     ax.title('Screening Process')
+#     im=ax.imshow(log['w_screening'][i])
+#
+#     ims.append(im) #各フレーム画像をimsに追加
+#
+# #アニメの生成
+# ani = animation.ArtistAnimation(fig, ims, interval=100, blit=True, repeat_delay=1000)
+#
+# #保存
+# ani.save("sample.gif", writer="pillow")
+#
+#
+# plt.imshow(G1_q00001)
+# plt.title('uot_mm_solution_5')
+# plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+#              orientation='horizontal', extend='both')
+# plt.show()
 
 
 # tau = 50
