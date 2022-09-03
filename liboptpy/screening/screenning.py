@@ -750,8 +750,11 @@ class sasvi_screening_matrix(screener_matrix):
                 self.Xw_line1_v = copy.copy(self.w[i, :])
                 self.Xw_line1_v[j] = self.v[j]
                 self.Xw_line1_u[i] = self.u[i]
-                self.dis_line2 = self.line2 / math.sqrt(np.dot(self.u - self.Xw_line1_u,self.u - self.Xw_line1_u)
-                                                       + np.dot(self.v - self.Xw_line1_v,self.v - self.Xw_line1_v))
+                self.Xw_line1_norm = np.linalg.norm(np.concatenate((self.Xw_line1_u, self.Xw_line1_v)))
+                self.Xw_line2_u = self.u - self.Xw_line1_u
+                self.Xw_line2_v = self.v - self.Xw_line1_v
+                self.Xw_line2_norm = np.linalg.norm(np.concatenate((self.Xw_line2_u, self.Xw_line2_v)))
+                self.dis_line2 = self.line2 / self.Xw_line2_norm
                 if(self.line2>=0):
                     #平面在原点上半
                     if(self.dis_line2>self.r):
@@ -763,10 +766,6 @@ class sasvi_screening_matrix(screener_matrix):
                     self.r_new = math.sqrt(self.r ** 2 - self.dis_line2 ** 2)
 
                 #L1 部分
-                self.Xw_line1_u = copy.copy(self.w[:,j])
-                self.Xw_line1_v = copy.copy(self.w[i, :])
-                self.Xw_line1_v[j] = self.v[j]
-                self.Xw_line1_u[i] = self.u[i]
                 xiXw_line1 = self.Xw_line1_u[i] + self.Xw_line1_v[j]
                 xitheta_o = self.theta_ou[i] + self.theta_ov[j]
                 if (self.r/xi_norm* xiXw_line1<=self.line1):
@@ -783,8 +782,7 @@ class sasvi_screening_matrix(screener_matrix):
                             self.countzeros += 1
             #5：L2 下交 L1 全
                 else:
-                    Xw_line1_norm2 = self.w_col_qua[j] - 2 * self.w_qua[i, j] + self.u[i] ** 2 + \
-                                   self.w_row_qua[i] + self.v[j] ** 2
+                    Xw_line1_norm2 = self.Xw_line1_norm**2
                     x_xw_line1_u = - xiXw_line1 / Xw_line1_norm2 * self.Xw_line1_u
                     x_xw_line1_u[i] = x_xw_line1_u[i] + 1
                     x_xw_line1_v = - xiXw_line1 / Xw_line1_norm2 * self.Xw_line1_v
@@ -813,16 +811,19 @@ class sasvi_screening_matrix(screener_matrix):
                                 self.countzeros += 1
                         else:
             # 6: L2下交 L1交
-                            self.Xw_line1_norm = np.linalg.norm(np.concatenate(((self.u - self.Xw_line1_u),(self.v - self.Xw_line1_v))))
-                            self.down_theta_u = self.theta_ou + (self.dis_line2 * (self.u - self.Xw_line1_u)/self.Xw_line1_norm)
-                            self.down_theta_v = self.theta_ov + (self.dis_line2 * (self.v - self.Xw_line1_v)/self.Xw_line1_norm)
+                            self.down_theta_u = self.theta_ou + (self.dis_line2 * self.Xw_line2_u/self.Xw_line2_norm)
+                            self.down_theta_v = self.theta_ov + (self.dis_line2 * self.Xw_line2_v/self.Xw_line2_norm)
                             #self.g_matrix.sum() - self.g_col_matrix[j] - self.g_row_matrix[i] + self.g_matrix[i, j] - \
                              #                  np.dot(self.down_theta_u, self.u-self.Xw_line1_u) - np.dot(self.down_theta_v,
                              #                                                                  self.v - self.Xw_line1_v)
                             self.opt_down_u = copy.copy(self.down_theta_u)
-                            self.opt_down_u[i] = self.down_theta_u[i] + self.r_new
+                            self.opt_down_u[i] = self.down_theta_u[i] + self.r_new/xi_norm
                             self.opt_down_v = copy.copy(self.down_theta_v)
-                            self.opt_down_v[j] = self.down_theta_v[j] + self.r_new
+                            self.opt_down_v[j] = self.down_theta_v[j] + self.r_new/xi_norm
+            # self.pointandl2 = self.g_matrix.sum() - self.g_col_matrix[j] - self.g_row_matrix[i] + self.g_matrix[i, j] \
+            #                  - np.dot(self.opt_down_u, self.u - self.Xw_line1_u) - np.dot(self.opt_down_v,
+            #                                                                      self.v - self.Xw_line1_v)
+            #               self.line1 = self.sep_col[j]+self.sep_row[i]-self.delta_matrix[i,j]
                             self.pointandl1 = self.g_col_matrix[j] + self.g_row_matrix[i] - self.g_matrix[i, j]\
                                               -  np.dot(self.opt_down_u, self.Xw_line1_u) - np.dot(self.opt_down_v,
                                                                                               self.Xw_line1_v)
@@ -834,17 +835,20 @@ class sasvi_screening_matrix(screener_matrix):
                                     self.countzeros += 1
                             else:
             # 6.2: L2下交 L1交 L2最优在L1外
+                                self.dis_line1 = self.line1 / self.Xw_line1_norm
                                 if (xitheta_o +\
                                     xiXw_line1 / Xw_line1_norm2 * self.line1 +\
-                                    self.dis_line1 *np.dot(self.vector_line1,xi)
-                                    self.r_line1 *
-                                        np.linalg.norm(np.concatenate((x_xw_line1_u, x_xw_line1_v))) * math.sqrt(
-                                            max(self.r_new ** 2 - 1 / Xw_line1_norm2 * self.line1 ** 2, 0)) < self.lam *
-                                        self.C[
-                                            i, j]):
-                                    self.w_screening[i, j] = 0
-                                    self.countzeros += 1
-                                # xiXw = self.u[i] + self.v[j]
+                                    np.linalg.norm(np.concatenate((x_xw_line1_u,x_xw_line1_v)))*\
+                                    math.sqrt(max(self.r ** 2 - self.dis_line1 ** 2, 0)) < \
+                                    self.lam *self.C[i, j]):
+                                        self.w_screening[i, j] = 0
+                                        self.countzeros += 1
+
+                # if (xitheta_o + \
+                #         xiXw_line1 / Xw_line1_norm2 * self.line1 + \
+                #         math.sqrt(xi_norm - xiXw_line1 ** 2 / (xi_norm * self.Xw_line1_norm ** 2)) * \
+                #         math.sqrt(max(self.r ** 2 - self.dis_line1 ** 2, 0)) < \
+                        # xiXw = self.u[i] + self.v[j]
                                 # x_xwu = - xiXw/self.Xw_norm2 * self.u
                                 # x_xwu[i] = x_xwu[i]+1
                                 # x_xwv = - xiXw/self.Xw_norm2 * self.v
