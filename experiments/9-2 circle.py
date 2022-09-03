@@ -143,31 +143,26 @@ xx = sp.vstack((Hr,Hc)).tocsc()
 
 
 
-tau =500
-round = 1000000
-m += 0.01
-M += 0.01
-G1= ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=1*round,stopThr=stopThr)
+tau =5
+round = 10000
+G1= ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=10000,stopThr=stopThr)
 plt.imshow(G1)
 plt.title('uot_mm_solution_5')
 plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
              orientation='horizontal', extend='both')
 plt.show()
 
-trans1 = sc.sasvi_screening_ratio_pic_test(np.ones_like(m),xx,np.concatenate((a,b)),m,1/tau,solution=G1.flatten())
+trans1 = sc.sasvi_screening_matrix(np.ones_like(M),a,b,M,1/tau,solution=G1)
 
 time_s = time.time()
-G1_q00001,log= ot.unbalanced.mm_unbalanced_revised_screening_for_pic(a, b, M, tau,saveround=10000, l_rate=1/(2*n),screening=trans1,div='l2_2',numItermax=round,stopThr=stopThr,log=True)
+G1_q00001,log= ot.unbalanced.mm_unbalanced_revised_screening_for_divide(a, b, M, tau,saveround=1000, l_rate=1/(2*n),screening=trans1,div='l2_2',numItermax=round,stopThr=stopThr,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
 plt.figure(figsize=(13,10))
 plt.plot(log["opt_alg"],label=r'$\hat{\theta} \sim \theta^{k}$')
-plt.plot(log["opt_proj1"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}$')
-plt.plot(log["opt_proj2"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{shifting}$', linestyle='dashed')
-
-plt.plot(log["alg_proj1"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}$')
-plt.plot(log["alg_proj2"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{shifting}$', linestyle='dashed')
+plt.plot(log["opt_proj"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{shifting}$', linestyle='dashed')
+plt.plot(log["alg_proj"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{shifting}$', linestyle='dashed')
 
 plt.yscale('log')
 plt.title("Distances")
@@ -176,24 +171,17 @@ plt.legend()
 plt.show()
 
 plt.figure(figsize=(13,10))
-plt.plot(log["opt_proj1"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{shrinking}$')
-plt.plot(log["opt_proj2"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{shifting}$', linestyle='dashed')
-
-plt.plot(log["alg_proj1"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{shrinking}$')
-plt.plot(log["alg_proj2"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{shifting}$', linestyle='dashed')
-
+plt.plot(log["opt_proj"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{shrinking}$')
+plt.plot(log["alg_proj"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{shrinking}$')
 plt.xlabel("rounds")
 plt.title("Distances")
 plt.legend()
 plt.show()
 
 plt.figure(figsize=(13,10))
-plt.plot(log["screening_area1"],label=r'$R(\tilde{\theta}^{k})_{shrinking}$')
-plt.plot(log["screening_area2"],label=r'$R(\tilde{\theta}^{k}_{shifting})$', linestyle='dashed')
+plt.plot(log["screening_area1"],label=r'$R(\tilde{\theta}^{k})_{normal}$')
+plt.plot(log["screening_area2"],label=r'$R(\tilde{\theta}^{k}_{divide})$', linestyle='dashed')
 
-plt.plot(log["screening_ps"],label=r'$\theta^{k}$')
-plt.plot(log["screening_p1"],label=r'$\tilde{\theta}^{k}_{shrinking}$')
-plt.plot(log["screening_p2"],label=r'$\tilde{\theta}^{k}_{shifting}$', linestyle='dashed')
 
 plt.title("Sparsity")
 plt.xlabel("rounds")
