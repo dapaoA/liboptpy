@@ -2,6 +2,7 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 import copy
+from scipy.optimize import fsolve
 
 
 
@@ -670,7 +671,14 @@ class sasvi_screening_matrix(screener_matrix):
     #     beilv = self.X.T.dot(alg_theta)/(self.lam * self.c)
     #     out = alg_theta / max(1,beilv.max())
     #     return out, beilv
-
+    def func(self,i):
+        l1, l2, l3 = i[0], i[1], i[2]
+        return [
+            (-self.nm_mn - self.sum_nm) * l3 - (self.sum_nn + self.nnnn) * l2 - 2 * l1 * self.cosline1 * self.r - self.nn,
+            (-self.nm_mn - self.sum_nm) * l2 - (self.sum_mm + self.mmmm) * l3 - 2 * l1 * self.cosline2 * self.r - self.mm,
+            (-l2 * l3 * (self.nm_mn) -0.5 *self.nnnn * l2**2-0.5*self.mmmm*l3**2 +\
+              l2 * self.nn + l3 * self.mm - 1 - 0.5 * self.sum_nn * l2 ** 2 - 0.5 * self.sum_mm * l3 ** 2 - self.sum_nm * l3 * l2) +\
+            2 * self.r * l1**2]
     def projection_translation(self,at_u,at_v):
 
         trans = ((at_u[:,None]+at_v[None,:]-(self.lam * self.C))/2 )
@@ -856,23 +864,57 @@ class sasvi_screening_matrix(screener_matrix):
                                         self.countzeros += 1
 
                                 else:
+                                    self.cosline2 = (self.dis_line2/self.r)
+                                    self.cosline1 = (self.dis_line1/self.r)
+                                    self.final_norm = self.r
+                                    self.n2_u = (self.Xw_line2_u/self.Xw_line2_norm)
+                                    self.n2_v= self.Xw_line2_v/self.Xw_line2_norm
+                                    self.n1_u = self.Xw_line1_u/self.Xw_line1_norm
+                                    self.n1_v = self.Xw_line1_v/self.Xw_line1_norm
+                                    self.n1n2 = np.dot(self.n1_u,self.n2_u)+np.dot(self.n1_v,self.n2_v)
+                                    self.length1 = (self.cosline1 - self.cosline2*self.n1n2)/(1-self.n1n2**2)*self.r
+                                    self.length2 = (self.cosline2 - self.cosline1*self.n1n2)/(1-self.n1n2**2)*self.r
+                                    self.nm_mn = self.n1_u[i]*self.n2_u[i]+self.n1_v[j]*self.n2_v[j]
+                                    self.sum_nm = self.n1n2 - self.nm_mn
+                                    self.nn = self.n1_u[i] +self.n1_v[j]
+                                    self.mm = self.n2_u[i] + self.n2_v[j]
+                                    self.nnnn = self.n1_u[i]**2 +self.n1_v[j]**2
+                                    self.mmmm = self.n2_u[i]**2 + self.n2_v[j]**2
+                                    self.sum_n = self.n1_u.sum()+self.n1_v.sum() - self.nn
+                                    self.sum_m = self.n2_u.sum()+self.n2_v.sum() - self.mm
+                                    self.sum_mm = np.dot(self.n2_u,self.n2_u)+np.dot(self.n2_v,self.n2_v) - self.mmmm
+                                    self.sum_nn = np.dot(self.n1_u,self.n1_u)+np.dot(self.n1_v,self.n1_v) - self.nnnn
+                                    r = fsolve(self.func, np.ones(3))
+                                    self.final = (1-self.n1_u[i]*r[1] - self.n2_u[i]*r[2])/(2*r[0]) + (1-self.n1_v[j]*r[1] - self.n2_v[j]*r[2])/(2*r[0])
+                                    if (xitheta_o+ self.final< self.lam * self.C[i, j]):
+                                          self.w_screening[i, j] = 0
+                                          self.countzeros += 1
 
-                                    self.c1c2_u = self.down_line1_theta_u - self.down_theta_u
-                                    self.c1c2_v = self.down_line1_theta_v - self.down_theta_v
-                                    self.dis_c1c2 = np.linalg.norm(np.concatenate((self.c1c2_u,self.c1c2_v)))
-                                    self.dis_c1op = self.r_new
-                                    self.dis_c2op = math.sqrt(self.r**2 - self.dis_line1**2)
-
-                                    self.alpha = - (self.c1c2_u[i]+self.c1c2_v[j])**2/(self.dis_c1c2**2) +2
-                                    self.final =  math.sqrt(self.alpha)
-                                    self.coscab = (self.dis_c1c2 ** 2 + self.dis_c2op ** 2 - self.dis_c1op ** 2) / (2 * self.dis_c1c2 * self.dis_c2op)
-                                    self.middle_part = (self.dis_c2op * self.coscab)*(self.c1c2_u[i]+self.c1c2_v[j])
-                                    self.cosfinal = (self.c1c2_u[i]+self.c1c2_v[j])/(xi_norm*self.dis_c1c2)
-                                    self.sinfinal = math.sqrt(1-self.cosfinal**2)
-                                    self.finallength = self.dis_c2op* math.sqrt(1-self.coscab**2)
-                                    if (xitheta_o+self.middle_part+ self.final*self.finallength< self.lam * self.C[i, j]):
-                                         self.w_screening[i, j] = 0
-                                         self.countzeros += 1
+                                    '''
+                                    final_pos_u = (-self.n1_u * r[1] - self.n2_u * r[2]) / (2 * r[0])
+                                    final_pos_v = (-self.n1_v * r[1] - self.n2_v * r[2]) / (2 * r[0])
+                                    final_pos_u[i] += (1) / (2 * r[0])
+                                    final_pos_v[j] += (1) / (2 * r[0])
+                                    print(np.dot(final_pos_u,final_pos_u)+np.dot(final_pos_v,final_pos_v) - self.r**2)
+                                    print(np.dot(final_pos_u, self.n1_u) + np.dot(final_pos_v, self.n1_v) - self.cosline1*self.r)
+                                    print(np.dot(final_pos_u, self.n2_u) + np.dot(final_pos_v, self.n2_v) - self.cosline2*self.r)
+'''
+                                    # self.c1c2_u = self.down_line1_theta_u - self.down_theta_u
+                                    # self.c1c2_v = self.down_line1_theta_v - self.down_theta_v
+                                    # self.dis_c1c2 = np.linalg.norm(np.concatenate((self.c1c2_u,self.c1c2_v)))
+                                    # self.dis_c1op = self.r_new
+                                    # self.dis_c2op = math.sqrt(self.r**2 - self.dis_line1**2)
+                                    #
+                                    # self.alpha = - (self.c1c2_u[i]+self.c1c2_v[j])**2/(self.dis_c1c2**2) +2
+                                    # self.final =  math.sqrt(self.alpha)
+                                    # self.coscab = (self.dis_c1c2 ** 2 + self.dis_c2op ** 2 - self.dis_c1op ** 2) / (2 * self.dis_c1c2 * self.dis_c2op)
+                                    # self.middle_part = (self.dis_c2op * self.coscab)*(self.c1c2_u[i]+self.c1c2_v[j])
+                                    # self.cosfinal = (self.c1c2_u[i]+self.c1c2_v[j])/(xi_norm*self.dis_c1c2)
+                                    # self.sinfinal = math.sqrt(1-self.cosfinal**2)
+                                    # self.finallength = self.dis_c2op* math.sqrt(1-self.coscab**2)
+                                    # if (xitheta_o+self.middle_part+ self.final*self.finallength< self.lam * self.C[i, j]):
+                                    #      self.w_screening[i, j] = 0
+                                    #      self.countzeros += 1
             # 6.2: L2下交 L1交 L2最优在L1外
             #                         self.dis_c1_line2 = self.line2_c1 / self.Xw_line2_norm
             #
