@@ -857,37 +857,53 @@ class sasvi_screening_matrix(screener_matrix):
 
                                 else:
 
-            # 6.2: L2下交 L1交 L2最优在L1外
-                                    self.dis_c1_line2 = self.line2_c1 / self.Xw_line2_norm
+                                    self.c1c2_u = self.down_line1_theta_u - self.down_theta_u
+                                    self.c1c2_v = self.down_line1_theta_v - self.down_theta_v
+                                    self.dis_c1c2 = np.linalg.norm(np.concatenate((self.c1c2_u,self.c1c2_v)))
+                                    self.dis_c1op = self.r_new
+                                    self.dis_c2op = math.sqrt(self.r**2 - self.dis_line1**2)
 
-                                    self.down_c1_2_theta_u = self.down_line1_theta_u + (
-                                            self.dis_c1_line2 * self.Xw_line2_u / self.Xw_line2_norm)
-                                    self.down_c1_2_theta_v = self.down_line1_theta_v + (
-                                            self.dis_c1_line2* self.Xw_line2_v / self.Xw_line2_norm)
-                                    self.coor_a_i = self.down_theta_u[i]
-                                    self.coor_a_j = self.down_theta_v[j]
-                                    self.coor_b_i = self.down_c1_2_theta_u[i]
-                                    self.coor_b_j = self.down_c1_2_theta_v[j]
-                                    self.lab = np.linalg.norm([self.coor_a_i-self.coor_b_i,self.coor_a_j-self.coor_b_j])
-                                    self.lac = self.r_new
-                                    self.lbc = math.sqrt(self.r**2 - self.dis_line1**2 - self.dis_c1_line2**2)
-                                    self.coscab = (self.lab**2 + self.lac**2 - self.lbc**2)/(2*self.lab*self.lac)
-                                    # if(abs(self.coscab)>1):
-                                    #     aa = 1
-                                    self.sincab =math.sqrt(1-min(self.coscab,1)**2)
-                                    self.vec = [self.coor_b_i-self.coor_a_i,self.coor_b_j-self.coor_a_j]/self.lab
-                                    self.vec1 = [0,0]
-                                    self.vec1[0] = -self.vec[1]
-                                    self.vec1[1] = self.vec[0]
-                                    self.vec2 = [0, 0]
-                                    self.vec2[0] = self.vec[1]
-                                    self.vec2[1] = -self.vec[0]
-                                    self.xifinal = self.coor_a_j +self.coor_a_i + \
-                                                    self.lac * self.coscab *(self.vec[0]+self.vec[1])+\
-                                                    max(self.lac*self.sincab*(self.vec1[0]+self.vec1[1]),self.lac*self.sincab*(self.vec2[0]+self.vec2[1]))
-                                    if (self.xifinal < self.lam * self.C[i, j]):
-                                        self.w_screening[i, j] = 0
-                                        self.countzeros += 1
+                                    self.alpha = - (self.c1c2_u[i]+self.c1c2_v[j])**2/(self.dis_c1c2**2) +2
+                                    self.final =  math.sqrt(self.alpha)
+                                    self.coscab = (self.dis_c1c2 ** 2 + self.dis_c2op ** 2 - self.dis_c1op ** 2) / (2 * self.dis_c1c2 * self.dis_c2op)
+                                    self.middle_part = (self.dis_c2op * self.coscab)*(self.c1c2_u[i]+self.c1c2_v[j])
+                                    self.cosfinal = (self.c1c2_u[i]+self.c1c2_v[j])/(xi_norm*self.dis_c1c2)
+                                    self.sinfinal = math.sqrt(1-self.cosfinal**2)
+                                    self.finallength = self.dis_c2op* math.sqrt(1-self.coscab**2)
+                                    if (xitheta_o+self.middle_part+ self.final*self.finallength< self.lam * self.C[i, j]):
+                                         self.w_screening[i, j] = 0
+                                         self.countzeros += 1
+            # 6.2: L2下交 L1交 L2最优在L1外
+            #                         self.dis_c1_line2 = self.line2_c1 / self.Xw_line2_norm
+            #
+            #                         self.down_c1_2_theta_u = self.down_line1_theta_u + (
+            #                                 self.dis_c1_line2 * self.Xw_line2_u / self.Xw_line2_norm)
+            #                         self.down_c1_2_theta_v = self.down_line1_theta_v + (
+            #                                 self.dis_c1_line2* self.Xw_line2_v / self.Xw_line2_norm)
+                                    # self.coor_a_i = self.down_theta_u[i]
+                                    # self.coor_a_j = self.down_theta_v[j]
+                                    # self.coor_b_i = self.down_c1_2_theta_u[i]
+                                    # self.coor_b_j = self.down_c1_2_theta_v[j]
+                                    # self.lab = np.linalg.norm([self.coor_a_i-self.coor_b_i,self.coor_a_j-self.coor_b_j])
+                                    # self.lac = self.r_new
+                                    # self.lbc = math.sqrt(self.r**2 - self.dis_line1**2 - self.dis_c1_line2**2)
+                                    # self.coscab = (self.lab**2 + self.lac**2 - self.lbc**2)/(2*self.lab*self.lac)
+                                    # # if(abs(self.coscab)>1):
+                                    # #     aa = 1
+                                    # self.sincab =math.sqrt(1-min(self.coscab,1)**2)
+                                    # self.vec = [self.coor_b_i-self.coor_a_i,self.coor_b_j-self.coor_a_j]/self.lab
+                                    # self.vec1 = [0,0]
+                                    # self.vec1[0] = -self.vec[1]
+                                    # self.vec1[1] = self.vec[0]
+                                    # self.vec2 = [0, 0]
+                                    # self.vec2[0] = self.vec[1]
+                                    # self.vec2[1] = -self.vec[0]
+                                    # self.xifinal = self.coor_a_j +self.coor_a_i + \
+                                    #                 self.lac * self.coscab *(self.vec[0]+self.vec[1])+\
+                                    #                 max(self.lac*self.sincab*(self.vec1[0]+self.vec1[1]),self.lac*self.sincab*(self.vec2[0]+self.vec2[1]))
+                                    # if (self.xifinal < self.lam * self.C[i, j]):
+                                    #     self.w_screening[i, j] = 0
+                                    #     self.countzeros += 1
 
 
 
