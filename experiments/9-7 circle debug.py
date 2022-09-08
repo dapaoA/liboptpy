@@ -23,6 +23,7 @@ import liboptpy.screening.screenning as sc
 #this file is used to disscuss about the convergence of the algorithm according to the tau
 # 关于nestrov加速要不要重启
 #貌似重启了下降快，但是不准，不重启下降慢，但是准。。。
+
 class Sinkhornalg:
     def __init__(self,log):
         self.log = log
@@ -34,12 +35,13 @@ class Sinkhornalg:
 plt.rc("text", usetex=True)
 fontsize = 24
 figsize = (16, 14)
+
 import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
 
 n = 30
-a,b,M = making_uot_gausses(n)
+a, b, M = making_uot_gausses(n)
 epsilon = 0.001
 tau = 20
 
@@ -61,15 +63,10 @@ HcHc = Hc.T.dot(Hc)
 Hca = Hc.T.dot(a)
 Hcb = Hc.T.dot(b)
 
-
 def func_opt(t, m):
-
-
     return np.dot(t,m)
 
 f_opt = lambda x: func_opt(x, m,)
-
-
 
 # linear programming
 # times = time.time()
@@ -78,29 +75,20 @@ f_opt = lambda x: func_opt(x, m,)
 # print("lp time: ",timee-times)
 # opt = f_opt(G0.flatten())
 
+grad = lambda x: g(x, a, b, Hc, Hr, dim_a, dim_b)
+proximalB = lambda x, h, grad: pb(m/tau, x, h, grad)
+proximalK = lambda x, h, grad: pk(m/tau, x, h, grad)
 
-
-grad = lambda x: g(x, a, b, Hc,Hr, dim_a,dim_b)
-
-
-proximalB = lambda x,h,grad: pb(m/tau,x,h,grad)
-
-proximalK = lambda x,h,grad: pk(m/tau,x,h,grad)
-
-
-
-mkl = lambda x: makl(x, a, b,Hc,Hr)
-ml2 = lambda x: mal2(x, a, b,Hc,Hr)
+mkl = lambda x: makl(x, a, b, Hc, Hr)
+ml2 = lambda x: mal2(x, a, b, Hc, Hr)
 def sparsity(t):
-    return np.count_nonzero(t==0)/len(t)
+    return np.count_nonzero(t == 0)/len(t)
 
 spa = lambda x: sparsity(x)
 
-
-
 tau = 0.5
 stopThr = 1e-16
-xx = sp.vstack((Hr,Hc)).tocsc()
+xx = sp.vstack((Hr, Hc)).tocsc()
 # trans1 = sc.sasvi_screening(np.ones_like(m),xx,np.concatenate((a,b)),m,1/tau)
 # time_s = time.time()
 # G1_q00001,log_q00001 = ot.unbalanced.mm_unbalanced_revised_screening(a, b, M, tau, l_rate=1/(2*n),screening=trans1,div='l2_2',numItermax=round,log=True)
@@ -139,34 +127,27 @@ xx = sp.vstack((Hr,Hc)).tocsc()
 # plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
 #              orientation='horizontal', extend='both')
 # plt.show()
-
-
-
-
-tau =500
+tau = 500
 round = 1000000
-m += 0.01
-M += 0.01
-G1= ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=1*round,stopThr=stopThr)
+G1 = ot.unbalanced.mm_unbalanced_revised(a, b, M, tau, l_rate=1/(2*n),div='l2_2',numItermax=1000000, stopThr=stopThr)
 plt.imshow(G1)
 plt.title('uot_mm_solution_5')
 plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
              orientation='horizontal', extend='both')
 plt.show()
 
-trans1 = sc.sasvi_screening_ratio_pic_test(np.ones_like(m),xx,np.concatenate((a,b)),m,1/tau,solution=G1.flatten())
+trans1 = sc.sasvi_screening_matrix_debug(np.ones_like(M), a, b, M, 1/tau, solution=G1)
 
 time_s = time.time()
-G1_q00001,log= ot.unbalanced.mm_unbalanced_revised_screening_for_pic(a, b, M, tau,saveround=100000, l_rate=1/(2*n),screening=trans1,div='l2_2',numItermax=round,stopThr=stopThr,log=True)
+G1_q00001, log = ot.unbalanced.mm_unbalanced_revised_screening_for_divide(a, b, M, tau, saveround=100000, l_rate=1/(2*n), screening=trans1, div='l2_2',numItermax=round,stopThr=stopThr,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
-plt.figure(figsize=(13,10))
+plt.figure(figsize=(13, 10))
 plt.plot(log["opt_alg"],label=r'$\hat{\theta} \sim \theta^{k}$')
-plt.plot(log["opt_proj1"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{1}$')
-plt.plot(log["opt_proj2"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{2}$', linestyle='dashed')
-plt.plot(log["alg_proj1"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{1}$')
-plt.plot(log["alg_proj2"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{2}$', linestyle='dashed')
+plt.plot(log["opt_proj"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{shifting}$', linestyle='dashed')
+plt.plot(log["alg_proj"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{shifting}$', linestyle='dashed')
+
 plt.yscale('log')
 plt.title("Distances")
 plt.xlabel("rounds")
@@ -174,21 +155,18 @@ plt.legend()
 plt.show()
 
 plt.figure(figsize=(13,10))
-plt.plot(log["opt_proj1"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{1}$')
-plt.plot(log["opt_proj2"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{2}$', linestyle='dashed')
-plt.plot(log["alg_proj1"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{1}$')
-plt.plot(log["alg_proj2"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{2}$', linestyle='dashed')
+plt.plot(log["opt_proj"], label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{shrinking}$')
+plt.plot(log["alg_proj"], label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{shrinking}$')
 plt.xlabel("rounds")
 plt.title("Distances")
 plt.legend()
 plt.show()
 
 plt.figure(figsize=(13,10))
-plt.plot(log["screening_area1"],label=r'$R(\tilde{\theta}^{k}_{1})$')
-plt.plot(log["screening_area2"],label=r'$R(\tilde{\theta}^{k}_{2})$', linestyle='dashed')
-plt.plot(log["screening_ps"],label=r'$\hat{\theta}$')
-plt.plot(log["screening_p1"],label=r'$\tilde{\theta}^{k}_{1}$')
-plt.plot(log["screening_p2"],label=r'$\tilde{\theta}^{k}_{2}$', linestyle='dashed')
+plt.plot(log["screening_area1"], label=r'$R(\tilde{\theta}^{k})_{normal}$')
+plt.plot(log["screening_area2"], label=r'$R(\tilde{\theta}^{k}_{divide})$', linestyle='dashed')
+
+
 plt.title("Sparsity")
 plt.xlabel("rounds")
 plt.legend()

@@ -37,7 +37,7 @@ sns.set_context("talk")
 
 a,b,M = a,b,M = making_mnist_uot_with_noise("1","3",3,4,0.001)
 epsilon = 0.01
-round = 5000
+round = 50
 tau = 1000
 
 dim_a = np.shape(a)[0]
