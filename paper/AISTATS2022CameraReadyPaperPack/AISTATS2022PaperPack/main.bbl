@@ -1,0 +1,32 @@
+\begin{thebibliography}{3}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Arjovsky et~al.(2017)Arjovsky, Chintala, and
+  Bottou]{arjovsky2017wasserstein}
+Martin Arjovsky, Soumith Chintala, and L{\'e}on Bottou.
+\newblock Wasserstein generative adversarial networks.
+\newblock In \emph{International conference on machine learning}, pages
+  214--223. PMLR, 2017.
+
+\bibitem[Courty(2017)]{7586038}
+Nicolas Courty.
+\newblock Optimal transport for domain adaptation.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 39\penalty0 (9):\penalty0 1853--1865, 2017.
+\newblock \doi{10.1109/TPAMI.2016.2615921}.
+
+\bibitem[Yamada and Yamada(2021)]{NEURIPS2021_7b5b23f4}
+Hiroaki Yamada and Makoto Yamada.
+\newblock Dynamic sasvi: Strong safe screening for norm-regularized least
+  squares.
+\newblock In M.~Ranzato, A.~Beygelzimer, Y.~Dauphin, P.S. Liang, and J.~Wortman
+  Vaughan, editors, \emph{Advances in Neural Information Processing Systems},
+  volume~34, pages 14645--14655. Curran Associates, Inc., 2021.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper/2021/file/7b5b23f4aadf9513306bcd59afb6e4c9-Paper.pdf}.
+
+\end{thebibliography}

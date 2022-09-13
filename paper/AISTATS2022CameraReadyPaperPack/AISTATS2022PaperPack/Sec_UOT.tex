@@ -1,0 +1,119 @@
+\section{Dynamic Screening and UOT problem}
+\subsection{Screening for UOT}
+
+For UOT ptoblem \ref{eq:uot}, we could get its dual form. 
+
+\begin{equation}
+\begin{split}
+-d^*(-\theta) - g^*(X^{\tranT}\theta) =& -\frac{1}{2}\|\theta\|_2^2-y^{\tranT}\theta \\
+ \text{s.t.} &\forall i \quad x_i^{\tranT}\theta -\lambda c_i \leq 0
+ \end{split}
+ \label{eq:uotdual}
+\end{equation}
+The equation indicate that the dual problem has many dual constraints, the optimal solution is inside the constaints.\\
+From the KKT condition, we can make sure that, for the optimal primal solution $\hat{t}$:
+ \begin{equation}
+\begin{split}
+x_i^{\tranT}\theta -\lambda c_i  \left\{
+\begin{aligned}
+< 0 \quad& \Rightarrow \hat{t}_i = 0\\
+= 0 \quad& \Rightarrow \hat{t}_i \geq 0
+\end{aligned}
+\right.
+ \end{split}
+ \label{eq:screening}
+\end{equation}
+
+As we do not know the information of $\hat{t}$ directly, we can construct an area $\mathcal{R}^{S}$ containing the $\hat{t}$, if
+
+ \begin{equation}
+\max_{t \in \mathcal{R}^S} x_i^{\tranT}\theta -\lambda c_i  < 0
+\end{equation}
+then we have:
+ \begin{equation}
+ x_i^{\tranT}\hat{\theta} -\lambda c_i  < 0
+\end{equation}
+which means the corresponding $\hat{t}_i = 0$, and can be screening out.
+
+Now we start to construct the area containing $\hat{\theta}$, from \ref{circle} we know that the $\hat{\theta}$ is inside the intersection of the area of \ref{circle} and the dual feasible area. However, the multilinear constraints make it hard to compute the maximum for the problem, We design a relaxation method. which divide the constrains into two parts, then we are maximizing on the intersection of two hyperplane and a hyper-ball. 
+
+\begin{thm}\label{area}
+$$
+\mathcal{R}^S = \{ nihao \}
+$$
+\end{thm}
+the computational process is in Appendix.A
+
+\subsection{Algorithms}
+
+ \begin{algorithm}
+ \caption{Algorithm for ...}
+ \begin{algorithmic}[1]
+ \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+ \renewcommand{\algorithmicensure}{\textbf{Output:}}
+ \REQUIRE in
+ \ENSURE  out
+ \\ \textit{Initialisation} :
+  \STATE first statement
+ \\ \textit{LOOP Process}
+  \FOR {$i = l-2$ to $0$}
+  \STATE statements..
+  \IF {($i \ne 0$)}
+  \STATE statement..
+  \ENDIF
+  \ENDFOR
+ \RETURN $P$ 
+ \end{algorithmic} 
+ \end{algorithm}
+
+screening method is irrelevent to the optimization solver you choose. We gave the specific algorithm for $L_2$ UOT problem to show the whole optimization process.\\
+An important part is that we use the primal solution to compute a dual solution, which might not inside the dual feasible area, a projection method is necessary. We promote a new projection method for the UOT problem for its sparse matrix structure.
+
+\begin{thm}\label{proj}
+$$
+\tilde{\theta} = 1
+$$
+\end{thm}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,100 @@
+\section{Background}
+\subsection{Optimal Transport and Unbalanced Optimal Transport}
+Optimal transport problem has a formula:
+$$
+\begin{aligned}
+&W(\alpha,\beta) := \min_{ \mathbf{T} \in \mathbb{R}_{+}^{n \times n}} \langle \C, \mathbf{T} \rangle \\
+& \mathbf{T} \mathbbm{1} = \alpha, \mathbf{T}^{T}\mathbbm{1} = \beta
+\end{aligned}
+$$
+
+We can write it into a vector type:
+$$
+\begin{aligned}
+&W(\alpha,\beta) := \min_{t \in \mathbb{R}_{+}^{n^2}} c^{\tranT}t \\
+& Nt = \alpha, Mt = \beta
+\end{aligned}
+$$
+
+The UOT problem can be wrote as: 
+\begin{equation}
+\label{eq:uot}
+W(\alpha,\beta) := \min_{t \in \mathbb{R}_{+}^{n^2}} c^{\tranT}t + D_h(Xt,y)
+\end{equation}
+$D_h$ is the Bregman divergence and $h$ is the norm.  
+
+\subsection{Relationship with Lasso}
+Lasso like problem can be write as:
+$$
+\begin{aligned}
+f(t) = g(t) + D_h(Xt,b), t\in \mathbbm{R}^{n^2}
+\end{aligned}
+$$
+When $g(t) = \lambda \|t\|$ and $D_h(Xt,b) = \|Xt-b\|_2^2$, this is the $L_2$ penalized Lasso problem
+
+
+\subsection{Dynamic Screening Framework}
+
+We follow the \cite{NEURIPS2021_7b5b23f4}'s method to introduce about the whole dynamic framework, The Lasso like problem has a common formula like:
+$$
+\begin{aligned}
+f(t) = g(t) + d(Xt)
+\end{aligned}
+$$
+
+By Frenchel-Rockafellar Duality, we get the dual problem
+\begin{thm}
+$$
+\begin{aligned}
+\min_t  g(t) + d(Xt) = \max -d^*(-\theta)-g^*(X^{\tranT}\theta)
+\end{aligned}
+$$
+\end{thm}
+
+Because the primal function $d()$ is always convex, the dual function $d^*()$ is concave. Assuming $d^*()$ is an L-strongly concave problem. we design an area for any $\tilde{\theta}$:
+
+\begin{thm}\label{circle}
+$$
+\begin{aligned}
+\theta \in \{\frac{L}{2}\|\theta-\tilde{\theta}\|_2^2+d^*(-\tilde{\theta}) \leq d^*(-\theta)\}
+\end{aligned}
+$$
+\end{thm}
+we know that the optimal solution for the dual problem $\hat{\theta}$ satisfied the inequality. So it is not empty.
+For $d(Xt) = \frac{1}{2}\|Xt-y\|_2^2$, the Lasso-like problem have: 
+$$
+\begin{aligned}
+d^*(-\theta) = \frac{1}{2}\|\theta\|_2^2-y^{\tranT}\theta
+\end{aligned}
+$$
+
+$$
+g^*(X^{\tranT}\theta) = \left\{
+\begin{aligned}
+0 \quad&\quad ( \forall t \quad\theta^{\tranT}Xt - g(t) \leq 0 )\\
+\infty \quad&( \exists t \quad\theta^{\tranT}Xt - g(t) \leq 0 )
+\end{aligned}
+\right.
+$$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
