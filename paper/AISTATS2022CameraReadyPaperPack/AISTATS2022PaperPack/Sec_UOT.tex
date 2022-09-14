@@ -1,20 +1,22 @@
 \section{Dynamic Screening and UOT problem}
 \subsection{Screening for UOT}
 
-For UOT ptoblem \ref{eq:uot}, we could get its dual form. 
-
+For UOT problem \ref{eq:uot}, we could get its dual form. 
+\begin{lem}(Dual form of UOT problem)
 \begin{equation}
 \begin{split}
--d^*(-\theta) - g^*(X^{\tranT}\theta) =& -\frac{1}{2}\|\theta\|_2^2-y^{\tranT}\theta \\
- \text{s.t.} &\forall i \quad x_i^{\tranT}\theta -\lambda c_i \leq 0
+-d^*(-\theta) - g^*(X^{\tranT}\theta)& = -\frac{1}{2}\|\theta\|_2^2-y^{\tranT}\theta \\
+ \mathbf{s.t.} \quad \forall i \quad x_i^{\tranT}\theta -\lambda c_i &\leq 0
  \end{split}
  \label{eq:uotdual}
 \end{equation}
-The equation indicate that the dual problem has many dual constraints, the optimal solution is inside the constaints.\\
+\end{lem}
+The equation indicate a dual feasible area constructed by many dual constraints, the optimal solution is inside the constraints.\\
 From the KKT condition, we can make sure that, for the optimal primal solution $\hat{t}$:
+\begin{thm} (Screening) For the dual optimal solution $\hat{\theta}$, we have the following relationship:
  \begin{equation}
 \begin{split}
-x_i^{\tranT}\theta -\lambda c_i  \left\{
+x_i^{\tranT}\hat{\theta} -\lambda c_i  \left\{
 \begin{aligned}
 < 0 \quad& \Rightarrow \hat{t}_i = 0\\
 = 0 \quad& \Rightarrow \hat{t}_i \geq 0
@@ -23,6 +25,7 @@ x_i^{\tranT}\theta -\lambda c_i  \left\{
  \end{split}
  \label{eq:screening}
 \end{equation}
+\end{thm}
 
 As we do not know the information of $\hat{t}$ directly, we can construct an area $\mathcal{R}^{S}$ containing the $\hat{t}$, if
 
@@ -44,25 +47,30 @@ $$
 \end{thm}
 the computational process is in Appendix.A
 
-\subsection{Algorithms}
+\subsection{Screening Algorithms}
 
  \begin{algorithm}
- \caption{Algorithm for ...}
+ \caption{UOT Dynamic Screening Algorithm}
  \begin{algorithmic}[1]
  \renewcommand{\algorithmicrequire}{\textbf{Input:}}
  \renewcommand{\algorithmicensure}{\textbf{Output:}}
- \REQUIRE in
- \ENSURE  out
- \\ \textit{Initialisation} :
-  \STATE first statement
- \\ \textit{LOOP Process}
-  \FOR {$i = l-2$ to $0$}
-  \STATE statements..
+ \REQUIRE $t_0, S \in R^{n\times m}, S_{ij}=1$
+ \ENSURE  $S$
+  \STATE \text{Choose a solver for the problem.}
+  \FOR {$t = 0 \text{ to } K$}
+  \STATE $\text{Projection } \tilde{\theta} = \operatorname{Proj}(t_k)$ 
   \IF {($i \ne 0$)}
-  \STATE statement..
+  \STATE $\textbf{break}$
   \ENDIF
+    \STATE $\mathcal{R} \Leftarrow \mathcal{R}^S{(\tilde{\theta},t_k)}$
+    \STATE $S \Leftarrow {S_{ij} = 0 \text{ if } \max_{\theta \in \mathcal{R}^S} {x_{k(i,j)}}^{\tranT}\theta <\lambda c_{k(i,j)} }$
+    \FOR {$a  \in {A_{ij}\|A_{ij}=0}$}
+    \STATE $t_k(i,j) \Leftarrow 0$
+    \ENDFOR
+    \STATE $t_{k+1} = \operatorname{update}(t_k)$
   \ENDFOR
- \RETURN $P$ 
+  
+ \RETURN $t_{K+1}, S $ 
  \end{algorithmic} 
  \end{algorithm}
 

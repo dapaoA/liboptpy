@@ -10,7 +10,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb,bbm}
 \usepackage{algorithm,algorithmic}
-
+\usepackage{natbib}
 %
 % This option will print headings for the title of your paper and
 % headings for the authors names, plus a copyright note at the end of
@@ -30,7 +30,10 @@
 \theoremstyle{plain}
 \newtheorem{thm}{Theorem}
 \newtheorem*{thm*}{Theorem}
-\newcommand{\x}{\mathbf x}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{conj}[thm]{Conjecture}
 \newcommand{\y}{\mathbf y}
 \newcommand{\C}{\mathbf C}
 \newcommand{\T}{\mathbf T}
@@ -44,6 +47,7 @@
 \newcommand{\diag}{\operatorname{diag}}
 \newcommand{\argmin}{\operatorname{argmin}}
 \newcommand{\tranT}{\mathsf T}
+\newcommand{\X}{\mathbf{X}}
 
 
 \begin{document}
