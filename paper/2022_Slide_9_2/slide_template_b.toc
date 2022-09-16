@@ -1,0 +1,4 @@
+\beamer@sectionintoc {1}{タイトル}{1}{0}{1}
+\beamer@sectionintoc {2}{その1}{2}{0}{2}
+\beamer@sectionintoc {3}{その2}{3}{0}{3}
+\beamer@sectionintoc {4}{その3}{4}{0}{4}

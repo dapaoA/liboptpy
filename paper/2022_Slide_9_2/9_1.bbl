@@ -1,0 +1,39 @@
+\begin{thebibliography}{}
+
+\bibitem[Chapel et~al., 2021]{https://doi.org/10.48550/arxiv.2106.04145}
+Chapel, L., Flamary, R., Wu, H., F辿votte, C., and Gasso, G. (2021).
+\newblock Unbalanced optimal transport through non-negative penalized linear
+  regression.
+
+\bibitem[Dantas et~al., 2021]{9414183}
+Dantas, C.~F., Soubies, E., and F辿votte, C. (2021).
+\newblock Safe screening for sparse regression with the kullback-leibler
+  divergence.
+\newblock In {\em ICASSP 2021 - 2021 IEEE International Conference on
+  Acoustics, Speech and Signal Processing (ICASSP)}, pages 5544--5548.
+
+\bibitem[Ghaoui et~al., 2010]{ghaoui2010safe}
+Ghaoui, L.~E., Viallon, V., and Rabbani, T. (2010).
+\newblock Safe feature elimination for the lasso and sparse supervised learning
+  problems.
+\newblock {\em arXiv preprint arXiv:1009.4219}.
+
+\bibitem[Pham et~al., 2020]{DBLP:journals/corr/abs-2002-03293}
+Pham, K., Le, K., Ho, N., Pham, T., and Bui, H. (2020).
+\newblock On unbalanced optimal transport: An analysis of sinkhorn algorithm.
+\newblock {\em CoRR}, abs/2002.03293.
+
+\bibitem[Tibshirani and Taylor, 2011]{Tibshirani_2011}
+Tibshirani, R.~J. and Taylor, J. (2011).
+\newblock The solution path of the generalized lasso.
+\newblock {\em The Annals of Statistics}, 39(3).
+
+\bibitem[Yamada and Yamada, 2021]{NEURIPS2021_7b5b23f4}
+Yamada, H. and Yamada, M. (2021).
+\newblock Dynamic sasvi: Strong safe screening for norm-regularized least
+  squares.
+\newblock In Ranzato, M., Beygelzimer, A., Dauphin, Y., Liang, P., and Vaughan,
+  J.~W., editors, {\em Advances in Neural Information Processing Systems},
+  volume~34, pages 14645--14655. Curran Associates, Inc.
+
+\end{thebibliography}
