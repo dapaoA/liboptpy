@@ -38,13 +38,41 @@ then we have:
 \end{equation}
 which means the corresponding $\hat{t}_i = 0$, and can be screening out.
 
-Now we start to construct the area containing $\hat{\theta}$, from \ref{circle} we know that the $\hat{\theta}$ is inside the intersection of the area of \ref{circle} and the dual feasible area. However, the multilinear constraints make it hard to compute the maximum for the problem, We design a relaxation method. which divide the constrains into two parts, then we are maximizing on the intersection of two hyperplane and a hyper-ball. 
-
-\begin{thm}\label{area}
-$$
-\mathcal{R}^S = \{ nihao \}
-$$
+Now we start to construct the area containing $\hat{\theta}$, from \ref{circle} we know that, if we can find a $\tilde{\theta}$ inside the dual feasible area, we can construct a circle where $\hat{\theta}$ is.  
+\begin{thm}
+(UOT projection) For any any $\theta^k$, we can compute the projection $\tilde{\theta}^k$ onto the dual feasible area.
+ \begin{equation}
+		\tilde{\theta}_{i}=\left\{
+	\begin{aligned}
+			\theta_{i} - \max_{j \mod n =i}(\frac{\theta_{j_{1}}+\theta_{j_{2}}-c_j}{2}) &\quad 0\leq i<n\\
+			\theta_{i} - \max_{in\leq j <i(n+1)}(\frac{\theta_{j_{1}}+\theta_{j_{2}}-c_j}{2}) & \quad n\leq i<2n
+	\end{aligned}
+	\right.
+ \end{equation}
 \end{thm}
+	\begin{figure}[htbp]
+	\begin{center}	
+	\includegraphics[width=0.8\hsize]{pic/shifting}
+	\caption{Shifting on a 2$\times$2 matrix}
+	\end{center}	
+	\end{figure}
+
+The intersection of the circle and the dual feasible area contain the $\hat{\theta}$, however, the multilinear constraints make it hard to compute the maximum for the problem, We design a relaxation method. which divide the constrains into two parts, then we are maximizing on the intersection of two hyperplane and a hyper-ball. 
+
+\begin{thm}\label{area}(Screening Area for UOT) With the help of $\tilde{\theta}$, we can construct following area $\mathcal{R}^{S}$, and the optimal dual solution $\hat{\theta}$ must be inside the area.
+ \begin{equation}
+\begin{split} 
+\mathcal{R}^S = \{ \theta \|
+\begin{aligned}
+ &\theta^{\tranT}X^A\beta - \lambda g^{A}\beta\leq 0 \\
+  &\theta^{\tranT}X^B\beta - \lambda g^{B}\beta \leq 0\\
+   &(\theta-\tilde{\theta})^{\tranT}(\theta-y)\leq 0\}
+\end{aligned}
+\end{split}
+\label{eq:divide}
+\end{equation}
+\end{thm}
+We devide the constraints into two group $A$ and $B$, we have $X^A +X^B=X$ and $g^A+g^B = g$
 the computational process is in Appendix.A
 
 \subsection{Screening Algorithms}
@@ -58,30 +86,23 @@ the computational process is in Appendix.A
  \ENSURE  $S$
   \STATE \text{Choose a solver for the problem.}
   \FOR {$t = 0 \text{ to } K$}
-  \STATE $\text{Projection } \tilde{\theta} = \operatorname{Proj}(t_k)$ 
+  \STATE $\text{Projection } \tilde{\theta} = \operatorname{Proj}(t^k)$ 
   \IF {($i \ne 0$)}
   \STATE $\textbf{break}$
   \ENDIF
-    \STATE $\mathcal{R} \Leftarrow \mathcal{R}^S{(\tilde{\theta},t_k)}$
+    \STATE $\mathcal{R} \Leftarrow \mathcal{R}^S{(\tilde{\theta},t^k)}$
     \STATE $S \Leftarrow {S_{ij} = 0 \text{ if } \max_{\theta \in \mathcal{R}^S} {x_{k(i,j)}}^{\tranT}\theta <\lambda c_{k(i,j)} }$
     \FOR {$a  \in {A_{ij}\|A_{ij}=0}$}
-    \STATE $t_k(i,j) \Leftarrow 0$
+    \STATE $t^k(i,j) \Leftarrow 0$
     \ENDFOR
-    \STATE $t_{k+1} = \operatorname{update}(t_k)$
+    \STATE $t^{k+1} = \operatorname{update}(t^k)$
   \ENDFOR
   
- \RETURN $t_{K+1}, S $ 
+ \RETURN $t^{K+1}, S $ 
  \end{algorithmic} 
  \end{algorithm}
 
-screening method is irrelevent to the optimization solver you choose. We gave the specific algorithm for $L_2$ UOT problem to show the whole optimization process.\\
-An important part is that we use the primal solution to compute a dual solution, which might not inside the dual feasible area, a projection method is necessary. We promote a new projection method for the UOT problem for its sparse matrix structure.
-
-\begin{thm}\label{proj}
-$$
-\tilde{\theta} = 1
-$$
-\end{thm}
+screening method is irrelevent to the optimization solver you choose. We give the specific algorithm for $L_2$ UOT problem to show the whole optimization process.\\
 
 
 

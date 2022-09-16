@@ -1173,8 +1173,64 @@ class sasvi_screening_matrix_debug(screener_matrix):
         plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
                      orientation='horizontal', extend='both')
         plt.show()
+        aaa = 1
         return countzeros / (w_screening.shape[0]*w_screening.shape[1])
 
+    def screening_selected_area(self, pu, pv):
+        countzeros = 0
+        usefulcons = 0
+        w_screening = np.ones_like(self.w)
+        w_cons = np.zeros_like(self.w)
+        theta_ou = 0.5 * (pu + self.a)
+        theta_ov = 0.5 * (pv + self.b)
+        self.r = 0.5 * math.sqrt(np.dot(pu - self.a, pu - self.a)+np.dot(pv - self.b, pv - self.b))
+        self.delta = self.lam * np.multiply(self.C, self.w).sum() - np.dot(theta_ou, self.u) -\
+            np.dot(theta_ov, self.v)
+        xi_norm = math.sqrt(2)
+        for i in range(w_screening.shape[0]):
+            for j in range(w_screening.shape[1]):
+                if theta_ou[i] + 2* self.r /xi_norm +theta_ov[j] > self.lam * self.C[i,j]:
+                    usefulcons += 1
+                    w_cons[i,j] = 1
+        print("useful constraints",usefulcons / (w_screening.shape[0]*w_screening.shape[1]))
+        plt.imshow(w_cons)
+        plt.title('constraints!')
+        plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+                     orientation='horizontal', extend='both')
+        plt.show()
+
+        new_w = np.where(w_cons>0,self.w,0)
+        new_u = new_w.sum(axis=1)
+        new_v = new_w.sum(axis=0)
+        # u,v 就是Xw
+        Xw_norm2 = np.dot(new_u,new_u)+np.dot(new_v,new_v)
+        delta = self.lam * np.multiply(self.C, new_w).sum() - np.dot(theta_ou, new_u) -\
+            np.dot(theta_ov, new_v)
+        for i in range(w_screening.shape[0]):
+            for j in range(w_screening.shape[1]):
+                xiXw = new_u[i] + new_v[j]
+                xitheta_o = theta_ou[i] + theta_ov[j]
+                if self.r/xi_norm * xiXw <= delta:
+                    if xitheta_o + self.r * xi_norm < self.lam * self.C[i,j]:
+                        w_screening[i, j] = 0
+                        countzeros += 1
+                else:
+                    x_xwu = - xiXw/Xw_norm2 * new_u
+                    x_xwu[i] = x_xwu[i] + 1
+                    x_xwv = - xiXw/Xw_norm2 * new_v
+                    x_xwv[j] = x_xwv[j] + 1
+                    if xitheta_o + xiXw/Xw_norm2*delta + \
+                            np.linalg.norm(np.concatenate((x_xwu, x_xwv))) * \
+                            math.sqrt(max(self.r**2-1/Xw_norm2 * delta**2, 0)) < self.lam*self.C[i, j]:
+                        w_screening[i, j] = 0
+                        countzeros += 1
+        plt.imshow(w_screening)
+        plt.title('running!')
+        plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+                     orientation='horizontal', extend='both')
+        plt.show()
+        aaa = 1
+        return countzeros / (w_screening.shape[0]*w_screening.shape[1])
     def screening_divided_area(self, pu, pv):
         countzeros = 0
         w_screening = np.ones_like(self.w)
@@ -1363,7 +1419,7 @@ class sasvi_screening_matrix_debug(screener_matrix):
                                     #     print("wrong!! again")
                                     if i == 29 and j == 29:
                                         print("here")
-                                    if xitheta_o + self.final < self.lam * self.C[i, j]:
+                                    if xitheta_o + self.final < self.lam * self.C[i, j] - 1e-10:
                                         w_screening[i, j] = 0
                                         countzeros += 1
 
