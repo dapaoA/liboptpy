@@ -1,0 +1,88 @@
+\begin{thebibliography}{9}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Arjovsky et~al.(2017)Arjovsky, Chintala, and
+  Bottou]{arjovsky2017wasserstein}
+Martin Arjovsky, Soumith Chintala, and L{\'e}on Bottou.
+\newblock Wasserstein generative adversarial networks.
+\newblock In \emph{International conference on machine learning}, pages
+  214--223. PMLR, 2017.
+
+\bibitem[Chapel et~al.(2021)Chapel, Flamary, Wu, F\'{e}votte, and
+  Gasso]{NEURIPS2021_c3c617a9}
+Laetitia Chapel, R\'{e}mi Flamary, Haoran Wu, C\'{e}dric F\'{e}votte, and
+  Gilles Gasso.
+\newblock Unbalanced optimal transport through non-negative penalized linear
+  regression.
+\newblock In M.~Ranzato, A.~Beygelzimer, Y.~Dauphin, P.S. Liang, and J.~Wortman
+  Vaughan, editors, \emph{Advances in Neural Information Processing Systems},
+  volume~34, pages 23270--23282. Curran Associates, Inc., 2021.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper/2021/file/c3c617a9b80b3ae1ebd868b0017cc349-Paper.pdf}.
+
+\bibitem[Chen et~al.(2019)Chen, Zhang, Zhang, Tao, Gan, Zhang, Li, Shen, Chen,
+  and Carin]{084adf2f555549c493e0331a00e4ecad}
+Liqun Chen, Yizhe Zhang, Ruiyi Zhang, Chenyang Tao, Zhe Gan, Haichao Zhang, Bai
+  Li, Dinghan Shen, Changyou Chen, and Lawrence Carin.
+\newblock Improving sequence-to-sequence learning via optimal transport.
+\newblock In \emph{7th International Conference on Learning Representations,
+  ICLR 2019}. International Conference on Learning Representations, ICLR,
+  January 2019.
+\newblock Generated from Scopus record by KAUST IRTS on 2021-02-09.
+
+\bibitem[Courty(2017)]{7586038}
+Nicolas Courty.
+\newblock Optimal transport for domain adaptation.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 39\penalty0 (9):\penalty0 1853--1865, 2017.
+\newblock \doi{10.1109/TPAMI.2016.2615921}.
+
+\bibitem[Cuturi(2013)]{NIPS2013_af21d0c9}
+Marco Cuturi.
+\newblock Sinkhorn distances: Lightspeed computation of optimal transport.
+\newblock In C.J. Burges, L.~Bottou, M.~Welling, Z.~Ghahramani, and K.Q.
+  Weinberger, editors, \emph{Advances in Neural Information Processing
+  Systems}, volume~26. Curran Associates, Inc., 2013.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper/2013/file/af21d0c97db2e27e13572cbf59eb343d-Paper.pdf}.
+
+\bibitem[Ghaoui et~al.(2010)Ghaoui, Viallon, and Rabbani]{ghaoui2010safe}
+Laurent~El Ghaoui, Vivian Viallon, and Tarek Rabbani.
+\newblock Safe feature elimination for the lasso and sparse supervised learning
+  problems.
+\newblock \emph{arXiv preprint arXiv:1009.4219}, 2010.
+
+\bibitem[Ndiaye et~al.(2017)Ndiaye, Fercoq, Alex, re~Gramfort, and
+  Salmon]{JMLR:v18:16-577}
+Eugene Ndiaye, Olivier Fercoq, Alex, re~Gramfort, and Joseph Salmon.
+\newblock Gap safe screening rules for sparsity enforcing penalties.
+\newblock \emph{Journal of Machine Learning Research}, 18\penalty0
+  (128):\penalty0 1--33, 2017.
+\newblock URL \url{http://jmlr.org/papers/v18/16-577.html}.
+
+\bibitem[Petric~Maretic et~al.(2019)Petric~Maretic, El~Gheche, Chierchia, and
+  Frossard]{NEURIPS2019_fdd5b16f}
+Hermina Petric~Maretic, Mireille El~Gheche, Giovanni Chierchia, and Pascal
+  Frossard.
+\newblock Got: An optimal transport framework for graph comparison.
+\newblock In H.~Wallach, H.~Larochelle, A.~Beygelzimer, F.~d\textquotesingle
+  Alch\'{e}-Buc, E.~Fox, and R.~Garnett, editors, \emph{Advances in Neural
+  Information Processing Systems}, volume~32. Curran Associates, Inc., 2019.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper/2019/file/fdd5b16fc8134339089ef25b3cf0e588-Paper.pdf}.
+
+\bibitem[Yamada and Yamada(2021)]{NEURIPS2021_7b5b23f4}
+Hiroaki Yamada and Makoto Yamada.
+\newblock Dynamic sasvi: Strong safe screening for norm-regularized least
+  squares.
+\newblock In M.~Ranzato, A.~Beygelzimer, Y.~Dauphin, P.S. Liang, and J.~Wortman
+  Vaughan, editors, \emph{Advances in Neural Information Processing Systems},
+  volume~34, pages 14645--14655. Curran Associates, Inc., 2021.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper/2021/file/7b5b23f4aadf9513306bcd59afb6e4c9-Paper.pdf}.
+
+\end{thebibliography}

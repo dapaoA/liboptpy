@@ -51,7 +51,6 @@
 \newcommand{\argmin}{\operatorname{argmin}}
 \newcommand{\tranT}{\mathsf T}
 \newcommand{\X}{\mathbf{X}}
-\newcommand{\one}{\mathbbm{1}}
 
 
 \begin{document}
@@ -102,7 +101,38 @@
 % For two-column format, uncomment the following:
 %\twocolumn[ \makesupplementtitle ]
 
-\input{Sec_appendix}
+\section{FORMATTING INSTRUCTIONS FOR THE SUPPLEMENTARY MATERIAL}
+
+Your supplementary material should go here. It may be in one-column or two-column format. To display the supplementary material in two-column format, comment out the line
+\begin{verbatim}
+\onecolumn \makesupplementtitle
+\end{verbatim}
+and uncomment the following line:
+\begin{verbatim}
+\twocolumn[ \makesupplementtitle ]
+\end{verbatim}
+
+Please submit your paper (including the supplementary material) as a single PDF file. Besides the PDF file, you may submit a single file of additional non-textual supplementary material, which should be a ZIP file containing, e.g., code.
+
+If you require to upload any video as part of the supplementary material of your camera-ready submission, do not submit it in the ZIP file. Instead, please send us via email the URL containing the video location.
+
+Note that reviewers are under no obligation to examine your supplementary material.
+
+\section{MISSING PROOFS}
+
+The supplementary materials may contain detailed proofs of the results that are missing in the main paper.
+
+\subsection{Proof of Lemma 3}
+
+\textit{In this section, we present the detailed proof of Lemma 3 and then [ ... ]}
+
+\section{ADDITIONAL EXPERIMENTS}
+
+If you have additional experimental results, you may include them in the supplementary materials.
+
+\subsection{The Effect of Regularization Parameter}
+
+\textit{Our algorithm depends on the regularization parameter $\lambda$. Here we illustrate the effect of this parameter on the performance of our algorithm [ ... ]}
 
 
 \end{document}

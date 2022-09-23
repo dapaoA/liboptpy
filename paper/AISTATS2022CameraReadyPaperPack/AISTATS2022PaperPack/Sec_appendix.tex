@@ -1,0 +1,121 @@
+
+\section{Entropic UOT dual}
+We know that 
+\begin{equation}
+P(t):= \min_{t \in \mathbb{R}_{+}^{mn}} f(\X t) + g(t)
+\end{equation}
+the dual problem is 
+\begin{equation}
+D(\theta) := \max_{\theta} -f^*(-\theta) - g^*(X^{\tranT}\theta)
+\end{equation}
+The Entropic UOT problem is:
+\begin{equation}
+\label{eq:euot}
+W(\alpha,\beta) := \min_{t \in \mathbb{R}_{+}^{mn}, t_i>\epsilon>0} \lambda c^{\tranT}t + D_h(\mathbf{X}t,y) + \varepsilon H(t)
+\end{equation}
+
+In order to screening, we introduce a smoothing threshold $\eta_1,\eta_2 > 0$ 
+$$
+\begin{aligned}
+f(\X t) &=  D_h(\mathbf{X}t,y) \\
+g(t) &= \lambda c^{\tranT} t
+\end{aligned}
+$$
+
+We have 
+$$
+\begin{aligned}
+f^{*}(\theta) &= \max_t \theta^{\tranT} t - t\ln \frac{t}{y} - t+y\\
+&=ye^{\theta} - y\\
+g^{*}(\theta) &= \max_t \theta^{\tranT} t - \varepsilon t\ln t - \lambda c^{\tranT}t\\
+&= \sum_{i,\theta_i\geq\lambda c_i +\varepsilon(\ln \epsilon + 1)} \varepsilon \exp(\frac{\theta_i-\lambda c_i}{\varepsilon}-1)+\sum_{i,\theta_i<\lambda c_i +\varepsilon(\ln \epsilon + 1)} \epsilon(\theta_i - \varepsilon\ln\epsilon-\lambda c_i)
+\end{aligned}
+$$
+
+The dual problem is:
+\begin{equation}
+\label{eq:reuot}
+D(\theta) := \max_{\theta} -ye^{-\theta} - y - \sum_{i,x_i^{\tranT}\theta\geq\lambda c_i +\varepsilon(\ln \epsilon + 1)} \varepsilon \exp(\frac{x_i^{\tranT}\theta-\lambda c_i}{\varepsilon}-1) - \sum_{i,x_i^{\tranT}\theta<\lambda c_i +\varepsilon(\ln \epsilon + 1)} \epsilon(x_i^{\tranT}\theta - \varepsilon\ln\epsilon-\lambda c_i)
+\end{equation}
+
+Let's have a look whether it is strongly convex...
+$$
+\begin{aligned}
+\frac{\partial D}{\partial \theta} &=  ye^{-\theta} -  \sum_{i,x_i^{\tranT}\theta\geq\lambda c_i +\varepsilon(\ln \epsilon + 1)} x_i\exp(\frac{x_i^{\tranT}\theta-\lambda c_i}{\varepsilon}-1) -\sum_{i,x_i^{\tranT}\theta<\lambda c_i +\varepsilon(\ln \epsilon + 1)} \epsilon x_i
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+\frac{\partial^{2} D}{\partial \theta^{2}} &=  -\operatorname{Diag}(ye^{-\theta}) -  \sum_{i,x_i^{\tranT}\theta\geq\lambda c_i +\varepsilon(\ln \epsilon + 1)} \frac{x_i x_i^{\tranT}}{\varepsilon}\exp(\frac{x_i^{\tranT}\theta-\lambda c_i}{\varepsilon}-1)
+\end{aligned}
+$$
+
+
+$$
+\begin{aligned}
+L(t,v,\eta,u,m) &= \min_{t,v} \max_{\eta>0,u,m} \lambda c^{\tranT}t + D_h(y,v) + \varepsilon H(t) + \eta ^{\tranT} (-t) +u^{\tranT}(v-\X t) + m( t^{\tranT}\one - a)\\
+&= \max_{\eta>0,u,m} -ma + \min_{t,v}  \lambda c^{\tranT}t + D_h(y,v) + \varepsilon H(t) + \eta ^{\tranT} (-t) +u^{\tranT}(v-\X t) + m t^{\tranT}\one 
+\end{aligned}
+$$
+
+\begin{equation}
+\frac{\partial L}{\partial v} = 
+\end{equation}
+
+\begin{equation}
+W(\alpha,\beta) := \min_{t \in \mathbb{R}_{+}^{mn}} f(\X t) + g(t)
+\end{equation}
+We have 
+$$
+f(Xt) = D_h(y,\X t) 
+$$
+
+$$
+g(t) = \lambda c^{\tranT}t +  \varepsilon (t +\eta_2) \ln (t+\eta_2)
+$$
+
+$$
+\begin{aligned}
+g^*(\theta) &= \max_{t} \theta^{\tranT} t - g(x)\\
+\frac{\partial g^*}{\partial t} &= \theta - \lambda c - \varepsilon(\ln (t+\eta_2)+1) \\
+t^* &= \exp (\frac{\theta - \lambda c}{\varepsilon}-1) - \eta_2\\
+g^*(\theta) &= (\lambda c-\theta)\eta_2 + \varepsilon \exp(\frac{\lambda c-\theta}{\varepsilon}-1)
+\mathbf{s.t.} 
+\end{aligned}
+$$
+
+\section{FORMATTING INSTRUCTIONS FOR THE SUPPLEMENTARY MATERIAL}
+
+Your supplementary material should go here. It may be in one-column or two-column format. To display the supplementary material in two-column format, comment out the line
+\begin{verbatim}
+\onecolumn \makesupplementtitle
+\end{verbatim}
+and uncomment the following line:
+\begin{verbatim}
+\twocolumn[ \makesupplementtitle ]
+\end{verbatim}
+
+Please submit your paper (including the supplementary material) as a single PDF file. Besides the PDF file, you may submit a single file of additional non-textual supplementary material, which should be a ZIP file containing, e.g., code.
+
+If you require to upload any video as part of the supplementary material of your camera-ready submission, do not submit it in the ZIP file. Instead, please send us via email the URL containing the video location.
+
+Note that reviewers are under no obligation to examine your supplementary material.
+
+\section{MISSING PROOFS}
+
+The supplementary materials may contain detailed proofs of the results that are missing in the main paper.
+
+\subsection{Proof of Lemma 3}
+
+\textit{In this section, we present the detailed proof of Lemma 3 and then [ ... ]}
+
+\section{ADDITIONAL EXPERIMENTS}
+
+If you have additional experimental results, you may include them in the supplementary materials.
+
+\subsection{The Effect of Regularization Parameter}
+
+\textit{Our algorithm depends on the regularization parameter $\lambda$. Here we illustrate the effect of this parameter on the performance of our algorithm [ ... ]}
+
+

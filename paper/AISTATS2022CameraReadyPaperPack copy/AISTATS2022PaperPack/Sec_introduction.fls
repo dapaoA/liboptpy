@@ -1,0 +1,6 @@
+PWD /Users/xunsu/Documents/GitHub/liboptpy/paper/AISTATS2022CameraReadyPaperPack/AISTATS2022PaperPack
+INPUT /usr/local/texlive/2022/texmf.cnf
+INPUT /usr/local/texlive/2022/texmf-dist/web2c/texmf.cnf
+INPUT /usr/local/texlive/2022/texmf-var/web2c/pdftex/pdflatex.fmt
+INPUT Sec_introduction.tex
+OUTPUT Sec_introduction.log
