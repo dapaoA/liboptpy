@@ -38,17 +38,16 @@ then we have:
 \end{equation}
 which means the corresponding $\hat{t}_i = 0$, and can be screening out.
 
-Now we start to construct the area containing $\hat{\theta}$, from \ref{circle} we know that, if we can find a $\tilde{\theta}$ inside the dual feasible area, we can construct a circle where $\hat{\theta}$ is.  
+Now we start to construct the area containing $\hat{\theta}$, from \ref{circle} we know that, if we can find a $\tilde{\theta}$ inside the dual feasible area, we can construct a circle where $\hat{\theta}$ is.  For convenience, we set all $\theta = [u^{\tranT},v^{\tranT}]^{\tranT}$.
 \begin{thm}
-(UOT projection) For any any $\theta^k$, we can compute the projection $\tilde{\theta}^k$ onto the dual feasible area.
- \begin{equation}
-		\tilde{\theta}_{i}=\left\{
-	\begin{aligned}
-			\theta_{i} - \max_{j \mod n =i}(\frac{\theta_{j_{1}}+\theta_{j_{2}}-c_j}{2}) &\quad 0\leq i<n\\
-			\theta_{i} - \max_{in\leq j <i(n+1)}(\frac{\theta_{j_{1}}+\theta_{j_{2}}-c_j}{2}) & \quad n\leq i<2n
-	\end{aligned}
-	\right.
- \end{equation}
+(UOT projection) For any any $\theta^k = [{u^k}^{\tranT},{v^k}^{\tranT}]^{\tranT}$, we can compute the projection $\tilde{\theta}^k = [\tilde{u^k}^{\tranT},\tilde{v^k}^{\tranT}]^{\tranT}$ onto the dual feasible area.
+\begin{equation}
+\begin{split}
+\tilde{u^k}_i &= {u^k}_i - \max_j \frac{{u^k}_i +{v^k}_j - \mathbf{C}_{ij}}{2}\\
+\tilde{v^k}_j &= {v^k}_j - \max_i \frac{{u^k}_i +{v^k}_j - \mathbf{C}_{ij}}{2}
+ \end{split}
+ \label{eq:uotdual}
+\end{equation}
 \end{thm}
 	\begin{figure}[htbp]
 	\begin{center}	
@@ -59,21 +58,27 @@ Now we start to construct the area containing $\hat{\theta}$, from \ref{circle} 
 
 The intersection of the circle and the dual feasible area contain the $\hat{\theta}$, however, the multilinear constraints make it hard to compute the maximum for the problem, We design a relaxation method. which divide the constrains into two parts, then we are maximizing on the intersection of two hyperplane and a hyper-ball. 
 
-\begin{thm}\label{area}(Screening Area for UOT) With the help of $\tilde{\theta}$, we can construct following area $\mathcal{R}^{S}$, and the optimal dual solution $\hat{\theta}$ must be inside the area.
+\begin{thm}\label{area}(Screening Area for UOT) With the help of $\tilde{\theta}$, we can construct specific area for every single primal variable as following area $\mathcal{R}^{S}_{IJ}$, and the optimal dual solution $\hat{\theta}$ must be inside the area.
  \begin{equation}
 \begin{split} 
-\mathcal{R}^S = \{ \theta \|
+\mathcal{R}^S_{IJ} = \{ \theta \|
 \begin{aligned}
- &\theta^{\tranT}X^A\beta - \lambda g^{A}\beta\leq 0 \\
-  &\theta^{\tranT}X^B\beta - \lambda g^{B}\beta \leq 0\\
+ &\theta^{\tranT}X^{A_{IJ}}\beta - \lambda g^{A_{IJ}}\beta\leq 0 \\
+  &\theta^{\tranT}X^{B_{IJ}}\beta - \lambda g^{B_{IJ}}\beta \leq 0\\
    &(\theta-\tilde{\theta})^{\tranT}(\theta-y)\leq 0\}
 \end{aligned}
 \end{split}
 \label{eq:divide}
 \end{equation}
 \end{thm}
-We devide the constraints into two group $A$ and $B$, we have $X^A +X^B=X$ and $g^A+g^B = g$
+We devide the constraints into two group $A$ and $B$ for every single $IJ$, we have $X^A +X^B=X$ and $g^A+g^B = g$
 the computational process is in Appendix.A
+	\begin{figure}[htbp]
+	\begin{center}	
+	\includegraphics[width=0.4\hsize]{pic/divide}
+	\caption{Selection of group $A_{IJ}$(red) and $B_{IJ}$(grey)}
+	\end{center}	
+	\end{figure}
 
 \subsection{Screening Algorithms}
 
@@ -102,7 +107,8 @@ the computational process is in Appendix.A
  \end{algorithmic} 
  \end{algorithm}
 
-screening method is irrelevent to the optimization solver you choose. We give the specific algorithm for $L_2$ UOT problem to show the whole optimization process.\\
+Screening method is irrelevent to the optimization solver you choose. We give the specific algorithm for $L_2$ UOT problem to show the whole optimization process.\\
+Benefiting from the special structure of UOT problem, The computational time of the screening method is $O(dnm)$, $d$ is a constant.
 
 
 

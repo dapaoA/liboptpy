@@ -3,16 +3,14 @@
 Given two histograms $\alpha \in \mathbbm{R}^{m}, \beta \in \mathbbm{R}^{n},$ For a cost matrix $C \in \mathbbm{R}^{m \times n}$, Optimal transport problem is trying to get a corresponding transport matrix $T \in \mathbbm{R}^{m \times n}$ that minimize the whole transport cost, which could be formulated as:
 $$
 \begin{aligned}
-&W(\alpha,\beta) := \min_{ \mathbf{T} \in \mathbb{R}_{+}^{n \times n}} \langle \C, \mathbf{T} \rangle \\
-& \mathbf{T} \mathbbm{1} = \alpha, \mathbf{T}^{T}\mathbbm{1} = \beta
+W(\alpha,\beta) := \min_{ \mathbf{T} \in \mathbb{R}_{+}^{n \times n},\mathbf{T} \mathbbm{1} = \alpha, \mathbf{T}^{T}\mathbbm{1} = \beta} \langle \C, \mathbf{T} \rangle 
 \end{aligned}
 $$
 
 We can write it into a vector type, set $c,t \in \mathbbm{R}^{mn}$:
 $$
 \begin{aligned}
-&W(\alpha,\beta) := \min_{t \in \mathbb{R}_{+}^{n^2}} c^{\tranT}t \\
-& \mathbf{N}t = \alpha, \mathbf{M}t = \beta
+W(\alpha,\beta) := \min_{t \in \mathbb{R}_{+}^{n^2}, \mathbf{N}t = \alpha, \mathbf{M}t = \beta} c^{\tranT}t 
 \end{aligned}
 $$
 
