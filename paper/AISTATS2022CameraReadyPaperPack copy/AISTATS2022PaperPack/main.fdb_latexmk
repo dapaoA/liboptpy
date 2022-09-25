@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex main"] 1663317656 "main.aux" "main.bbl" "main" 1663317700
+["bibtex main"] 1664086646 "main.aux" "main.bbl" "main" 1664096132
   "/usr/local/texlive/2022/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1233624470 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "main.aux" 1663317699 1352 daadd6c69ced3868d1a6d55dbff5d162 "pdflatex"
+  "main.aux" 1664096132 1409 722997a836f4dcf6c6bbe0b894595417 "pdflatex"
   "ref.bib" 1663146260 6155 1b4abfd0ef1e5e5e5ec637f45707b798 ""
   (generated)
   "main.bbl"
   "main.blg"
-["pdflatex"] 1663317699 "main.tex" "main.pdf" "main" 1663317700
+["pdflatex"] 1664096132 "main.tex" "main.pdf" "main" 1664096132
   "/Users/xunsu/Library/texlive/2022/texmf-var/fonts/pk/ljfour/public/bbm/bbm10.600pk" 1649148075 6964 eb6a6c68ff6020b1bab262081298adc6 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -87,15 +87,16 @@
   "/usr/local/texlive/2022/texmf.cnf" 1647878952 577 209b46be99c9075fd74d4c0369380e8c ""
   "Sec_UOT.tex" 1663317699 4331 9e571a6ceb013c685bcc8abe55193a90 ""
   "Sec_abstract.tex" 1663144396 517 f9c4d6610374e5ecdd8b78f967a566c6 ""
+  "Sec_appendix.tex" 1664096132 4909 8be330b058fcd152e3ad7e25775a9594 ""
   "Sec_background.tex" 1663149350 3349 17ed15f5d8e1cc94aec0750bd1c056e3 ""
   "Sec_conclusion.tex" 1663060259 91 98963edebf86bc4010245b4bbf0023e0 ""
   "Sec_experiments.tex" 1663060203 162 2e31e2f64611470f052607cdafcdd05b ""
-  "Sec_introduction.tex" 1663151219 2782 0781a5eaad9c05e55cbac7b7a1a335a8 ""
+  "Sec_introduction.tex" 1663656594 2783 acbfd46afed51563e488e5797389d81b ""
   "aistats2022.sty" 1662794450 17206 3100008a0c92cfe580a11660e282731b ""
   "fancyhdr.sty" 1662794450 20521 e5d13d98d57bd53d4fed3aa61bd29c86 ""
-  "main.aux" 1663317699 1352 daadd6c69ced3868d1a6d55dbff5d162 "pdflatex"
-  "main.bbl" 1663317656 4258 0251961d456a697944c76cb19613956f "bibtex main"
-  "main.tex" 1663315464 4624 7b2a43bf32790730e383f5f8c0f16a73 ""
+  "main.aux" 1664096132 1409 722997a836f4dcf6c6bbe0b894595417 "pdflatex"
+  "main.bbl" 1664086647 4258 0251961d456a697944c76cb19613956f "bibtex main"
+  "main.tex" 1664084351 3133 054ca29935d3325eb40af16f61985076 ""
   "pic/shifting.png" 1663314770 28636 5370024bf5f2342244bb64e1305992e3 ""
   (generated)
   "main.aux"

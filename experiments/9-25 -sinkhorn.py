@@ -127,7 +127,7 @@ xx = sp.vstack((Hr, Hc)).tocsc()
 # plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
 #              orientation='horizontal', extend='both')
 # plt.show()
-tau = 50
+tau = 5
 eps = 1e-2
 round = 1000
 G1 = ot.unbalanced.sinkhorn_unbalanced(a, b, M, eps, tau, stopThr=stopThr)
@@ -137,42 +137,14 @@ plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
              orientation='horizontal', extend='both')
 plt.show()
 
-trans1 = sc.Gap_screening_matrix(np.ones_like(M), a, b, M, 1/tau,eps,mint=1e-4, solution=G1)
+trans1 = sc.Gap_screening_matrix(np.ones_like(M), a, b, M, 1/tau,eps,mint=1e-5, solution=G1)
 
 time_s = time.time()
-G1_q00001, log = ot.unbalanced.sinkhorn_unbalanced_screening(a, b, M, eps, tau,numItermax=100,periter=10, stopThr=stopThr,
+G1_q00001, log = ot.unbalanced.sinkhorn_unbalanced_screening(a, b, M, eps, tau,numItermax=10000,periter=1000, stopThr=stopThr,
                                                              screening=trans1,log=True)
 time_e = time.time()
 print( "time costs: ", time_e - time_s, " s")
 
-plt.figure(figsize=(13, 10))
-plt.plot(log["opt_alg"],label=r'$\hat{\theta} \sim \theta^{k}$')
-plt.plot(log["opt_proj"],label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{shifting}$', linestyle='dashed')
-plt.plot(log["alg_proj"],label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{shifting}$', linestyle='dashed')
-
-plt.yscale('log')
-plt.title("Distances")
-plt.xlabel("rounds")
-plt.legend()
-plt.show()
-
-plt.figure(figsize=(13,10))
-plt.plot(log["opt_proj"], label=r'$\hat{\theta} \sim \tilde{\theta}^{k}_{shrinking}$')
-plt.plot(log["alg_proj"], label=r'$\theta^{k} \sim \tilde{\theta}^{k}_{shrinking}$')
-plt.xlabel("rounds")
-plt.title("Distances")
-plt.legend()
-plt.show()
-
-plt.figure(figsize=(13,10))
-plt.plot(log["screening_area1"], label=r'$R(\tilde{\theta}^{k})_{normal}$')
-plt.plot(log["screening_area2"], label=r'$R(\tilde{\theta}^{k}_{divide})$', linestyle='dashed')
-
-
-plt.title("Sparsity")
-plt.xlabel("rounds")
-plt.legend()
-plt.show()
 
 
 

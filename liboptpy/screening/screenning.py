@@ -1543,6 +1543,7 @@ class Gap_screening_matrix(screener_matrix):
         self.primal = .0
         self.dual = .0
 
+
     def update(self, w):
         self.w = w
         self.w = np.where(w>self.mint,w,self.mint)
@@ -1555,10 +1556,17 @@ class Gap_screening_matrix(screener_matrix):
         self.dim_b = w.shape[1]
         self.u = self.w.sum(axis=1)
         self.v = self.w.sum(axis=0)
-        self.theta_hat_u = np.log(self.u/self.a)
-        self.theta_hat_v = np.log(self.v/self.b)
+        self.theta_hat_u = - np.log(self.u/self.a)
+        self.theta_hat_v = - np.log(self.v/self.b)
+        # self.primal_func(w, w.sum(axis=1), w.sum(axis=0))
+        # self.theta_pu,self.theta_pv = self.projection_translation(np.log(w.sum(axis=1)/self.a),np.log(self.w.sum(axis=0)/self.b))
+        # self.dual_func(self.theta_pu,self.theta_pv)
+        # print("org primal: ",self.primal)
+        # print("org p=dual: ", self.dual )
         self.primal_func(self.w,self.u,self.v)
-        self.dual_func(self.theta_hat_u,self.theta_hat_v)
+        self.theta_pu,self.theta_pv = self.projection_translation(self.theta_hat_u,self.theta_hat_v)
+        self.dual_func(self.theta_pu,self.theta_pv)
+        # self.dual_func(self.theta_hat_u,self.theta_hat_v)
         self.gap = self.primal - self.dual
         self.g = self.lam * np.multiply(self.C,self.w).sum()
 
@@ -1568,26 +1576,33 @@ class Gap_screening_matrix(screener_matrix):
         # self.theta_best_v = np.log(self.solution.sum(axis=0)/self.b)
         # self.primal_func(self.solution,self.solution.sum(axis=1),self.solution.sum(axis=0))
         # self.dual_func(self.theta_best_u,self.theta_best_v)
+        # self.theta_pu,self.theta_pv = self.projection_translation(self.theta_best_u,self.theta_best_v)
+        # print("opt")
+        # print("primal: ",self.primal," dual: ", self.dual)
+        # self.dual_func(self.theta_pu,self.theta_pv)
+        # print("proj dual: ",self.dual)
+        # print("gap: ",self.gap)
 
         w_screening_area1 = self.screening_area(self.theta_hat_u, self.theta_hat_v)
         w_screening = {"screening_area1": w_screening_area1}
         return w_screening
+        return 0
 
     # def projection_normal(self, alg_theta):
     #     beilv = self.X.T.dot(alg_theta)/(self.lam * self.c)
     #     out = alg_theta / max(1,beilv.max())
     #     return out, beilv
     def dual_func(self,theta_u,theta_v):
-        self.dual = -self.a.dot(np.exp(-theta_u))-self.b.dot(np.exp(-theta_v))
+        self.dual = -self.a.dot(np.exp(-theta_u))-self.b.dot(np.exp(-theta_v)) + self.a.sum() + self.b.sum()
         w_screening = np.ones_like(self.w)
-        down = self.eps * (np.log(self.mint) + 1)
+        down = self.eps * math.log(self.mint)
         for i in range(self.dim_a):
             for j in range(self.dim_b):
                 middle = theta_u[i] + theta_v[j] - self.lam * self.C[i,j]
                 if middle >= down:
-                    self.dual -= self.eps * math.exp(middle/self.eps - 1)
+                    self.dual -= self.eps * math.exp(middle/self.eps )
                 else:
-                    self.dual -= self.mint * (middle - self.eps * math.exp(self.mint))
+                    self.dual -= self.mint * (middle - self.eps * (math.log(self.mint) - 1))
                     w_screening[i,j] = 0
         plt.imshow(w_screening)
         plt.title('dual condition!')
@@ -1597,15 +1612,15 @@ class Gap_screening_matrix(screener_matrix):
 
     def primal_func(self,w,u,v):
         self.primal = self.lam * np.multiply(self.C,w).sum() + u.dot(np.log(u/self.a))+\
-                      v.dot(np.log(v/self.b))+\
-                      self.eps * np.multiply(np.log(w),w).sum()
+                      v.dot(np.log(v/self.b))- u.sum()- v.sum() + self.a.sum() + self.b.sum()+\
+                      self.eps * np.multiply(np.log(w)-1,w).sum()
 
     def projection_translation(self, at_u, at_v):
-        trans = ((at_u[:, None]+at_v[None, :]-(self.lam * self.C))/2)
-        # plt.imshow(trans)
-        # plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
-        #              orientation='horizontal', extend='both')
-        # plt.show
+        trans = ((at_u[:, None]+at_v[None, :]-(self.lam * self.C + self.eps * math.log(self.mint)))/2)
+        plt.imshow(np.where(trans>=0,trans,0))
+        plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+                     orientation='horizontal', extend='both')
+        plt.show()
         difu = trans.max(axis=1)
         difv = trans.max(axis=0)
         outu = at_u - np.where(difu > 0, difu, 0)
@@ -1615,12 +1630,12 @@ class Gap_screening_matrix(screener_matrix):
     def screening_area(self,theta_u,theta_v):
         countzeros = 0
         w_screening = np.ones_like(self.w)
-        self.alpha = self.lam ** 2 ** 1
+        self.alpha = ((self.lam) ** 2) * 1000000
         self.r = math.sqrt(2*self.gap/self.alpha)
         xi_norm = math.sqrt(2)
         for i in range(w_screening.shape[0]):
             for j in range(w_screening.shape[1]):
-                if theta_u[i] + theta_v[j] + self.r *xi_norm < self.lam *self.C[i,j]:
+                if theta_u[i] + theta_v[j] + self.r *xi_norm < self.lam *self.C[i,j] + self.eps*math.log(self.mint):
                     w_screening[i,j] = 0
                     countzeros += 1
         plt.imshow(w_screening)
