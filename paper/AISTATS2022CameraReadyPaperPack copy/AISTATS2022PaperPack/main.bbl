@@ -1,4 +1,4 @@
-\begin{thebibliography}{9}
+\begin{thebibliography}{15}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -11,6 +11,26 @@ Martin Arjovsky, Soumith Chintala, and L{\'e}on Bottou.
 \newblock Wasserstein generative adversarial networks.
 \newblock In \emph{International conference on machine learning}, pages
   214--223. PMLR, 2017.
+
+\bibitem[Blondel et~al.(2018)Blondel, Seguy, and
+  Rolet]{DBLP:conf/aistats/BlondelSR18}
+Mathieu Blondel, Vivien Seguy, and Antoine Rolet.
+\newblock Smooth and sparse optimal transport.
+\newblock In Amos~J. Storkey and Fernando P{\'{e}}rez{-}Cruz, editors,
+  \emph{International Conference on Artificial Intelligence and Statistics,
+  {AISTATS} 2018, 9-11 April 2018, Playa Blanca, Lanzarote, Canary Islands,
+  Spain}, volume~84 of \emph{Proceedings of Machine Learning Research}, pages
+  880--889. {PMLR}, 2018.
+\newblock URL \url{http://proceedings.mlr.press/v84/blondel18a.html}.
+
+\bibitem[Bonnefoy et~al.(2015)Bonnefoy, Emiya, Ralaivola, and
+  Gribonval]{7128732}
+Antoine Bonnefoy, Valentin Emiya, Liva Ralaivola, and R{\'e}mi Gribonval.
+\newblock Dynamic screening: Accelerating first-order algorithms for the lasso
+  and group-lasso.
+\newblock \emph{IEEE Transactions on Signal Processing}, 63\penalty0
+  (19):\penalty0 5121--5132, 2015.
+\newblock \doi{10.1109/TSP.2015.2447503}.
 
 \bibitem[Chapel et~al.(2021)Chapel, Flamary, Wu, F\'{e}votte, and
   Gasso]{NEURIPS2021_c3c617a9}
@@ -56,6 +76,16 @@ Laurent~El Ghaoui, Vivian Viallon, and Tarek Rabbani.
   problems.
 \newblock \emph{arXiv preprint arXiv:1009.4219}, 2010.
 
+\bibitem[Janati et~al.(2019)Janati, Cuturi, and
+  Gramfort]{DBLP:conf/aistats/JanatiCG19}
+Hicham Janati, Marco Cuturi, and Alexandre Gramfort.
+\newblock Wasserstein regularization for sparse multi-task regression.
+\newblock In Kamalika Chaudhuri and Masashi Sugiyama, editors, \emph{The 22nd
+  International Conference on Artificial Intelligence and Statistics, {AISTATS}
+  2019, 16-18 April 2019, Naha, Okinawa, Japan}, volume~89 of \emph{Proceedings
+  of Machine Learning Research}, pages 1407--1416. {PMLR}, 2019.
+\newblock URL \url{http://proceedings.mlr.press/v89/janati19a.html}.
+
 \bibitem[Ndiaye et~al.(2017)Ndiaye, Fercoq, Alex, re~Gramfort, and
   Salmon]{JMLR:v18:16-577}
 Eugene Ndiaye, Olivier Fercoq, Alex, re~Gramfort, and Joseph Salmon.
@@ -75,6 +105,31 @@ Hermina Petric~Maretic, Mireille El~Gheche, Giovanni Chierchia, and Pascal
 \newblock URL
   \url{https://proceedings.neurips.cc/paper/2019/file/fdd5b16fc8134339089ef25b3cf0e588-Paper.pdf}.
 
+\bibitem[Pham et~al.(2020)Pham, Le, Ho, Pham, and
+  Bui]{DBLP:conf/icml/PhamLHPB20}
+Khiem Pham, Khang Le, Nhat Ho, Tung Pham, and Hung Bui.
+\newblock On unbalanced optimal transport: An analysis of sinkhorn algorithm.
+\newblock In \emph{Proceedings of the 37th International Conference on Machine
+  Learning, {ICML} 2020, 13-18 July 2020, Virtual Event}, volume 119 of
+  \emph{Proceedings of Machine Learning Research}, pages 7673--7682. {PMLR},
+  2020.
+\newblock URL \url{http://proceedings.mlr.press/v119/pham20a.html}.
+
+\bibitem[Schiebinger et~al.(2019)Schiebinger, Shu, Tabaka, Cleary, Subramanian,
+  Solomon, Gould, Liu, Lin, Berube, Lee, Chen, Brumbaugh, Rigollet,
+  Hochedlinger, Jaenisch, Regev, and Lander]{SCHIEBINGER2019928}
+Geoffrey Schiebinger, Jian Shu, Marcin Tabaka, Brian Cleary, Vidya Subramanian,
+  Aryeh Solomon, Joshua Gould, Siyan Liu, Stacie Lin, Peter Berube, Lia Lee,
+  Jenny Chen, Justin Brumbaugh, Philippe Rigollet, Konrad Hochedlinger, Rudolf
+  Jaenisch, Aviv Regev, and Eric~S. Lander.
+\newblock Optimal-transport analysis of single-cell gene expression identifies
+  developmental trajectories in reprogramming.
+\newblock \emph{Cell}, 176\penalty0 (4):\penalty0 928--943.e22, 2019.
+\newblock ISSN 0092-8674.
+\newblock \doi{https://doi.org/10.1016/j.cell.2019.01.006}.
+\newblock URL
+  \url{https://www.sciencedirect.com/science/article/pii/S009286741930039X}.
+
 \bibitem[Yamada and Yamada(2021)]{NEURIPS2021_7b5b23f4}
 Hiroaki Yamada and Makoto Yamada.
 \newblock Dynamic sasvi: Strong safe screening for norm-regularized least
@@ -84,5 +139,13 @@ Hiroaki Yamada and Makoto Yamada.
   volume~34, pages 14645--14655. Curran Associates, Inc., 2021.
 \newblock URL
   \url{https://proceedings.neurips.cc/paper/2021/file/7b5b23f4aadf9513306bcd59afb6e4c9-Paper.pdf}.
+
+\bibitem[Yang and Uhler(2019)]{DBLP:conf/iclr/YangU19}
+Karren~D. Yang and Caroline Uhler.
+\newblock Scalable unbalanced optimal transport using generative adversarial
+  networks.
+\newblock In \emph{7th International Conference on Learning Representations,
+  {ICLR} 2019, New Orleans, LA, USA, May 6-9, 2019}. OpenReview.net, 2019.
+\newblock URL \url{https://openreview.net/forum?id=HyexAiA5Fm}.
 
 \end{thebibliography}

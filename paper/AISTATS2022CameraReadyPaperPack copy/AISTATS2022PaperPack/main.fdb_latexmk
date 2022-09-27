@@ -1,13 +1,14 @@
 # Fdb version 3
-["bibtex main"] 1664086646 "main.aux" "main.bbl" "main" 1664096132
+["bibtex main"] 1664273156 "main.aux" "main.bbl" "main" 1664274503
   "/usr/local/texlive/2022/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1233624470 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "main.aux" 1664096132 1409 722997a836f4dcf6c6bbe0b894595417 "pdflatex"
-  "ref.bib" 1663146260 6155 1b4abfd0ef1e5e5e5ec637f45707b798 ""
+  "main.aux" 1664274503 2311 f19805fbb81284524a98de25279abe1d "pdflatex"
+  "ref.bib" 1664267493 12144 7e010fc276e17d2f834cf3e79e8fa916 ""
   (generated)
   "main.bbl"
   "main.blg"
-["pdflatex"] 1664096132 "main.tex" "main.pdf" "main" 1664096132
+["pdflatex"] 1664274503 "main.tex" "main.pdf" "main" 1664274503
   "/Users/xunsu/Library/texlive/2022/texmf-var/fonts/pk/ljfour/public/bbm/bbm10.600pk" 1649148075 6964 eb6a6c68ff6020b1bab262081298adc6 ""
+  "/Users/xunsu/Library/texlive/2022/texmf-var/fonts/pk/ljfour/public/bbm/bbm7.600pk" 1649148077 4840 fecccf0f1539bac1f6aec4ad0bb21668 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1136768653 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
@@ -85,18 +86,18 @@
   "/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1649150805 4410336 7d30a02e9fa9a16d7d1f8d037ba69641 ""
   "/usr/local/texlive/2022/texmf-var/web2c/pdftex/pdflatex.fmt" 1649150429 2826436 20cffb79c4e87c60eae432adcf15ccd9 ""
   "/usr/local/texlive/2022/texmf.cnf" 1647878952 577 209b46be99c9075fd74d4c0369380e8c ""
-  "Sec_UOT.tex" 1663317699 4331 9e571a6ceb013c685bcc8abe55193a90 ""
-  "Sec_abstract.tex" 1663144396 517 f9c4d6610374e5ecdd8b78f967a566c6 ""
-  "Sec_appendix.tex" 1664096132 4909 8be330b058fcd152e3ad7e25775a9594 ""
-  "Sec_background.tex" 1663149350 3349 17ed15f5d8e1cc94aec0750bd1c056e3 ""
+  "Sec_UOT.tex" 1664274503 5705 9ebe2bf59fa87fcc53d0731940fdad69 ""
+  "Sec_abstract.tex" 1664262352 881 42317cffc60908d5c8b6497050a9988b ""
+  "Sec_appendix.tex" 1664103426 4909 d7b292bfff7309b6b24c61d580c1e9dd ""
+  "Sec_background.tex" 1664273587 2967 c9028d8c38d0e1aeb1b3031168c9d173 ""
   "Sec_conclusion.tex" 1663060259 91 98963edebf86bc4010245b4bbf0023e0 ""
   "Sec_experiments.tex" 1663060203 162 2e31e2f64611470f052607cdafcdd05b ""
-  "Sec_introduction.tex" 1663656594 2783 acbfd46afed51563e488e5797389d81b ""
+  "Sec_introduction.tex" 1664267657 3854 cf5a3e11ab13d9b7558de1f7983b9163 ""
   "aistats2022.sty" 1662794450 17206 3100008a0c92cfe580a11660e282731b ""
   "fancyhdr.sty" 1662794450 20521 e5d13d98d57bd53d4fed3aa61bd29c86 ""
-  "main.aux" 1664096132 1409 722997a836f4dcf6c6bbe0b894595417 "pdflatex"
-  "main.bbl" 1664086647 4258 0251961d456a697944c76cb19613956f "bibtex main"
-  "main.tex" 1664084351 3133 054ca29935d3325eb40af16f61985076 ""
+  "main.aux" 1664274503 2311 f19805fbb81284524a98de25279abe1d "pdflatex"
+  "main.bbl" 1664273156 7619 9f45ec4a03eea5f97455d6d77b377419 "bibtex main"
+  "main.tex" 1664270280 3304 2757ee2a98d423a460378840d6e94ac7 ""
   "pic/shifting.png" 1663314770 28636 5370024bf5f2342244bb64e1305992e3 ""
   (generated)
   "main.aux"

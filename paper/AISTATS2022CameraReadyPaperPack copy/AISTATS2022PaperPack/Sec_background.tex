@@ -1,44 +1,44 @@
 \section{Background}
 \subsection{Optimal Transport and Unbalanced Optimal Transport}
-Given two histograms $\alpha \in \mathbbm{R}^{m}, \beta \in \mathbbm{R}^{n},$ For a cost matrix $C \in \mathbbm{R}^{m \times n}$, Optimal transport problem is trying to get a corresponding transport matrix $T \in \mathbbm{R}^{m \times n}$ that minimize the whole transport cost, which could be formulated as:
+Given two histograms $\ma\in \R^{m}, \mb \in \R^{n},$ For a cost matrix $\C \in \mathbbm{R}^{m \times n}$, mordern Optimal transport problem is trying to get a corresponding transport matrix $\T \in \R^{m \times n}$ that minimize the whole transport cost, which could be formulated as:
 $$
 \begin{aligned}
-&W(\alpha,\beta) := \min_{ \mathbf{T} \in \mathbb{R}_{+}^{n \times n}} \langle \C, \mathbf{T} \rangle \\
-& \mathbf{T} \mathbbm{1} = \alpha, \mathbf{T}^{T}\mathbbm{1} = \beta
+&W(\ma,\mb) := \min_{ \T \in \R_{+}^{n \times n}} \langle \C, \T \rangle \\
+& \mathbf{T} \one_n= \ma, \mathbf{T}^{T}\one_m = \mb
 \end{aligned}
 $$
 
-We can write it into a vector type, set $c,t \in \mathbbm{R}^{mn}$:
+We can write it into a vector type, set $\vc,\vt \in \mathbbm{R}^{mn}$:
 $$
 \begin{aligned}
-&W(\alpha,\beta) := \min_{t \in \mathbb{R}_{+}^{n^2}} c^{\tranT}t \\
-& \mathbf{N}t = \alpha, \mathbf{M}t = \beta
+&W(\ma,\mb) := \min_{t \in \R_{+}^{n^2}} c^{\tranT}t \\
+& \mathbf{N}\vt = \alpha, \mathbf{M}\vt = \beta
 \end{aligned}
 $$
 
-$\mathbf{N} \in \mathbbm{R}^{m \times mn}, \mathbf{N} \in \mathbbm{R}^{n \times mn}$ are two matrix consisted with 0 and 1, listed in Appendix.A. We define $y = [\alpha, \beta]^{\tranT}$, the UOT problem add a penalty function for the historgrams: 
+$\mathbf{N} \in \R^{m \times mn}, \mathbf{N} \in \R^{n \times mn}$ are two matrix consisted with 0 and 1, listed in Appendix.A. When the $\|\ma\|_2 = \|\mb\|_2$, it is the OT problem. When $\|\ma\|_2 \neq \|\mb\|_2$, the solution $\vt^{*}$ is not exist. We define $\y = [\ma, \mb]^{\tranT}$, the UOT problem use a penalty function for the historgrams: 
 \begin{equation}
 \label{eq:uot}
-W(\alpha,\beta) := \min_{t \in \mathbb{R}_{+}^{mn}} c^{\tranT}t + D_h(\mathbf{X}t,y)
+W(\ma,\mb) := \min_{t \in \R_{+}^{mn}} \vc^{\tranT}t + D_h(\X\vt,\y)
 \end{equation}
-$D_h$ is the Bregman divergence and $h$ is the norm, $\X = [\mathbf{M}^{\tranT} \mathbf{N}^{\tranT}]^{\tranT}$.
+$D_h$ is the Bregman divergence derived from the norm $h$, $\X = [\mathbf{M}^{\tranT} \mathbf{N}^{\tranT}]^{\tranT}$.
 
 \subsection{Relationship with Lasso}
 Lasso-like problem has a general formula as:
 $$
 \begin{aligned}
-f(t) = g(t) + D_h(\X t,b), t\in \mathbbm{R}^{mn}
+f(\vt) = g(\vt) + D_h(\X \vt,\y), t\in \mathbbm{R}^{mn}
 \end{aligned}
 $$
-When $g(t) = \lambda \|t\|$ and $D_h(\X t,b) = \|\X t-b\|_2^2$, this is the Euclid regression Lasso problem
+When $g(\vt) = \lambda \|\vt\|_1$ and $D_h(\X \vt,\y) = \|\X \vt-\y\|_2^2$, this is the $L_2$ regression Lasso problem.
 
 
 \subsection{Dynamic Screening Framework}
 
-We follow \cite{NEURIPS2021_7b5b23f4}'s framework to introduce about the whole dynamic screening technique for Lasso-like problem:
+We follow \citep{NEURIPS2021_7b5b23f4}'s framework to introduce about the whole dynamic screening technique for Lasso-like problem:
 \begin{equation}
 \label{eq:lassolike}
-f(t) = g(t) + d(\X t)
+f(\vt) = g(\vt) + d(\X \vt)
 \end{equation}
 
 By Frenchel-Rockafellar Duality, we get the dual problem
@@ -46,40 +46,22 @@ By Frenchel-Rockafellar Duality, we get the dual problem
  (Frenchel-Rockafellar Duality) If $d$ and $g$ are proper convex functions on $\mathbbm{R}^{m+n}$ and $\mathbbm{R}^{mn}$. Then we have the following:
  $$
 \begin{aligned}
-\min_t  g(t) + d(Xt) = \max_{\theta} -d^*(-\theta)-g^*(X^{\tranT}\theta)
+\min_\vt  g(\vt) + d(\X\vt) = \max_{\theta} -d^*(-\theta)-g^*(\X^{\tranT}\theta)
 \end{aligned}
 $$
 \end{thm}
 
-Because the primal function $d$ is always convex, the dual function $d^*$ is concave. Assuming $d^*$ is an L-strongly concave problem. we design an area for any $\tilde{\theta}$ by the strongly concave property:
+Because the primal function $d$ is always convex, the dual function $d^*$ is concave. Assuming $d^*$ is an L-strongly concave problem. we can design an area for any feasible $\tilde{\theta}$ by the strongly concave property:
 
 \begin{thm}\label{circle}
-(L-strongly concave) Considering problem \ref{eq:lassolike}, if $d$ and $g$ are both convex, for $\forall \theta \in{R^{m+n}}$, we have the following:  
+(L-strongly concave) Considering problem \ref{eq:lassolike}, if $d$ and $g$ are both convex, for $\forall$ feasible $\tilde{\theta} \in{R^{m+n}}$, we have the following area:  
 $$
 \begin{aligned}
-\theta \in \{\frac{L}{2}\|\theta-\tilde{\theta}\|_2^2+d^*(-\tilde{\theta}) \leq d^*(-\theta)\}
+\mathcal{R}^{C}:=\theta \in \{\frac{L}{2}\|\theta-\tilde{\theta}\|_2^2+d^*(-\tilde{\theta}) \leq d^*(-\theta)\}
 \end{aligned}
 $$
 \end{thm}
 We know that the optimal solution for the dual problem $\hat{\theta}$ satisfied the inequality, so the set is not empty.
-We can get the dual form of Lasso-like problem for some specific functions: 
-\begin{lem}
-For $d(\X t) = \frac{1}{2}\|\X t-y\|_2^2$, the dual Lasso problem has the following form:
-$$
-\begin{aligned}
-d^*(-\theta) = \frac{1}{2}\|\theta\|_2^2-y^{\tranT}\theta
-\end{aligned}
-$$
-
-$$
-g^*(X^{\tranT}\theta) = \left\{
-\begin{aligned}
-0 \quad&\quad ( \forall t \quad\theta^{\tranT}Xt - g(t) \leq 0 )\\
-\infty \quad&( \exists t \quad\theta^{\tranT}Xt - g(t) \leq 0 )
-\end{aligned}
-\right.
-$$
-\end{lem}
 
 
 

@@ -327,6 +327,8 @@ INPUT Sec_introduction.tex
 INPUT ./Sec_introduction.tex
 INPUT ./Sec_introduction.tex
 INPUT Sec_introduction.tex
+OUTPUT main.pdf
+INPUT /usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map
 INPUT /usr/local/texlive/2022/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm
 INPUT ./Sec_background.tex
 INPUT ./Sec_background.tex
@@ -335,6 +337,8 @@ INPUT Sec_background.tex
 INPUT ./Sec_background.tex
 INPUT ./Sec_background.tex
 INPUT Sec_background.tex
+INPUT /usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm
+INPUT /usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
 INPUT /usr/local/texlive/2022/texmf-dist/tex/latex/bbm-macros/ubbm.fd
 INPUT /usr/local/texlive/2022/texmf-dist/tex/latex/bbm-macros/ubbm.fd
 INPUT /usr/local/texlive/2022/texmf-dist/tex/latex/bbm-macros/ubbm.fd
@@ -342,10 +346,6 @@ INPUT /usr/local/texlive/2022/texmf-dist/tex/latex/bbm-macros/ubbm.fd
 INPUT /usr/local/texlive/2022/texmf-dist/fonts/tfm/public/bbm/bbm10.tfm
 INPUT /usr/local/texlive/2022/texmf-dist/fonts/tfm/public/bbm/bbm7.tfm
 INPUT /usr/local/texlive/2022/texmf-dist/fonts/tfm/public/bbm/bbm5.tfm
-OUTPUT main.pdf
-INPUT /usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map
-INPUT /usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm
-INPUT /usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
 INPUT /usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmss10.tfm
 INPUT /usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmss8.tfm
 INPUT /usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmss8.tfm
@@ -388,6 +388,7 @@ INPUT ./Sec_appendix.tex
 INPUT ./Sec_appendix.tex
 INPUT Sec_appendix.tex
 INPUT main.aux
+INPUT /Users/xunsu/Library/texlive/2022/texmf-var/fonts/pk/ljfour/public/bbm/bbm7.600pk
 INPUT /Users/xunsu/Library/texlive/2022/texmf-var/fonts/pk/ljfour/public/bbm/bbm10.600pk
 INPUT /usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
 INPUT /usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
