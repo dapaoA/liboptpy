@@ -1,0 +1,190 @@
+\section{Dynamic Screening and UOT problem}
+\subsection{Screening for UOT}
+
+We can get the dual form of UOT problem: 
+\begin{lem}
+For $d(\X \vt) = \frac{1}{2}\|\X \vt-\y\|_2^2$, the dual Lasso problem has the following form:
+$$
+\begin{aligned}
+d^*(-\theta) = \frac{1}{2}\|\theta\|_2^2-\y^{\tranT}\theta
+\end{aligned}
+$$
+
+$$
+g^*(\X^{\tranT}\theta) = \left\{
+\begin{aligned}
+0 \quad&\quad ( \forall \vt \quad\theta^{\tranT}\X\vt - g(\vt) \leq 0 )\\
+\infty \quad&( \exists t \quad\theta^{\tranT}\X\vt - g(\vt) \leq 0 )
+\end{aligned}
+\right.
+$$
+\end{lem}
+
+
+For UOT problem \ref{eq:uot}, we could get its dual form. 
+\begin{lem}(Dual form of UOT problem)
+\begin{equation}
+\begin{split}
+-d^*(-\theta) - g^*(\X^{\tranT}\theta)& = -\frac{1}{2}\|\theta\|_2^2-\y^{\tranT}\theta \\
+ \mathbf{s.t.} \quad \forall p  \quad \x_p^{\tranT}\theta -\lambda \vc_p &\leq 0
+ \end{split}
+ \label{eq:uotdual}
+\end{equation}
+\end{lem}
+$\x_p $ is the p-th column of $\X$, these inequations \ref{eq:uotdual} make up a dual feasible area written as $\mathcal{R}^{D}$, and the optimal solution definitely satisfied them.\\
+From the KKT condition, we konw that, for the optimal primal solution $\hat{\vt}$:
+\begin{thm} (KKT condition) For the dual optimal solution $\hat{\theta}$, we have the following relationship:
+ \begin{equation}
+\begin{split}
+\x_p^{\tranT}\hat{\theta} -\lambda \vc_p  \left\{
+\begin{aligned}
+< 0 \quad& \Rightarrow \hat{\vt}_p = 0\\
+= 0 \quad& \Rightarrow \hat{\vt}_p \geq 0
+\end{aligned}
+\right.
+ \end{split}
+ \label{eq:kkt}
+\end{equation}
+\end{thm}
+
+As we do not know the information of $\hat{\vt}$ directly, we can construct an area $\mathcal{R}^{S}$ containing the $\hat{\vt}$, if
+
+\begin{equation}
+\max_{\vt \in \mathcal{R}^S} \x_p^{\tranT}\theta -\lambda \vc_p  < 0
+\end{equation}
+then we have:
+ \begin{equation}
+ \x_p^{\tranT}\hat{\theta} -\lambda \vc_p  < 0 
+ \label{eq:kktineq}
+\end{equation}
+which means the corresponding $\hat{t}_i = 0$, and can be screening out.
+As for the UOT problem, $x_p = [...,0,1,0,...,0,1,0,...,]^{\tranT}$, which has only two elements $p_1$, $p_2$ equal to 1, we can set $\theta = [\vu^{\tranT},\vv^{\tranT}]^{\tranT}$ and $\vu\in\R^{m}, \vv\in\R^{n}$, assuming $p=(I,J), I = p \mid m, J = p \mod m$. then we could rewrite \ref{eq:kktineq} as 
+
+ \begin{equation}
+\vu_{I} + \vv_{J}-\lambda \vc_p  < 0
+\end{equation}
+
+Before we start to construct the area containing $\hat{\theta}$, from \ref{circle} we know that, we have to find a $\tilde{\theta}$ in the dual feasible area before we construct any area, there is a relationship between the primal variable and dual variable $\theta = \y - \X\vt$, however, the outcome $\theta$ might not inside the dual feasible area, which encourage us to project. In lasso problem, as the constraints limit the $\|\x_p \theta\|_1$, and every elements of $\theta$ is multiplied by the dense $x_i$, researchers has to use a shrinking method to obtain a $\tilde{\theta} \in \mathcal{R}^{D}$ for further constructing the dual screening area: 
+\begin{equation}
+\tilde{\theta} = \frac{(\y - \X \vt)}{\max(\lambda \vc, \|\X^{\tranT}(\y-\X\vt)\|_{\infty})}
+\end{equation}
+As for UOT problem, it only allow $\vt_p \geq 0$, and its $x_p$ only consists of two non-zero elements, which allows us to adapt a better projection method:
+
+\begin{thm}
+(UOT projection) For any any $\theta = [{\vu}^{\tranT},{\vv}^{\tranT}]^{\tranT}$, we can compute the projection $\tilde{\theta} = [\tilde{\vu}^{\tranT},\tilde{\vv}^{\tranT}]^{\tranT} \in \mathcal{R}^{D}$.
+\begin{equation}
+\begin{split}
+\tilde{\vu}_I &= {\vu}_I - \max_{0\geq j\geq n} \frac{{\vu}_I +{\vv}_j - \lambda\vc_{p}}{2}\\
+& = \frac{{\vu}_I +\lambda\vc_{p}}{2} - \frac{1}{2}\max_{0\geq j\geq n} {\vv}_j\\
+\tilde{\vv}_J &= {\vv}_J - \max_{0 \geq i \geq m} \frac{{\vu}_i +{\vv}_J - \lambda\vc_{p}}{2}\\
+& = \frac{{\vv}_J +\lambda\vc_{p}}{2} - \frac{1}{2}\max_{0\geq i\geq m} {\vu}_j
+ \end{split}
+ \label{eq:uotdual}
+\end{equation}
+\end{thm}
+	\begin{figure}[h]
+	\begin{center}	
+	\includegraphics[width = \linewidth]{pic/shifting}
+	\caption{Shifting on a 2$\times$2 matrix}
+	\end{center}	
+	\end{figure}
+
+
+As we have got the $\tilde{\theta}$ in the $R^{D}$ and we also have another constraint area $\mathcal{R}^{C}$, we are sure that the $\hat{\vt} \in \mathcal{R}^{C}\cap\mathcal{R}^{D}$. However, The intersection of a sphere and a polytope can not be compute in $O(knm)$, where $k$ is a constant.  We design a relaxation method. which divide the constrains into two parts, then we are maximizing on the intersection of two hyperplanes and a hyper-ball. 
+
+	\begin{figure}[h]
+	\begin{center}	
+	\includegraphics[width = \linewidth]{pic/divide}
+	\caption{Selection of group $A_{IJ}$(red) and $B_{IJ}$(grey)}
+	\end{center}	
+	\end{figure}
+
+\begin{thm}\label{area}(Screening Area for UOT) With the help of $\tilde{\theta}$, we can construct specific area for every single primal variable as following area $\mathcal{R}^{S}_{IJ}$, and the optimal dual solution $\hat{\theta}$ must be inside the area.
+ \begin{equation}
+\begin{split} 
+\mathcal{R}^S_{IJ} = \{ \theta \|
+\begin{aligned}
+ &\theta^{\tranT}\X^{A_{IJ}}\vt - \lambda g^{A_{IJ}}\vt\leq 0 \\
+  &\theta^{\tranT}\X^{B_{IJ}}\vt - \lambda g^{B_{IJ}}\vt \leq 0\\
+   &(\theta-\tilde{\theta})^{\tranT}(\theta-\y)\leq 0\}
+\end{aligned}
+\end{split}
+\label{eq:divide}
+\end{equation}
+\end{thm}
+We devide the constraints into two group $A$ and $B$ for every single $IJ$, we have $X^A +X^B=X$ and $g^A+g^B = g$
+This problem can be solved easily by Lagrangian method in constant time, the computational process is in Appendix.A
+
+
+\subsection{Screening Algorithms}
+
+ \begin{algorithm}
+ \caption{UOT Dynamic Screening Algorithm}
+ \begin{algorithmic}[h]
+ \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+ \renewcommand{\algorithmicensure}{\textbf{Output:}}
+ \REQUIRE $\vt_0, S \in R^{n\times m}, S_{ij}=1, (i,j) = mi+j$
+ \ENSURE  $S$
+  \STATE \text{Choose a solver for the problem.}
+  \FOR {$k = 0 \text{ to } K$}
+  \STATE $\text{Projection } \tilde{\theta} = \operatorname{Proj}(t^k)$ 
+  \FOR {$i = 0 \text{ to } m$}
+    \FOR {$j = 0 \text{ to } n$}
+   \STATE $\mathcal{R}^{S} \Leftarrow \mathcal{R_{IJ}}^S{(\tilde{\theta},t^k)}$
+      \STATE $S \Leftarrow {S_{ij} = 0 \text{ if } \max_{\theta \in \mathcal{R}^S} {x_{(i,j)}}^{\tranT}\theta <\lambda c_{(i,j)} }$
+  \ENDFOR
+    \ENDFOR
+  \FOR {$(i,j)  \in \{(i,j)\|S_{ij}=0\}$}
+    \STATE $\vt^k_{(i,j)} \Leftarrow 0$
+    \ENDFOR
+    \STATE $\vt^{k+1} = \operatorname{update}(\vt^k)$
+  \ENDFOR
+  
+ \RETURN $\vt^{K+1}, S $ 
+ \end{algorithmic} 
+ \end{algorithm}
+
+The screening method is irrelevent to the optimization solver you choose. We give the specific algorithm for $L_2$ UOT problem to show the whole optimization process.\\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

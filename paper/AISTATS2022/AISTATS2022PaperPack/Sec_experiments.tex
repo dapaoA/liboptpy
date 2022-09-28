@@ -1,0 +1,44 @@
+\section{Experiments}
+In this section, we show the efficacy of the proposed methods using toy Gaussian models and the MNIST dataset.
+\subsection{Projection Method}
+In order to prove the rightness of our projection method compared with the traditional projection method in Lasso problem, we compared the projection distance and screening ratio with random generated Gaussian measures by two projection method. We set the $\lambda = \frac{\|\mathbf{X}^{\tranT}y\|}{100}$ and test for 10 different pairs.We choose the FISTA for solving the $L_2$ penalized UOT problems. Our projection method have only moved the dual point by a very small order of magnitude. It ensures that the points are kept at a smaller distance from the optimal solution and cause a better screening effects.
+	\begin{figure}[h]
+	\begin{center}	
+	\includegraphics[width = \linewidth]{pic/projdis}
+	\caption{Distance of different projection method}
+	\end{center}	
+	\end{figure}
+	\begin{figure}[htbp]
+	\begin{center}	
+	\includegraphics[width = \linewidth]{pic/sparse_proj}
+	\caption{Screening ratio of different projection method}
+	\end{center}	
+	\end{figure}
+
+\subsection{Divide Method}
+We compared the screening ratio with three different method, including our Divide method, Dynamic Sasvi method and Gap method. Every method would use our projection method to get a better outcome, which also make sure the difference in performance is only in the construction of the feasible domain. 
+	\begin{figure}[h]
+	\begin{center}	
+	\includegraphics[width = \linewidth]{pic/screening_divide_ratio_long}
+	\caption{Screening ratio of dividing method}
+	\end{center}	
+	\end{figure}
+
+\subsection{Best divide Method}
+We compared the screening ratio with three different method, including our Divide method, Dynamic Sasvi method and a random divide method. 
+	\begin{figure}[h]
+	\begin{center}	
+	\includegraphics[width = \linewidth]{pic/divide}
+	\caption{Comparing of our seperation method with random seperation method}
+	\end{center}	
+	\end{figure}
+
+\subsection{Speed up ratio}
+
+We choose FISTA method, Newton method and Language method to test about the screening ratio. 
+	\begin{figure}[h]
+	\begin{center}	
+	\includegraphics[width = \linewidth]{pic/divide}
+	\caption{speed up ratio for different solver}
+	\end{center}	
+	\end{figure}
