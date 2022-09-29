@@ -68,9 +68,9 @@ We can get the Lagrangrian dual problem:
 Compute the gradient, we can get three equality:
 \begin{equation}
 \begin{split} 
-\frac{\partial L}{\partial \eta} &= -\frac{1+\mu a_{I_1} + \nu {I_1}}{4\eta^2} -  \frac{1+\mu a_{I_2} + \nu {I_2}}{4\eta^2} - 2\frac{\partial q^{*}}{\partial \eta}q^{*} (r - {q^{*}}^{\tranT}q^{*} )+\mu a \frac{\partial q^{*}}{\partial \eta} + +\nu b \frac{\partial q^{*}}{\partial \eta}\\
-\frac{\partial L}{\partial \mu} &= \frac{a_{I_1} + a_{I_2}}{2\eta} - 2 q^{*}\frac{\partial q^{*}}{\partial \mu} +( a^{\tranT}q^{*} - e_a )\frac{\partial q^{*}}{\partial \mu} + \nu b \frac{\partial q^{*}}{\partial \mu} \\
-\frac{\partial L}{\partial \nu} &= \frac{b_{I_1} + b_{I_2}}{2\eta} - 2 q^{*}\frac{\partial q^{*}}{\partial \nu} +( b^{\tranT}q^{*} - e_b )\frac{\partial q^{*}}{\partial \nu} + \mu a \frac{\partial q^{*}}{\partial \nu} 
+\frac{\partial L}{\partial \eta} &= -\frac{1+\mu a_{I_1} + \nu b_{I_1}}{4\eta^2} -  \frac{1+\mu a_{I_2} + \nu b_ {I_2}}{4\eta^2} + (r - {q^{*}}^{\tranT}q^{*} ) - 2\eta\frac{\partial q^{*}}{\partial \eta}q^{*} +\mu a \frac{\partial q^{*}}{\partial \eta} + \nu b \frac{\partial q^{*}}{\partial \eta}\\
+\frac{\partial L}{\partial \mu} &= \frac{a_{I_1} + a_{I_2}}{2\eta} - 2 \eta q^{*}\frac{\partial q^{*}}{\partial \mu} +( a^{\tranT}q^{*} - e_a ) + \mu a \frac{\partial q^{*}}{\partial \mu} + \nu b \frac{\partial q^{*}}{\partial \mu} \\
+\frac{\partial L}{\partial \nu} &= \frac{b_{I_1} + b_{I_2}}{2\eta} - 2 \eta q^{*}\frac{\partial q^{*}}{\partial \nu} +( b^{\tranT}q^{*} - e_b ) + \nu b \frac{\partial q^{*}}{\partial \nu} + \mu a \frac{\partial q^{*}}{\partial \nu} 
  \end{split}
 \end{equation}
 

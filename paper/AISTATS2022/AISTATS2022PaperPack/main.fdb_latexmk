@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex main"] 1664359309 "main.aux" "main.bbl" "main" 1664359790
+["bibtex main"] 1664359309 "main.aux" "main.bbl" "main" 1664441335
   "/usr/local/texlive/2022/texmf-dist/bibtex/bst/base/apalike.bst" 1292289607 24635 604dafcc79f521a11ea73e506e1fbd98 ""
-  "main.aux" 1664359790 1735 53646fdd405ce2ce43807931837b6201 "pdflatex"
+  "main.aux" 1664441335 1735 53646fdd405ce2ce43807931837b6201 "pdflatex"
   "ref.bib" 1664267493 12144 7e010fc276e17d2f834cf3e79e8fa916 ""
   (generated)
   "main.bbl"
   "main.blg"
-["pdflatex"] 1664359790 "main.tex" "main.pdf" "main" 1664359790
+["pdflatex"] 1664441335 "main.tex" "main.pdf" "main" 1664441335
   "/Users/xunsu/Library/texlive/2022/texmf-var/fonts/pk/ljfour/public/bbm/bbm10.600pk" 1649148075 6964 eb6a6c68ff6020b1bab262081298adc6 ""
   "/Users/xunsu/Library/texlive/2022/texmf-var/fonts/pk/ljfour/public/bbm/bbm7.600pk" 1649148077 4840 fecccf0f1539bac1f6aec4ad0bb21668 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
@@ -85,14 +85,14 @@
   "/usr/local/texlive/2022/texmf.cnf" 1647878952 577 209b46be99c9075fd74d4c0369380e8c ""
   "Sec_UOT.tex" 1664359790 6761 1643f245796041fb61e5bf598958a574 ""
   "Sec_abstract.tex" 1664351352 835 a749c99b3821b7e46974010ff66c1661 ""
-  "Sec_appendix.tex" 1664359592 3625 968a46071a515a291c0b57f8180625d6 ""
+  "Sec_appendix.tex" 1664441335 3664 12e2a8f2624d0e26d8815e7caa7b06ae ""
   "Sec_background.tex" 1664353495 3230 fcb77d07e9c43435a3e4784b888c20c9 ""
   "Sec_conclusion.tex" 1663060259 91 98963edebf86bc4010245b4bbf0023e0 ""
   "Sec_experiments.tex" 1664355489 2286 83bbbecfc2950110a1c9665514d689ec ""
   "Sec_introduction.tex" 1664352275 4174 237141ad67ce9ff4182fe854cf744c9e ""
   "aistats2022.sty" 1662794450 17206 3100008a0c92cfe580a11660e282731b ""
   "fancyhdr.sty" 1662794450 20521 e5d13d98d57bd53d4fed3aa61bd29c86 ""
-  "main.aux" 1664359790 1735 53646fdd405ce2ce43807931837b6201 "pdflatex"
+  "main.aux" 1664441335 1735 53646fdd405ce2ce43807931837b6201 "pdflatex"
   "main.bbl" 1664359309 5048 c6f5d9d16a5dce31ac8c8b6cd1c33642 "bibtex main"
   "main.tex" 1664352843 3349 67b5e4aee95eec908f533726c09509e4 ""
   "pic/divide.png" 1664084351 5258 d4333734a781eb3c604f76bf2d7120c3 ""
