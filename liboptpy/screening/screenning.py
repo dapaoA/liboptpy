@@ -1131,21 +1131,23 @@ class sasvi_screening_matrix_debug(screener_matrix):
         return [
             (- self.sum_nm) * l3 - self.sum_nn_all * l2 - 2 * l1 * self.cosline1 * self.r - self.nn, #+ or -??
             (- self.sum_nm) * l2 - self.sum_mm_all * l3 - 2 * l1 * self.cosline2 * self.r,
-            (l2 * self.nn - 1 - 0.5 * self.sum_nn_all * l2 ** 2 - 0.5 * self.sum_mm_all * l3 ** 2 -
+            (-l2 * self.nn - 1 - 0.5 * self.sum_nn_all * l2 ** 2 - 0.5 * self.sum_mm_all * l3 ** 2 -
              self.sum_nm * l3 * l2) + 2 * self.r**2 * l1**2]
     def func2(self):
-        fenmu = self.sum_mm_all * self.sum_nn_all - self.sum_nm**2
+        fenmu = self.sum_nm**2 - self.sum_mm_all * self.sum_nn_all
         cm1 = 2 * (self.sum_nn_all * self.cosline2 * self.r - self.sum_nm * self.cosline1 * self.r)/fenmu
-        cm2 = (self.nn ** self.sum_nm)/fenmu
+        cm2 = -(self.nn * self.sum_nm)/fenmu
         cn1 = 2 * (self.sum_mm_all * self.cosline1 * self.r - self.sum_nm * self.cosline2 * self.r)/fenmu
-        cn2 = ( - self.nn ** self.sum_mm_all)/fenmu
+        cn2 = ( self.nn * self.sum_mm_all)/fenmu
         aa = 4 * self.r**2 - cn1**2 * self.sum_nn_all - cm1**2 * self.sum_mm_all - 2 * cn1 * cm1 * self.sum_nm
         bb = -(2 * cn1 * cn2 * self.sum_nn_all + 2 * cm1 * cm2 * self.sum_mm_all + 2 * (cn1 * cm2 + cn2 * cm1) * self.sum_nm
                + 2 * self.nn * cn1)
         cc = -(2 + cn2**2 * self.sum_nn_all + cm2**2 * self.sum_mm_all + 2 * cn2 * cm2 * self.sum_nm + 2 * self.nn * cn2)
+        if bb ** 2 - 4 * aa * cc < 0:
+            print("error")
         l1 = (-bb + math.sqrt( bb ** 2 - 4 * aa * cc))/(2 * aa)
         l2 = cn1 * l1 + cn2
-        l3 = cm1 * l2 + cm2
+        l3 = cm1 * l1 + cm2
         return [l1,l2,l3]
     def projection_translation(self, at_u, at_v):
         trans = ((at_u[:, None]+at_v[None, :]-(self.lam * self.C))/2)
@@ -1398,14 +1400,16 @@ class sasvi_screening_matrix_debug(screener_matrix):
                                     self.sum_nm = self.n1n2
                                     self.nn = self.n1_u[i] + self.n1_v[j]
                                     self.nnnn = self.n1_u[i]**2 +self.n1_v[j]**2
-                                    self.sum_n = self.n1_u.sum()+self.n1_v.sum() - self.nn
+                                    # self.sum_n = self.n1_u.sum()+self.n1_v.sum() - self.nn
+                                    self.sum_n = self.n1_u.sum() + self.n1_v.sum()
                                     self.sum_m = self.n2_u.sum()+self.n2_v.sum()
                                     self.sum_mm_all = np.dot(self.n2_u,self.n2_u)+np.dot(self.n2_v,self.n2_v)
                                     self.sum_nn_all = np.dot(self.n1_u,self.n1_u)+np.dot(self.n1_v,self.n1_v)
-                                    r1 = fsolve(self.func, np.ones(3),maxfev=1000)
-
-                                    if r1[0] < 0:
-                                        r1 = fsolve(self.func, [-r1[0],1,1])
+                                    r1 = self.func2()
+                                    # r1 = fsolve(self.func, np.ones(3),maxfev=1000)
+                                    #
+                                    # if r1[0] < 0:
+                                    #     r1 = fsolve(self.func, [-r1[0],1,1])
                                     if r1[1] < 0:
                                         self.final = xiXw_line1 / Xw_line1_norm2 * line1 + \
                                             np.linalg.norm(np.concatenate((x_xw_line1_u, x_xw_line1_v))) * \
@@ -1415,7 +1419,10 @@ class sasvi_screening_matrix_debug(screener_matrix):
                                             self.final = xiXw_line2 / Xw_line2_norm2 * line2 + \
                                             np.linalg.norm(np.concatenate((x_xw_line2_u, x_xw_line2_v))) * \
                                             math.sqrt(max(self.r ** 2 - dis_line1 ** 2, 0))
-                                    self.final = (1-self.n1_u[i]*r1[1])/(2*r1[0]) + (1-self.n1_v[j]*r1[1])/(2*r1[0])
+                                    # self.final = (1-self.n1_u[i]*r1[1])/(2*r1[0]) + (1-self.n1_v[j]*r1[1])/(2*r1[0])
+                                    self.final = (-1 - self.n1_u[i] * r1[1]) / (2 * r1[0]) + (
+                                                -1 - self.n1_v[j] * r1[1]) / (2 * r1[0])
+
                                     # print(r1[0]/abs(r1[0]), r1[1]/abs(r1[1]), r1[2]/abs(r1[2]))
                                     # xiXw = self.u[i] + self.v[j]
                                     # x_xwu = - xiXw/self.Xw_norm2 * self.u

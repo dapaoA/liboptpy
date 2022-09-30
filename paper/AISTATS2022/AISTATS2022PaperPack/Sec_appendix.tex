@@ -34,15 +34,15 @@ We Generalize the problem as
 \end{equation}
 Considering the center of the circle as $\theta^o$, we define $\theta = \theta^{o} + q$, as ${ \theta^{o}_{I_1} +\theta^{o}_{I_2} }$ is a constant, the problem is equal to  $\max_{\theta \in \mathcal{R}^{S}_{I}}{ q_{I_1} +q_{I_2} }$, we compute the Lagrangrian function of later:
 \begin{equation}
-\min_{t} \max_{\eta,\mu,\nu}  L(q,\eta,\mu,\nu) =\min_{t}\max_{\eta,\mu,\nu}   {q_{I_1} +q_{I_2}  + \eta(r - q^{\tranT}q )+\mu( a^{\tranT}q - e_a ) + \nu( b^{\tranT}q - e_b )}
+\min_{t} \max_{\eta,\mu,\nu > 0}  L(q,\eta,\mu,\nu) =\min_{t}\max_{\eta,\mu,\nu}   {q_{I_1} +q_{I_2}  + \eta( q^{\tranT}q - r)+\mu( a^{\tranT}q - e_a ) + \nu( b^{\tranT}q - e_b )}
 \end{equation}
 
  \begin{equation}
 \begin{split} 
 \frac{\partial L}{\partial q_i} =  \left\{
 \begin{aligned}
-1 - 2\eta q_i +\mu a_i + \nu b_i \quad&  i = I_1, I_2\\
- - 2\eta q_i +\mu a_i + \nu b_i \quad&  i \neq I_1, I_2
+1 + 2\eta q_i +\mu a_i + \nu b_i \quad&  i = I_1, I_2\\
+ + 2\eta q_i +\mu a_i + \nu b_i \quad&  i \neq I_1, I_2
 \end{aligned}
 \right.
  \end{split}
@@ -53,8 +53,8 @@ Considering the center of the circle as $\theta^o$, we define $\theta = \theta^{
 \begin{split} 
 {q_i}^{*} =  \left\{
 \begin{aligned}
-\frac{1+\mu a_i + \nu b_i}{2\eta} \quad&  i = I_1, I_2\\
-\frac{\mu a_i + \nu b_i}{2\eta} \quad&  i \neq I_1, I_2
+-\frac{1+\mu a_i + \nu b_i}{2\eta} \quad&  i = I_1, I_2\\
+-\frac{\mu a_i + \nu b_i}{2\eta} \quad&  i \neq I_1, I_2
 \end{aligned}
 \right.
  \end{split}
@@ -63,14 +63,14 @@ Considering the center of the circle as $\theta^o$, we define $\theta = \theta^{
 We can get the Lagrangrian dual problem:
 
 \begin{equation}
-\max_{\eta,\mu,\nu}  L(\eta,\mu,\nu) = \max_{\eta,\mu,\nu} \frac{1+\mu a_{I_1} + \nu b_{I_1}}{2\eta}  +\frac{1+\mu a_{I_2} + \nu b_{I_2}}{2\eta}+ \eta(r - {q^{*}}^{\tranT}q^{*} )+\mu( a^{\tranT}q^{*} - e_a ) + \nu( b^{\tranT}q^{*} - e_b )
+\max_{\eta,\mu,\nu}  L(\eta,\mu,\nu) = \max_{\eta,\mu,\nu>0} -\frac{1+\mu a_{I_1} + \nu b_{I_1}}{2\eta}  -\frac{1+\mu a_{I_2} + \nu b_{I_2}}{2\eta}+ \eta({q^{*}}^{\tranT}q^{*}-r )+\mu( a^{\tranT}q^{*} - e_a ) + \nu( b^{\tranT}q^{*} - e_b )
 \end{equation}
 Compute the gradient, we can get three equality:
 \begin{equation}
 \begin{split} 
-\frac{\partial L}{\partial \eta} &= -\frac{1+\mu a_{I_1} + \nu b_{I_1}}{4\eta^2} -  \frac{1+\mu a_{I_2} + \nu b_ {I_2}}{4\eta^2} + (r - {q^{*}}^{\tranT}q^{*} ) - 2\eta\frac{\partial q^{*}}{\partial \eta}q^{*} +\mu a \frac{\partial q^{*}}{\partial \eta} + \nu b \frac{\partial q^{*}}{\partial \eta}\\
-\frac{\partial L}{\partial \mu} &= \frac{a_{I_1} + a_{I_2}}{2\eta} - 2 \eta q^{*}\frac{\partial q^{*}}{\partial \mu} +( a^{\tranT}q^{*} - e_a ) + \mu a \frac{\partial q^{*}}{\partial \mu} + \nu b \frac{\partial q^{*}}{\partial \mu} \\
-\frac{\partial L}{\partial \nu} &= \frac{b_{I_1} + b_{I_2}}{2\eta} - 2 \eta q^{*}\frac{\partial q^{*}}{\partial \nu} +( b^{\tranT}q^{*} - e_b ) + \nu b \frac{\partial q^{*}}{\partial \nu} + \mu a \frac{\partial q^{*}}{\partial \nu} 
+\frac{\partial L}{\partial \eta} &= \frac{1+\mu a_{I_1} + \nu b_{I_1}}{4\eta^2} +  \frac{1+\mu a_{I_2} + \nu b_ {I_2}}{4\eta^2} + ( {q^{*}}^{\tranT}q^{*} -r) + 2\eta\frac{\partial q^{*}}{\partial \eta}q^{*} +\mu a \frac{\partial q^{*}}{\partial \eta} + \nu b \frac{\partial q^{*}}{\partial \eta}\\
+\frac{\partial L}{\partial \mu} &= -\frac{a_{I_1} + a_{I_2}}{2\eta} + 2 \eta q^{*}\frac{\partial q^{*}}{\partial \mu} +( a^{\tranT}q^{*} - e_a ) + \mu a \frac{\partial q^{*}}{\partial \mu} + \nu b \frac{\partial q^{*}}{\partial \mu} \\
+\frac{\partial L}{\partial \nu} &= -\frac{b_{I_1} + b_{I_2}}{2\eta} + 2 \eta q^{*}\frac{\partial q^{*}}{\partial \nu} +( b^{\tranT}q^{*} - e_b ) + \nu b \frac{\partial q^{*}}{\partial \nu} + \mu a \frac{\partial q^{*}}{\partial \nu} 
  \end{split}
 \end{equation}
 
