@@ -3,44 +3,49 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: main.aux
 The style file: apalike.bst
 Database file #1: ref.bib
-You've used 14 entries,
+Illegal end of database file---line 223 of file ref.bib
+ :   year = {2022},
+ :                 
+I'm skipping whatever remains of this entry
+You've used 15 entries,
             1935 wiz_defined-function locations,
-            573 strings with 7578 characters,
-and the built_in function-call counts, 7767 in all, are:
-= -- 726
-> -- 447
+            578 strings with 7782 characters,
+and the built_in function-call counts, 8100 in all, are:
+= -- 757
+> -- 470
 < -- 15
-+ -- 153
-- -- 153
-* -- 689
-:= -- 1306
-add.period$ -- 52
-call.type$ -- 14
-change.case$ -- 134
-chr.to.int$ -- 14
-cite$ -- 14
-duplicate$ -- 288
-empty$ -- 495
-format.name$ -- 171
-if$ -- 1566
++ -- 161
+- -- 161
+* -- 718
+:= -- 1371
+add.period$ -- 54
+call.type$ -- 15
+change.case$ -- 143
+chr.to.int$ -- 15
+cite$ -- 15
+duplicate$ -- 298
+empty$ -- 510
+format.name$ -- 180
+if$ -- 1625
 int.to.chr$ -- 1
 int.to.str$ -- 0
 missing$ -- 14
-newline$ -- 74
-num.names$ -- 54
-pop$ -- 146
+newline$ -- 78
+num.names$ -- 57
+pop$ -- 154
 preamble$ -- 1
-purify$ -- 134
+purify$ -- 143
 quote$ -- 0
-skip$ -- 213
+skip$ -- 221
 stack$ -- 0
-substring$ -- 471
+substring$ -- 483
 swap$ -- 77
 text.length$ -- 11
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 84
+type$ -- 90
 warning$ -- 0
-while$ -- 54
+while$ -- 56
 width$ -- 0
-write$ -- 196
+write$ -- 206
+(There was 1 error message)

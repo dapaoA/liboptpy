@@ -69,6 +69,11 @@ Ndiaye, E., Fercoq, O., Alex, re~Gramfort, and Salmon, J. (2017).
 \newblock Gap safe screening rules for sparsity enforcing penalties.
 \newblock {\em Journal of Machine Learning Research}, 18(128):1--33.
 
+\bibitem[Nguyen et~al., 2022]{https://doi.org/10.48550/arxiv.2202.03618}
+Nguyen, Q.~M., Nguyen, H.~H., Zhou, Y., and Nguyen, L.~M. (2022).
+\newblock On unbalanced optimal transport: Gradient methods, sparsity and
+  approximation error.
+
 \bibitem[Petric~Maretic et~al., 2019]{NEURIPS2019_fdd5b16f}
 Petric~Maretic, H., El~Gheche, M., Chierchia, G., and Frossard, P. (2019).
 \newblock Got: An optimal transport framework for graph comparison.

@@ -1,8 +1,8 @@
-\section{Notation}
+\section{NOTATIONS}
 \begin{align}
 M &= 
 \begin{pmatrix}
-\begin{matrix} 1&\\&1 \end{matrix}& & &\dots\dots&\begin{matrix} 1&\\&1 \end{matrix}& &  \\
+\begin{matrix} 1&\\&1 \end{matrix}& & &\dots\dots&\begin{matrix} 1&\\&1 \end{matrix}& & \\
 &\ddots& & \ddots\ddots & & \ddots & & \\
 & &\begin{matrix} 1&\\&1 \end{matrix}& \dots\dots& & &\begin{matrix} 1&\\&1 \end{matrix}
 \end{pmatrix}\\
@@ -13,36 +13,36 @@ N &=
 &\dots\dots & \begin{matrix} 1&1&\dots&1&1\end{matrix}
 \end{pmatrix}
 \end{align}
-
-\section{Proof of Theorem 6}
+\section{PROOFS}
+\subsection{Proof of Theorem 6}
 For any $p \in {0,1,...,nm -1}$ we assume that $p = (I,J)$, then we can compute that:
  \begin{equation}
 \begin{split} 
 \x_p^{\tranT}\tilde{\theta} &= \tilde{\vu}_{I} + \tilde{\vv}_J \\
-				       &= {\vu}_{I} + {\vv}_J -  \max_{0\geq j\geq n} \frac{{\vu}_I +{\vv}_j - \lambda \vc_{p}}{2} -  \max_{0 \geq i \geq m} \frac{{\vu}_i +{\vv}_J - \lambda \vc_{p}}{2}\\
-				       &= \frac{{\vu}_{I} + {\vv}_J}{2} -  \max_{0\geq j\geq n} \frac{{\vv}_j}{2} -  \max_{0 \geq i \geq m} \frac{{\vu}_i }{2} + \lambda \vc_{p}\\
-				       &= \frac{1}{2}\x_p^{\tranT}{\theta}  - \max_{0\geq j\geq n} \frac{{\vv}_j}{2} -  \max_{0 \geq i \geq m} \frac{{\vu}_i }{2}  +\lambda \vc_{p} \\
-				       &\leq \lambda \vc_{p} 
+				    &= {\vu}_{I} + {\vv}_J - \max_{0\geq j\geq n} \frac{{\vu}_I +{\vv}_j - \lambda \vc_{p}}{2} - \max_{0 \geq i \geq m} \frac{{\vu}_i +{\vv}_J - \lambda \vc_{p}}{2}\\
+				    &= \frac{{\vu}_{I} + {\vv}_J}{2} - \max_{0\geq j\geq n} \frac{{\vv}_j}{2} - \max_{0 \geq i \geq m} \frac{{\vu}_i }{2} + \lambda \vc_{p}\\
+				    &= \frac{1}{2}\x_p^{\tranT}{\theta} - \max_{0\geq j\geq n} \frac{{\vv}_j}{2} - \max_{0 \geq i \geq m} \frac{{\vu}_i }{2} +\lambda \vc_{p} \\
+				    &\leq \lambda \vc_{p} 
  \end{split} 
 \end{equation}
-As it holds for $\forall p$, $\tilde{\theta} \in \mathcal{R}^{D}$
+For $\forall p$, we have $\tilde{\theta} \in \mathcal{R}^{D}$
 
-\section{Proof of Theorem 7}
+\subsection{Proof of Theorem 7}
 We Generalize the problem as 
 \begin{equation}
 \max_{\theta \in \mathcal{R}^{S}_{I}}{ \theta_{I_1} +\theta_{I_2} }
 \end{equation}
-Considering the center of the circle as $\theta^o$, we define $\theta = \theta^{o} + q$, as ${ \theta^{o}_{I_1} +\theta^{o}_{I_2} }$ is a constant, the problem is equal to  $\min_{\theta \in \mathcal{R}^{S}_{I}}{- ( q_{I_1} +q_{I_2} )}$, we compute the Lagrangrian function of later:
+Considering the center of the circle as $\theta^o$, we define $\theta = \theta^{o} + q$, as ${ \theta^{o}_{I_1} +\theta^{o}_{I_2} }$ is a constant, the problem is equal to $\min_{\theta \in \mathcal{R}^{S}_{I}}{- ( \vq_{I_1} +\vq_{I_2} )}$, we compute the Lagrangrian function of later:
 \begin{equation}
-\min_{q} \max_{\eta,\mu,\nu > 0}  L(q,\eta,\mu,\nu) =\min_{q}\max_{\eta,\mu,\nu}  - {q_{I_1} - q_{I_2}  + \eta( q^{\tranT}q - r^2)+\mu( a^{\tranT}q - e_a ) + \nu( b^{\tranT}q - e_b )}
+\min_{\vq} \max_{\eta,\mu,\nu \geq 0} L(\vq,\eta,\mu,\nu) =\min_{\vq}\max_{\eta,\mu,\nu\geq0} - {\vq_{I_1} - \vq_{I_2} + \eta( \vq^{\tranT}\vq - r^2)+\mu( a^{\tranT}\vq - e_a ) + \nu( b^{\tranT}\vq - e_b )}
 \end{equation}
 
  \begin{equation}
 \begin{split} 
-\frac{\partial L}{\partial q_i} =  \left\{
+\frac{\partial L}{\partial \vq_i} = \left\{
 \begin{aligned}
--1 + 2\eta q_i +\mu a_i + \nu b_i \quad&  i = I_1, I_2\\
-  2\eta q_i +\mu a_i + \nu b_i \quad&  i \neq I_1, I_2
+-1 + 2\eta \vq_i +\mu a_i + \nu b_i \quad& i = I_1, I_2\\
+ 2\eta \vq_i +\mu a_i + \nu b_i \quad& i \neq I_1, I_2
 \end{aligned}
 \right.
  \end{split}
@@ -51,67 +51,58 @@ Considering the center of the circle as $\theta^o$, we define $\theta = \theta^{
 
  \begin{equation}
 \begin{split} 
-{q_i}^{*} =  \left\{
+{\vq_i}^{*} = \left\{
 \begin{aligned}
-\frac{1- \mu a_i - \nu b_i}{2\eta} \quad&  i = I_1, I_2\\
--\frac{\mu a_i + \nu b_i}{2\eta} \quad&  i \neq I_1, I_2
+\frac{1- \mu a_i - \nu b_i}{2\eta} \quad& i = I_1, I_2\\
+-\frac{\mu a_i + \nu b_i}{2\eta} \quad& i \neq I_1, I_2
 \end{aligned}
 \right.
  \end{split}
 \label{eq:lang1}
 \end{equation}
-We can get the Lagrangrian dual problem:
 
+We can get the Lagrangian dual problem:
 \begin{equation}
-\max_{\eta,\mu,\nu}  L(\eta,\mu,\nu) = \max_{\eta,\mu,\nu>0} \frac{\mu a_{I_1} + \nu b_{I_1}-1}{2\eta}  +\frac{\mu a_{I_2} + \nu b_{I_2}-1}{2\eta}+ \eta({q^{*}}^{\tranT}q^{*}-r^2 )+\mu( a^{\tranT}q^{*} - e_a ) + \nu( b^{\tranT}q^{*} - e_b )
+\max_{\eta,\mu,\nu\geq0} L(\eta,\mu,\nu) = \max_{\eta,\mu,\nu\geq0} \frac{\mu a_{I_1} + \nu b_{I_1}-1}{2\eta} +\frac{\mu a_{I_2} + \nu b_{I_2}-1}{2\eta}+ \eta({\vq^{*}}^{\tranT}\vq^{*}-r^2 )+\mu( a^{\tranT}\vq^{*} - e_a ) + \nu( b^{\tranT}\vq^{*} - e_b )
 \end{equation}
-Compute the gradient, we can get three equality:
+From the KKT optimum condition, we know that if
 \begin{equation}
 \begin{split} 
-\frac{\partial L}{\partial \eta} &= \frac{1-\mu a_{I_1} - \nu b_{I_1}}{2\eta^2} +  \frac{1-\mu a_{I_2} - \nu b_ {I_2}}{2\eta^2} + ( {q^{*}}^{\tranT}q^{*} -r^2) + 2\eta\frac{\partial q^{*}}{\partial \eta}q^{*} +\mu a \frac{\partial q^{*}}{\partial \eta} + \nu b \frac{\partial q^{*}}{\partial \eta}\\
-\frac{\partial L}{\partial \mu} &= \frac{a_{I_1} + a_{I_2}}{2\eta} + 2 \eta q^{*}\frac{\partial q^{*}}{\partial \mu} +( a^{\tranT}q^{*} - e_a ) + \mu a \frac{\partial q^{*}}{\partial \mu} + \nu b \frac{\partial q^{*}}{\partial \mu} \\
-\frac{\partial L}{\partial \nu} &= \frac{b_{I_1} + b_{I_2}}{2\eta} + 2 \eta q^{*}\frac{\partial q^{*}}{\partial \nu} +( b^{\tranT}q^{*} - e_b ) + \nu b \frac{\partial q^{*}}{\partial \nu} + \mu a \frac{\partial q^{*}}{\partial \nu} 
+ \eta ({\vq^{*}}^{\tranT}\vq^{*} -r^2) &= 0\\
+ \mu( a^{\tranT}\vq^{*} - e_a)&= 0\\
+ \nu(b^{\tranT}\vq^{*} - e_b) &=0
  \end{split}
 \end{equation}
-
-From KKT we know that, as $\eta,\mu,\nu \neq 0$, we have:
+We set $\eta^{*}, \mu^{*}, \nu^{*}$ as the solution of the equations, which is also the solution of the dual problem. Firstly, we assume that $\eta^{*}, \mu^{*}, \nu^{*} \neq 0$, then the solution is equal to compute the following equations:
 
 \begin{equation}
 \begin{split} 
- {q^{*}}^{\tranT}q^{*} -r^2 &= 0\\
-  a^{\tranT}q^{*} - e_a&= 0\\
-  b^{\tranT}q^{*} - e_b &=0
+ & (1-\mu a_{I_1}-\nu b_{I_1})^2 + (1-\mu a_{I_2}-\nu b_{I_2})^2 + \sum^{m+n}_{i\neq I_1,I_2}(a_i\mu+b_i\nu)^2 - 4\eta^2 r^2 = 0 \\
+ & a_{I_1}-\mu a_{I_1}^2-\nu b_{I_1}a_{I_1} + a_{I_2}-\mu a_{I_2}^2-\nu b_{I_2}a_{I_2} - \sum^{m}_{i\neq I_1,I_2}(a_i^2\mu +b_i a_i\nu) - 2\eta {e_a} = 0 \\
+ & b_{I_1}-\nu b_{I_1}^2-\mu b_{I_1}a_{I_1} + b_{I_2}-\nu b_{I_2}^2-\mu b_{I_2}a_{I_2} - \sum^{m}_{i\neq I_1,I_2}(b_i^2\nu +b_i a_i\mu) - 2\eta {e_b} = 0 
  \end{split}
 \end{equation}
-
+Rearranged as:
 \begin{equation}
 \begin{split} 
-  & (1-\mu a_{I_1}-\nu b_{I_1})^2 + (1-\mu a_{I_2}-\nu b_{I_2})^2 + \sum^{m+n}_{i\neq I_1,I_2}(a_i\mu+b_i\nu)^2 - 4\eta^2 r^2 = 0 \\
-  & a_{I_1}-\mu a_{I_1}^2-\nu b_{I_1}a_{I_1} + a_{I_2}-\mu a_{I_2}^2-\nu b_{I_2}a_{I_2} - \sum^{m}_{i\neq I_1,I_2}(a_i^2\mu +b_i a_i\nu) - 2\eta {e_a} = 0 \\
-  & b_{I_1}-\nu b_{I_1}^2-\mu b_{I_1}a_{I_1} + b_{I_2}-\nu b_{I_2}^2-\mu b_{I_2}a_{I_2} - \sum^{m}_{i\neq I_1,I_2}(b_i^2\nu +b_i a_i\mu) - 2\eta {e_b} = 0 
- \end{split}
-\end{equation}
-Rearrage as:
-\begin{equation}
-\begin{split} 
-  & 2-2\mu (a_{I_1}+a_{I_2})-2\nu(b_{I_1}+b_{I_2})+  \|a\|^2\mu^2+\|b\|^2\nu^2+2\mu\nu a^{\tranT}b - 4\eta^2 r^2 = 0 \\
-  & (a_{I_1}+ a_{I_1}) -  \|a\|^2\mu - a^{\tranT}b\nu - 2\eta {e_a} = 0 \\
-  & (b_{I_1}+ b_{I_2}) - \|b\|^2\nu - a^{\tranT}b \mu - 2\eta {e_b} = 0 
+ & 2-2\mu (a_{I_1}+a_{I_2})-2\nu(b_{I_1}+b_{I_2})+ \|a\|^2\mu^2+\|b\|^2\nu^2+2\mu\nu a^{\tranT}b - 4\eta^2 r^2 = 0 \\
+ & (a_{I_1}+ a_{I_1}) - \|a\|^2\mu - a^{\tranT}b\nu - 2\eta {e_a} = 0 \\
+ & (b_{I_1}+ b_{I_2}) - \|b\|^2\nu - a^{\tranT}b \mu - 2\eta {e_b} = 0 
  \end{split}
 \end{equation}
 
 we have 
 \begin{equation}
 \begin{split} 
-\mu &= \frac{2( e_ba^{\tranT}b - e_a\|b\|^2  )\eta + (a_{I_1}+a_{I_2}) \|b\|^2 - (b_{I_1} + b_{I_2}) (a^{\tranT}b)}{ \|a\|^2 \|b\|^2 -a^{\tranT}b}\\
-\nu  &=\frac{2( e_aa^{\tranT}b - e_b\|a\|^2  )\eta + (b_{I_1}+b_{I_2}) \|a\|^2 - (a_{I_1} + a_{I_2}) (a^{\tranT}b)}{ \|a\|^2 \|b\|^2 -a^{\tranT}b}\\
+\mu &= \frac{2( e_ba^{\tranT}b - e_a\|b\|^2 )\eta + (a_{I_1}+a_{I_2}) \|b\|^2 - (b_{I_1} + b_{I_2}) (a^{\tranT}b)}{ \|a\|^2 \|b\|^2 -a^{\tranT}b}\\
+\nu &=\frac{2( e_aa^{\tranT}b - e_b\|a\|^2 )\eta + (b_{I_1}+b_{I_2}) \|a\|^2 - (a_{I_1} + a_{I_2}) (a^{\tranT}b)}{ \|a\|^2 \|b\|^2 -a^{\tranT}b}\\
  \end{split}
 \end{equation}
 set it as:
 \begin{equation}
 \begin{split} 
 \mu &= s_1 \eta + s_2\\ 
-\nu  &= u_1 \eta + u_2
+\nu &= u_1 \eta + u_2
  \end{split}
  \label{eq:final}
 \end{equation}
@@ -121,9 +112,39 @@ Then we can solve the $\eta$ as a quadratic equation:
 \begin{split} 
 0&=a\eta^2+b\eta+c\\
  a&= 4r^2 - s_1^2\|a\|^2 - u_1^2\|b\|^2 -2s_1 u_1a^{\tranT}b\\
-b&=2(a_{I_1} + a_{I_2})s_1 +2(b_{I_1} + b_{I_2})u_1 - 2s_1s_2 \|a\|^2 - 2u_1u_2\|b\|^2 - 2(s_1u_2+s_2u_1)a^{\tranT}b  \\
+b&=2(a_{I_1} + a_{I_2})s_1 +2(b_{I_1} + b_{I_2})u_1 - 2s_1s_2 \|a\|^2 - 2u_1u_2\|b\|^2 - 2(s_1u_2+s_2u_1)a^{\tranT}b \\
  c&=2(a_{I_1} + a_{I_2})s_2 +2(b_{I_1} + b_{I_2})u_2 -s_2^2\|a\|_1 -u_2^2\|b\|_1 - 2s_2u_2a^{\tranT}b -2
  \end{split}
 \end{equation}
 
-Then we can put it back into \ref{eq:final} and get $\mu, \nu$
+Then we can put it back into \ref{eq:final} and get $\mu, \nu$.
+
+If the solution satisfied the constraints $\eta^{*}, \mu^{*}, \nu^{*} > 0$, then it is the solution.
+However, if one of the dual variables is less than 0, the problem would degenerate into a simpler question. 
+
+If only $\eta^{*}$ is larger than 0, 
+ $\min_{\theta \in \mathcal{R}^{S}_{I}}{- ( \vq_{I_1} +\vq_{I_2} )} = -\sqrt{2}r$
+
+If only $\mu^{*}$ or $\nu^{*}$ is less than 0, we are optimizing on a sphere cap, the solution can be found in \cite[Appendix B]{NEURIPS2021_7b5b23f4}
+
+if only $\eta^{*} \leq 0$:
+As the sphere is inactivated, the problem gets maximum at every point of the intersection of two planes.
+\begin{equation}
+\min_{\vq} \max_{\mu,\nu \geq 0} L(\vq,\mu,\nu) =\min_{\vq}\max_{\mu,\nu\geq0} - {\vq_{I_1} - \vq_{I_2} +\mu( a^{\tranT}\vq - e_a ) + \nu( b^{\tranT}\vq - e_b )}
+\end{equation}
+To have a solution, the equations satisfied
+ \begin{equation}
+\begin{split} 
+\frac{\partial L}{\partial q} = \left\{
+\begin{aligned}
+-1+\mu a_i + \nu b_i =0 \quad& i = I_1, I_2\\
+-\mu a_i -\nu b_i \quad =0& i \neq I_1, I_2
+\end{aligned}
+\right.
+ \end{split}
+\end{equation}
+
+As the equation satisfied, we can just set $\vq_i^{*} = 0, i \neq I_1,I_2$, then we compute the  
+ \begin{equation}
+ \min_{\theta \in \mathcal{R}^{S}_{I}}{- ( \vq_{I_1} +\vq_{I_2} )} = \frac{a_{I_2}e_b - b_{I_2}e_a -a_{I_1}e_b +b_{I_1}e_a}{a_{I_1}b_{I_2}-a_{I_2}b_{I_1}}
+\end{equation}

@@ -118,3 +118,10 @@ If you have additional experimental results, you may include them in the supplem
 
 \textit{Our algorithm depends on the regularization parameter $\lambda$. Here we illustrate the effect of this parameter on the performance of our algorithm [ ... ]}
 
+\begin{equation}
+\begin{split} 
+\frac{\partial L}{\partial \eta} &= \frac{1-\mu a_{I_1} - \nu b_{I_1}}{2\eta^2} +  \frac{1-\mu a_{I_2} - \nu b_ {I_2}}{2\eta^2} + ( {\vq^{*}}^{\tranT}\vq^{*} -r^2) + 2\eta\frac{\partial \vq^{*}}{\partial \eta}\vq^{*} +\mu a \frac{\partial \vq^{*}}{\partial \eta} + \nu b \frac{\partial \vq^{*}}{\partial \eta}\\
+\frac{\partial L}{\partial \mu} &= \frac{a_{I_1} + a_{I_2}}{2\eta} + 2 \eta \vq^{*}\frac{\partial \vq^{*}}{\partial \mu} +( a^{\tranT}\vq^{*} - e_a ) + \mu a \frac{\partial \vq^{*}}{\partial \mu} + \nu b \frac{\partial \vq^{*}}{\partial \mu} \\
+\frac{\partial L}{\partial \nu} &= \frac{b_{I_1} + b_{I_2}}{2\eta} + 2 \eta \vq^{*}\frac{\partial \vq^{*}}{\partial \nu} +( b^{\tranT}\vq^{*} - e_b ) + \nu b \frac{\partial \vq^{*}}{\partial \nu} + \mu a \frac{\partial \vq^{*}}{\partial \nu} 
+ \end{split}
+\end{equation}
