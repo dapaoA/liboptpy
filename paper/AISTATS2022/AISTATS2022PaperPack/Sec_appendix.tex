@@ -95,16 +95,16 @@ Rearrage as:
 \begin{equation}
 \begin{split} 
   & 2-2\mu (a_{I_1}+a_{I_2})-2\nu(b_{I_1}+b_{I_2})+  \|a\|^2\mu^2+\|b\|^2\nu^2+2\mu\nu a^{\tranT}b - 4\eta^2 r^2 = 0 \\
-  & (a_{I_1}+ a_{I_1}) -  \|a\|^2\mu + a^{\tranT}b\nu - 2\eta {e_a} = 0 \\
-  & (b_{I_1}+ b_{I_2}) - \|b\|^2\nu +a^{\tranT}b \mu - 2\eta {e_b} = 0 
+  & (a_{I_1}+ a_{I_1}) -  \|a\|^2\mu - a^{\tranT}b\nu - 2\eta {e_a} = 0 \\
+  & (b_{I_1}+ b_{I_2}) - \|b\|^2\nu - a^{\tranT}b \mu - 2\eta {e_b} = 0 
  \end{split}
 \end{equation}
 
 we have 
 \begin{equation}
 \begin{split} 
-\mu &= \frac{2( e_a\|b\|^2 -  e_ba^{\tranT}b )\eta + (b_{I_1} + b_{I_2}) (a^{\tranT}b) - (a_{I_1}+a_{I_2}) \|b\|^2}{ \|a\|^2 \|b\|^2 -a^{\tranT}b}\\
-\nu  &=\frac{2( e_b\|a\|^2 -  e_aa^{\tranT}b )\eta + (a_{I_1} + a_{I_2}) (a^{\tranT}b) - (a_{I_1}+a_{I_2}) \|a\|^2}{ \|a\|^2 \|b\|^2 -a^{\tranT}b}\\
+\mu &= \frac{2( e_ba^{\tranT}b - e_a\|b\|^2  )\eta + (a_{I_1}+a_{I_2}) \|b\|^2 - (b_{I_1} + b_{I_2}) (a^{\tranT}b)}{ \|a\|^2 \|b\|^2 -a^{\tranT}b}\\
+\nu  &=\frac{2( e_aa^{\tranT}b - e_b\|a\|^2  )\eta + (b_{I_1}+b_{I_2}) \|a\|^2 - (a_{I_1} + a_{I_2}) (a^{\tranT}b)}{ \|a\|^2 \|b\|^2 -a^{\tranT}b}\\
  \end{split}
 \end{equation}
 set it as:
