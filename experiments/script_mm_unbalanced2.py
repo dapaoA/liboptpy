@@ -4784,7 +4784,7 @@ def mm_unbalanced_revised_screening_for_zero(a, b, M, reg_m, saveround=10000, l_
     else:
         return G
 def mm_unbalanced_revised_screening_for_divide(a, b, M, reg_m, saveround=10000, l_rate=0.5,screening=None, div='kl', G0=None, numItermax=1000,
-                  stopThr=1e-15, verbose=False, log=False):
+                  stopThr=1e-15, verbose=False, log=False,distance_log=None):
     r"""
     Solve the unbalanced optimal transport problem and return the OT plan.
     The function solves the following optimization problem:
@@ -4902,16 +4902,23 @@ def mm_unbalanced_revised_screening_for_divide(a, b, M, reg_m, saveround=10000, 
     for i in range(numItermax):
         Gprev = G
         if(i%saveround==1):
-            dis,w=screening.update(G)
-            log ["opt_alg"].append(dis["opt_alg"])
-            log ["opt_proj"].append(dis["opt_proj"])
-            log ["alg_proj"].append(dis["alg_proj"])
-            log ["screening_area1"].append(w["screening_area1"])
-            log ["screening_area2"].append(w["screening_area2"])
+            if distance_log:
+                if len(log ["screening_area1"]) < 1:
+                    dis,w=screening.update(G,distance_log=distance_log)
+                else:
+                    dis,w=screening.update(G,log ["screening_area2"][-1], distance_log=distance_log)
+                log ["opt_alg"].append(dis["opt_alg"])
+                log ["opt_proj"].append(dis["opt_proj"])
+                log ["alg_proj"].append(dis["alg_proj"])
+                log ["screening_area1"].append(w["screening_area1"])
+                log ["screening_area2"].append(w["screening_area2"])
+            else:
+                w=screening.update(G)
+                log ["screening_area1"].append(w["screening_area1"])
+                log ["screening_area2"].append(w["screening_area2"])
             if log:
                 log['err'].append(err)
                 log['G'].append(G)
-
         if div == 'kl':
             u = nx.power(a / (nx.sum(G, 1) + 1e-16),l_rate)
             v = nx.power(b / (nx.sum(G, 0) + 1e-16),l_rate)
