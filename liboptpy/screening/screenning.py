@@ -629,6 +629,7 @@ class sasvi_screening_circle_test(screener):
 class sasvi_screening_matrix(screener_matrix):
     def __init__(self, w, a, b ,C, lam, reg="l1",sratio=0,solution=None):
         super().__init__(w, a, b, C, lam, reg="l1")
+
         self.sratio = 0
         self.solution = solution
         self.Nt = .0
@@ -658,7 +659,7 @@ class sasvi_screening_matrix(screener_matrix):
 
         self.final = .0
 
-    def update(self, w):
+    def update(self, w, w_s_last=None, distance_log=None):
         self.w = w
         # w is t in paper
         self.Nt = w.sum(axis=1)
@@ -686,10 +687,11 @@ class sasvi_screening_matrix(screener_matrix):
         d_alg_proj = math.sqrt(np.dot(self.u - self.u_proj, self.u - self.u_proj) +
                                np.dot(self.v - self.v_proj, self.v - self.v_proj))
 
-        dis = {"opt_alg": d_opt_alg,
-               "opt_proj": d_opt_proj,
-               "alg_proj": d_alg_proj,
-               }
+        if distance_log == 1:
+            dis = {"opt_alg": d_opt_alg,
+                   "opt_proj": d_opt_proj,
+                    "alg_proj": d_alg_proj,
+                    }
 
         # for drawing the distance of different projection in dual sapce
 
@@ -698,8 +700,10 @@ class sasvi_screening_matrix(screener_matrix):
         w_screening_area2 = self.screening_divided_area(self.u_proj, self.v_proj)
         w_screening = {"screening_area1": w_screening_area1,
                        "screening_area2": w_screening_area2}
-        return dis, w_screening
-
+        if distance_log == 1:
+            return dis, w_screening
+        else:
+            return w_screening
     # def projection_normal(self, alg_theta):
     #     beilv = self.X.T.dot(alg_theta)/(self.lam * self.c)
     #     out = alg_theta / max(1,beilv.max())
@@ -730,6 +734,13 @@ class sasvi_screening_matrix(screener_matrix):
         nu = cm1 * eta + cm2
         return [eta, mu, nu]
 
+
+    def projection_lasso(self, u, v):
+        trans = ((u[:, None]+v[None, :])/(self.lam *self.C[i,j]))
+        max_trans = max(1,trans.max().max())
+        return u/max_trans, v/max_trans
+
+
     def projection(self, u, v):
         trans = ((u[:, None]+v[None, :]-(self.lam * self.C))/2)
         # plt.imshow(trans)
@@ -741,6 +752,22 @@ class sasvi_screening_matrix(screener_matrix):
         outu = u - np.where(difu > 0, difu, 0)
         outv = v - np.where(difv > 0, difv, 0)
         return outu, outv
+
+
+    def projection_activate(self, u, v, w_s):
+        # only projected to the activated constraints
+        trans = ((u[:, None]+v[None, :]-(self.lam * self.C))/2)
+        # plt.imshow(trans)
+        # plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+        #              orientation='horizontal', extend='both')
+        # plt.show
+        trans = np.where(w_s == 1, trans, -100000)
+        difu = trans.max(axis=1)
+        difv = trans.max(axis=0)
+        outu = u - np.where(difu > 0, difu, 0)
+        outv = v - np.where(difv > 0, difv, 0)
+        return outu, outv
+
 
     def screening_area(self, up, vp):
         #Dynamic-Sasvi method for screening, using one sphere and one hyper-plane
@@ -773,11 +800,11 @@ class sasvi_screening_matrix(screener_matrix):
                             math.sqrt(max(self.r**2-1/self.Xw_norm2 * self.delta**2, 0)) < self.lam*self.C[i, j]:
                         w_screening[i, j] = 0
                         countzeros += 1
-        plt.imshow(w_screening)
-        plt.title('running!')
-        plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
-                     orientation='horizontal', extend='both')
-        plt.show()
+        # plt.imshow(w_screening)
+        # plt.title('running!')
+        # plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+        #              orientation='horizontal', extend='both')
+        # plt.show()
         return countzeros / (w_screening.shape[0]*w_screening.shape[1])
 
     def screening_divided_area(self, up, vp):
@@ -1008,11 +1035,11 @@ class sasvi_screening_matrix(screener_matrix):
                     #得到L1最值
                     #如果L2与球无关系（包裹了球）
                     #否则：
-        plt.imshow(w_screening)
-        plt.title('running!')
-        plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
-                     orientation='horizontal', extend='both')
-        plt.show()
+        # plt.imshow(w_screening)
+        # plt.title('running!')
+        # plt.colorbar(aspect=40, pad=0.08, shrink=0.6,
+        #              orientation='horizontal', extend='both')
+        # plt.show()
         print("ratio:", number)
         return countzeros / (w_screening.shape[0] * w_screening.shape[1])
     # def screening_point(self,theta_projected):
