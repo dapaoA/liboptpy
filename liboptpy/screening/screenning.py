@@ -736,7 +736,7 @@ class sasvi_screening_matrix(screener_matrix):
 
 
     def projection_lasso(self, u, v):
-        trans = ((u[:, None]+v[None, :])/(self.lam *self.C[i,j]))
+        trans = ((u[:, None]+v[None, :])/(self.lam *self.C))
         max_trans = max(1,trans.max().max())
         return u/max_trans, v/max_trans
 

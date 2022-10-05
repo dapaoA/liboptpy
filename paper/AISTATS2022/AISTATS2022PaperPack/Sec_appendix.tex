@@ -14,35 +14,35 @@ N &=
 \end{pmatrix}
 \end{align}
 \section{PROOFS}
-\subsection{Proof of Theorem 6}
+\subsection{Proof of Theorem \ref{eq:uotproj}}
 For any $p \in {0,1,...,nm -1}$ we assume that $p = (I,J)$, then we can compute that:
  \begin{equation}
 \begin{split} 
-\x_p^{\tranT}\tilde{\theta} &= \tilde{\vu}_{I} + \tilde{\vv}_J \\
-				    &= {\vu}_{I} + {\vv}_J - \max_{0\geq j\geq n} \frac{{\vu}_I +{\vv}_j - \lambda \vc_{p}}{2} - \max_{0 \geq i \geq m} \frac{{\vu}_i +{\vv}_J - \lambda \vc_{p}}{2}\\
-				    &= \frac{{\vu}_{I} + {\vv}_J}{2} - \max_{0\geq j\geq n} \frac{{\vv}_j}{2} - \max_{0 \geq i \geq m} \frac{{\vu}_i }{2} + \lambda \vc_{p}\\
-				    &= \frac{1}{2}\x_p^{\tranT}{\theta} - \max_{0\geq j\geq n} \frac{{\vv}_j}{2} - \max_{0 \geq i \geq m} \frac{{\vu}_i }{2} +\lambda \vc_{p} \\
-				    &\leq \lambda \vc_{p} 
+\vec{x}_p^{\tranT}\tilde{\theta} &= \tilde{\vec{u}}_{I} + \tilde{\vec{v}}_J \\
+				    &= {\vec{u}}_{I} + {\vec{v}}_J - \max_{0\geq j\geq n} \frac{{\vec{u}}_I +{\vec{v}}_j - \lambda \vec{c}_{p}}{2} - \max_{0 \geq i \geq m} \frac{{\vec{u}}_i +{\vec{v}}_J - \lambda \vec{c}_{p}}{2}\\
+				    &= \frac{{\vec{u}}_{I} + {\vec{v}}_J}{2} - \max_{0\geq j\geq n} \frac{{\vec{v}}_j}{2} - \max_{0 \geq i \geq m} \frac{{\vec{u}}_i }{2} + \lambda \vec{c}_{p}\\
+				    &= \frac{1}{2}\vec{x}_p^{\tranT}{\theta} - \max_{0\geq j\geq n} \frac{{\vec{v}}_j}{2} - \max_{0 \geq i \geq m} \frac{{\vec{u}}_i }{2} +\lambda \vec{c}_{p} \\
+				    &\leq \lambda \vec{c}_{p} 
  \end{split} 
 \end{equation}
 For $\forall p$, we have $\tilde{\theta} \in \mathcal{R}^{D}$
 
-\subsection{Proof of Theorem 7}
+\subsection{Proof of Theorem \ref{eq:divide}}
 We Generalize the problem as 
 \begin{equation}
 \max_{\theta \in \mathcal{R}^{S}_{I}}{ \theta_{I_1} +\theta_{I_2} }
 \end{equation}
-Considering the center of the circle as $\theta^o$, we define $\theta = \theta^{o} + q$, as ${ \theta^{o}_{I_1} +\theta^{o}_{I_2} }$ is a constant, the problem is equal to $\min_{\theta \in \mathcal{R}^{S}_{I}}{- ( \vq_{I_1} +\vq_{I_2} )}$, we compute the Lagrangrian function of later:
+Considering the center of the circle as $\theta^o$, we define $\theta = \theta^{o} + q$, as ${ \theta^{o}_{I_1} +\theta^{o}_{I_2} }$ is a constant, the problem is equal to $\min_{\theta \in \mathcal{R}^{S}_{I}}{- ( \vec{q}_{I_1} +\vec{q}_{I_2} )}$, we compute the Lagrangrian function of later:
 \begin{equation}
-\min_{\vq} \max_{\eta,\mu,\nu \geq 0} L(\vq,\eta,\mu,\nu) =\min_{\vq}\max_{\eta,\mu,\nu\geq0} - {\vq_{I_1} - \vq_{I_2} + \eta( \vq^{\tranT}\vq - r^2)+\mu( a^{\tranT}\vq - e_a ) + \nu( b^{\tranT}\vq - e_b )}
+\min_{\vec{q}} \max_{\eta,\mu,\nu \geq 0} L(\vec{q},\eta,\mu,\nu) =\min_{\vec{q}}\max_{\eta,\mu,\nu\geq0} - {\vec{q}_{I_1} - \vec{q}_{I_2} + \eta( \vec{q}^{\tranT}\vec{q} - r^2)+\mu( a^{\tranT}\vec{q} - e_a ) + \nu( b^{\tranT}\vec{q} - e_b )}
 \end{equation}
 
  \begin{equation}
 \begin{split} 
-\frac{\partial L}{\partial \vq_i} = \left\{
+\frac{\partial L}{\partial \vec{q}_i} = \left\{
 \begin{aligned}
--1 + 2\eta \vq_i +\mu a_i + \nu b_i \quad& i = I_1, I_2\\
- 2\eta \vq_i +\mu a_i + \nu b_i \quad& i \neq I_1, I_2
+-1 + 2\eta \vec{q}_i +\mu a_i + \nu b_i \quad& i = I_1, I_2\\
+ 2\eta \vec{q}_i +\mu a_i + \nu b_i \quad& i \neq I_1, I_2
 \end{aligned}
 \right.
  \end{split}
@@ -51,7 +51,7 @@ Considering the center of the circle as $\theta^o$, we define $\theta = \theta^{
 
  \begin{equation}
 \begin{split} 
-{\vq_i}^{*} = \left\{
+{\vec{q}_i}^{*} = \left\{
 \begin{aligned}
 \frac{1- \mu a_i - \nu b_i}{2\eta} \quad& i = I_1, I_2\\
 -\frac{\mu a_i + \nu b_i}{2\eta} \quad& i \neq I_1, I_2
@@ -63,14 +63,14 @@ Considering the center of the circle as $\theta^o$, we define $\theta = \theta^{
 
 We can get the Lagrangian dual problem:
 \begin{equation}
-\max_{\eta,\mu,\nu\geq0} L(\eta,\mu,\nu) = \max_{\eta,\mu,\nu\geq0} \frac{\mu a_{I_1} + \nu b_{I_1}-1}{2\eta} +\frac{\mu a_{I_2} + \nu b_{I_2}-1}{2\eta}+ \eta({\vq^{*}}^{\tranT}\vq^{*}-r^2 )+\mu( a^{\tranT}\vq^{*} - e_a ) + \nu( b^{\tranT}\vq^{*} - e_b )
+\max_{\eta,\mu,\nu\geq0} L(\eta,\mu,\nu) = \max_{\eta,\mu,\nu\geq0} \frac{\mu a_{I_1} + \nu b_{I_1}-1}{2\eta} +\frac{\mu a_{I_2} + \nu b_{I_2}-1}{2\eta}+ \eta({\vec{q}^{*}}^{\tranT}\vec{q}^{*}-r^2 )+\mu( a^{\tranT}\vec{q}^{*} - e_a ) + \nu( b^{\tranT}\vec{q}^{*} - e_b )
 \end{equation}
 From the KKT optimum condition, we know that if
 \begin{equation}
 \begin{split} 
- \eta ({\vq^{*}}^{\tranT}\vq^{*} -r^2) &= 0\\
- \mu( a^{\tranT}\vq^{*} - e_a)&= 0\\
- \nu(b^{\tranT}\vq^{*} - e_b) &=0
+ \eta ({\vec{q}^{*}}^{\tranT}\vec{q}^{*} -r^2) &= 0\\
+ \mu( a^{\tranT}\vec{q}^{*} - e_a)&= 0\\
+ \nu(b^{\tranT}\vec{q}^{*} - e_b) &=0
  \end{split}
 \end{equation}
 We set $\eta^{*}, \mu^{*}, \nu^{*}$ as the solution of the equations, which is also the solution of the dual problem. Firstly, we assume that $\eta^{*}, \mu^{*}, \nu^{*} \neq 0$, then the solution is equal to compute the following equations:
@@ -123,14 +123,14 @@ If the solution satisfied the constraints $\eta^{*}, \mu^{*}, \nu^{*} > 0$, then
 However, if one of the dual variables is less than 0, the problem would degenerate into a simpler question. 
 
 If only $\eta^{*}$ is larger than 0, 
- $\min_{\theta \in \mathcal{R}^{S}_{I}}{- ( \vq_{I_1} +\vq_{I_2} )} = -\sqrt{2}r$
+ $\min_{\theta \in \mathcal{R}^{S}_{I}}{- ( \vec{q}_{I_1} +\vec{q}_{I_2} )} = -\sqrt{2}r$
 
 If only $\mu^{*}$ or $\nu^{*}$ is less than 0, we are optimizing on a sphere cap, the solution can be found in \cite[Appendix B]{NEURIPS2021_7b5b23f4}
 
 if only $\eta^{*} \leq 0$:
 As the sphere is inactivated, the problem gets maximum at every point of the intersection of two planes.
 \begin{equation}
-\min_{\vq} \max_{\mu,\nu \geq 0} L(\vq,\mu,\nu) =\min_{\vq}\max_{\mu,\nu\geq0} - {\vq_{I_1} - \vq_{I_2} +\mu( a^{\tranT}\vq - e_a ) + \nu( b^{\tranT}\vq - e_b )}
+\min_{\vec{q}} \max_{\mu,\nu \geq 0} L(\vec{q},\mu,\nu) =\min_{\vec{q}}\max_{\mu,\nu\geq0} - {\vec{q}_{I_1} - \vec{q}_{I_2} +\mu( a^{\tranT}\vec{q} - e_a ) + \nu( b^{\tranT}\vec{q} - e_b )}
 \end{equation}
 To have a solution, the equations satisfied
  \begin{equation}
@@ -144,7 +144,7 @@ To have a solution, the equations satisfied
  \end{split}
 \end{equation}
 
-As the equation satisfied, we can just set $\vq_i^{*} = 0, i \neq I_1,I_2$, then we compute the  
+As the equation satisfied, we can just set $\vec{q}_i^{*} = 0, i \neq I_1,I_2$, then we compute the  
  \begin{equation}
- \min_{\theta \in \mathcal{R}^{S}_{I}}{- ( \vq_{I_1} +\vq_{I_2} )} = \frac{a_{I_2}e_b - b_{I_2}e_a -a_{I_1}e_b +b_{I_1}e_a}{a_{I_1}b_{I_2}-a_{I_2}b_{I_1}}
+ \min_{\theta \in \mathcal{R}^{S}_{I}}{- ( \vec{q}_{I_1} +\vec{q}_{I_2} )} = \frac{a_{I_2}e_b - b_{I_2}e_a -a_{I_1}e_b +b_{I_1}e_a}{a_{I_1}b_{I_2}-a_{I_2}b_{I_1}}
 \end{equation}
