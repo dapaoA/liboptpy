@@ -1,0 +1,138 @@
+\begin{thebibliography}{}
+
+\bibitem[Arjovsky et~al., 2017]{arjovsky2017wasserstein}
+Arjovsky, M., Chintala, S., and Bottou, L. (2017).
+\newblock Wasserstein generative adversarial networks.
+\newblock In {\em International conference on machine learning}, pages
+  214--223. PMLR.
+
+\bibitem[{Benamou, Jean-David}, 2003]{refId0}
+{Benamou, Jean-David} (2003).
+\newblock Numerical resolution of an "unbalanced" mass transport problem.
+\newblock {\em ESAIM: M2AN}, 37(5):851--868.
+
+\bibitem[Blondel et~al., 2018]{DBLP:conf/aistats/BlondelSR18}
+Blondel, M., Seguy, V., and Rolet, A. (2018).
+\newblock Smooth and sparse optimal transport.
+\newblock In Storkey, A.~J. and P{\'{e}}rez{-}Cruz, F., editors, {\em
+  International Conference on Artificial Intelligence and Statistics, {AISTATS}
+  2018, 9-11 April 2018, Playa Blanca, Lanzarote, Canary Islands, Spain},
+  volume~84 of {\em Proceedings of Machine Learning Research}, pages 880--889.
+  {PMLR}.
+
+\bibitem[Bonnefoy et~al., 2015]{7128732}
+Bonnefoy, A., Emiya, V., Ralaivola, L., and Gribonval, R. (2015).
+\newblock Dynamic screening: Accelerating first-order algorithms for the lasso
+  and group-lasso.
+\newblock {\em IEEE Transactions on Signal Processing}, 63(19):5121--5132.
+
+\bibitem[Caffarelli and McCann, 2010]{10.2307/20752228}
+Caffarelli, L.~A. and McCann, R.~J. (2010).
+\newblock Free boundaries in optimal transport and monge-amp^^c3^^a8re obstacle
+  problems.
+\newblock {\em Annals of Mathematics}, 171(2):673--730.
+
+\bibitem[Chapel et~al., 2021]{NEURIPS2021_c3c617a9}
+Chapel, L., Flamary, R., Wu, H., F\'{e}votte, C., and Gasso, G. (2021).
+\newblock Unbalanced optimal transport through non-negative penalized linear
+  regression.
+\newblock In Ranzato, M., Beygelzimer, A., Dauphin, Y., Liang, P., and Vaughan,
+  J.~W., editors, {\em Advances in Neural Information Processing Systems},
+  volume~34, pages 23270--23282. Curran Associates, Inc.
+
+\bibitem[Chen et~al., 2019]{084adf2f555549c493e0331a00e4ecad}
+Chen, L., Zhang, Y., Zhang, R., Tao, C., Gan, Z., Zhang, H., Li, B., Shen, D.,
+  Chen, C., and Carin, L. (2019).
+\newblock Improving sequence-to-sequence learning via optimal transport.
+\newblock In {\em 7th International Conference on Learning Representations,
+  ICLR 2019}. International Conference on Learning Representations, ICLR.
+\newblock Generated from Scopus record by KAUST IRTS on 2021-02-09.
+
+\bibitem[Courty, 2017]{7586038}
+Courty, N. (2017).
+\newblock Optimal transport for domain adaptation.
+\newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  39(9):1853--1865.
+
+\bibitem[Cuturi, 2013]{NIPS2013_af21d0c9}
+Cuturi, M. (2013).
+\newblock Sinkhorn distances: Lightspeed computation of optimal transport.
+\newblock In Burges, C., Bottou, L., Welling, M., Ghahramani, Z., and
+  Weinberger, K., editors, {\em Advances in Neural Information Processing
+  Systems}, volume~26. Curran Associates, Inc.
+
+\bibitem[Ghaoui et~al., 2010]{ghaoui2010safe}
+Ghaoui, L.~E., Viallon, V., and Rabbani, T. (2010).
+\newblock Safe feature elimination for the lasso and sparse supervised learning
+  problems.
+\newblock {\em arXiv preprint arXiv:1009.4219}.
+
+\bibitem[Janati et~al., 2019]{DBLP:conf/aistats/JanatiCG19}
+Janati, H., Cuturi, M., and Gramfort, A. (2019).
+\newblock Wasserstein regularization for sparse multi-task regression.
+\newblock In Chaudhuri, K. and Sugiyama, M., editors, {\em The 22nd
+  International Conference on Artificial Intelligence and Statistics, {AISTATS}
+  2019, 16-18 April 2019, Naha, Okinawa, Japan}, volume~89 of {\em Proceedings
+  of Machine Learning Research}, pages 1407--1416. {PMLR}.
+
+\bibitem[Liero et~al., 2018]{Liero:2018wo}
+Liero, M., Mielke, A., and Savar{\'e}, G. (2018).
+\newblock Optimal entropy-transport problems and a new hellinger--kantorovich
+  distance between positive measures.
+\newblock {\em Inventiones mathematicae}, 211(3):969--1117.
+
+\bibitem[Ndiaye et~al., 2017]{JMLR:v18:16-577}
+Ndiaye, E., Fercoq, O., Alex, re~Gramfort, and Salmon, J. (2017).
+\newblock Gap safe screening rules for sparsity enforcing penalties.
+\newblock {\em Journal of Machine Learning Research}, 18(128):1--33.
+
+\bibitem[Nguyen et~al., 2022]{https://doi.org/10.48550/arxiv.2202.03618}
+Nguyen, Q.~M., Nguyen, H.~H., Zhou, Y., and Nguyen, L.~M. (2022).
+\newblock On unbalanced optimal transport: Gradient methods, sparsity and
+  approximation error.
+
+\bibitem[Petric~Maretic et~al., 2019]{NEURIPS2019_fdd5b16f}
+Petric~Maretic, H., El~Gheche, M., Chierchia, G., and Frossard, P. (2019).
+\newblock Got: An optimal transport framework for graph comparison.
+\newblock In Wallach, H., Larochelle, H., Beygelzimer, A., d\textquotesingle
+  Alch\'{e}-Buc, F., Fox, E., and Garnett, R., editors, {\em Advances in Neural
+  Information Processing Systems}, volume~32. Curran Associates, Inc.
+
+\bibitem[Schiebinger et~al., 2019]{SCHIEBINGER2019928}
+Schiebinger, G., Shu, J., Tabaka, M., Cleary, B., Subramanian, V., Solomon, A.,
+  Gould, J., Liu, S., Lin, S., Berube, P., Lee, L., Chen, J., Brumbaugh, J.,
+  Rigollet, P., Hochedlinger, K., Jaenisch, R., Regev, A., and Lander, E.~S.
+  (2019).
+\newblock Optimal-transport analysis of single-cell gene expression identifies
+  developmental trajectories in reprogramming.
+\newblock {\em Cell}, 176(4):928--943.e22.
+
+\bibitem[Schmitzer, 2016]{DBLP:journals/corr/Schmitzer16}
+Schmitzer, B. (2016).
+\newblock Stabilized sparse scaling algorithms for entropy regularized
+  transport problems.
+\newblock {\em CoRR}, abs/1610.06519.
+
+\bibitem[Sinkhorn, 1974]{10.2307/2040061}
+Sinkhorn, R. (1974).
+\newblock Diagonal equivalence to matrices with prescribed row and column sums.
+  ii.
+\newblock {\em Proceedings of the American Mathematical Society},
+  45(2):195--198.
+
+\bibitem[Yamada and Yamada, 2021]{NEURIPS2021_7b5b23f4}
+Yamada, H. and Yamada, M. (2021).
+\newblock Dynamic sasvi: Strong safe screening for norm-regularized least
+  squares.
+\newblock In Ranzato, M., Beygelzimer, A., Dauphin, Y., Liang, P., and Vaughan,
+  J.~W., editors, {\em Advances in Neural Information Processing Systems},
+  volume~34, pages 14645--14655. Curran Associates, Inc.
+
+\bibitem[Yang and Uhler, 2019]{DBLP:conf/iclr/YangU19}
+Yang, K.~D. and Uhler, C. (2019).
+\newblock Scalable unbalanced optimal transport using generative adversarial
+  networks.
+\newblock In {\em 7th International Conference on Learning Representations,
+  {ICLR} 2019, New Orleans, LA, USA, May 6-9, 2019}. OpenReview.net.
+
+\end{thebibliography}
