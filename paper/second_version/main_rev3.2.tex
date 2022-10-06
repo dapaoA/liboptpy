@@ -250,7 +250,7 @@ For UOT problem in Eq.(\ref{eq:uot}), we obtain the following dual problem:
 \begin{equation}
 \begin{split}
 -h^*(-\vec{\theta}) - g^*(\mat{X}^{\tranT}\vec{\theta})& = -\frac{1}{2}\|\vec{\theta}\|_2^2-\vec{y}^{\tranT}\vec{\theta} \\
- \text{s.t.} \quad \quad \vec{x}_p^{\tranT}\vec{\theta} -\lambda \vec{c}_p &\leq 0, \forall p,
+ \text{s.t.} \quad \quad \vec{x}_p^{\tranT}\vec{\theta} -\lambda c_p &\leq 0, \forall p,
  \end{split}
  \label{eq:uotdual}
 \end{equation}
@@ -261,10 +261,10 @@ It is clear that the strongly concave coefficient $L$ for the dual function $d$ 
 \begin{thm}[KKT condition] For the dual optimal solution $\hat{\vec{\theta}}$, we have the following relationship:
  \begin{equation}
 \begin{split}
-\vec{x}_p^{\tranT}\hat{\vec{\theta}} -\lambda \vec{c}_p \left\{
+\vec{x}_p^{\tranT}\hat{\vec{\theta}} -\lambda c_p \left\{
 \begin{aligned}
-< 0 \quad& \Rightarrow \hat{\vec{t}}_p = 0\\
-= 0 \quad& \Rightarrow \hat{\vec{t}}_p \geq 0.
+< 0 \quad& \Rightarrow \hat{t}_p = 0\\
+= 0 \quad& \Rightarrow \hat{t}_p \geq 0.
 \end{aligned}
 \right.
  \end{split}
@@ -276,17 +276,17 @@ It is clear that the strongly concave coefficient $L$ for the dual function $d$ 
 
 Eq.(\ref{eq:kkt}) indicates a potential method to screening the primal variable. Since we do not know the information of $\hat{\vec{t}}$ directly, \changeXS{ Screening techniques try to construct an area $\mathcal{R}^{S}$  as small as possible and }also containing the $\hat{\vec{t}}$, if
 \begin{equation}
-\max_{\vec{t} \in \mathcal{R}^S} \vec{x}_p^{\tranT}\vec{\theta} -\lambda \vec{c}_p < 0.
+\max_{\vec{t} \in \mathcal{R}^S} \vec{x}_p^{\tranT}\vec{\theta} -\lambda c_p < 0.
 \end{equation}
 then we assert that:
  \begin{equation}
- \vec{x}_p^{\tranT}\hat{\vec{\theta}} -\lambda \vec{c}_p < 0,
+ \vec{x}_p^{\tranT}\hat{\vec{\theta}} -\lambda c_p < 0,
  \label{eq:kktineq}
 \end{equation}
 which means the corresponding $\hat{\vec{t}}_p = 0$, and can be screened out. Noteworthy point is that, for the UOT problem, $\vec{x}_p = [...,0,1,0,...,0,1,0,...,]^{\tranT}$ has only two nonzero elements, $p_1$ and $p_2$, that are equal to 1. Therefore, we can set $\vec{\theta} = [\vec{u}^{\tranT},\vec{v}^{\tranT}]^{\tranT}$ and $\vec{u}\in\R^{m}, \vec{v}\in\R^{n}$, assuming $p=(I,J)$ where $I = p \mid m, J = p \mod m$. Subsequently, we rewrite Eq.(\ref{eq:kktineq}) as 
 %
  \begin{equation}
-\vec{u}_{I} + \vec{v}_{J}-\lambda \vec{c}_p < 0.
+u_{I} + v_{J}-\lambda c_p < 0.
 \end{equation}
 
 \changeXS{If we have $\tilde{\vec{\theta}} \in \mathcal{R}^{D}$, knowing from {\bf Theorem \ref{thm:circle}}, we can construct the area $\mathcal{R}^{C}$ for the UOT problem:
@@ -300,17 +300,17 @@ For the UOT problem in Eq.(\ref{eq:uot}), $\mathcal{R}^{C}$ in {\bf Theorem \ref
 The $\vec\theta$ and $\vec y$ are the endpoints of the diameter of this circle. and $\hat{ \vec\theta} \in \mathcal{R}^{C}$
 \end{lem}
 If we obtain $\tilde{\vec{\theta}}$ in $\mathcal{R}^{D}$, combining $\mathcal{R}^{D}$ with $\mathcal{R}^{C}$ in {\bf Lemma \ref{lem:uotrc}}, we can use $\mathcal{R}^{C}\cap\mathcal{R}^{D}$ as the area $R^{S}$ in Eq.(\ref{eq:kktineq}). However, maxmizing on the intersection of a hyper-ball and a polytope cannot be computed easily cause the $n+m$-polytope has $nm$ Facets, \note{(????)} which costs too much for a screening operation.\\
-The most direct method for dealing with the problem is to relax the polytope into a hyper-plane. Considering the specific structure of the $\mat X$ in the UOT problem, Our proposed method relaxes the polytope into two planes by combining the $nm$ dual constraints with a positive weight $\vec t_i \geq 0$, If the constraint is relevent to the dual elements $I$ and $j$, which would influence the screening of $\vec t_p$, we add it in group $A$, and the rest constraints are added in group $B$.}
+The most direct method for dealing with the problem is to relax the polytope into a hyper-plane. Considering the specific structure of the $\mat X$ in the UOT problem, Our proposed method relaxes the polytope into two planes by combining the $nm$ dual constraints with a positive weight $t_p \geq 0$, If the constraint is relevent to the dual elements $I$ and $j$, which would influence the screening of $t_p$, we add it in group $A$, and the rest constraints are added in group $B$.}
 
 \begin{thm}[Two Plane Screening for UOT]
 \label{Thm:AreaScreeningUOT}
-For every single primal variable $t_p$, let $A_p = \{ i \| 0\leq i<nm, i\mid m = I \vee i\mod m = J\}$, and $B_p = \{ i \| 0\leq i<nm, i \notin A_p\}$. Then, we construct a specific area $\mathcal{R}^{S}_{IJ}$ as presented below:
+For every single primal variable $t_p$, let $A_p = \{ i \| 0\leq i<nm, i\mid m = I \vee i\mod m = J\}$, and $B_p = \{ i \| 0\leq i<nm, i \notin A_p\}$. Then, we construct a specific area $\mathcal{R}^{S}_{p}$ as presented below:
  \begin{equation}
 \begin{split} 
-\mathcal{R}^S_{IJ} = \left\{\vec{\theta} \ \left|\!\left| \ 
+\mathcal{R}^S_{p} = \left\{\vec{\theta} \ \left|\!\left| \ 
 \begin{aligned}
- &\sum_{l\in A_p}(\vec{\theta}^{\tranT}\vec{x}_{l}\vec{t}_l - \lambda \vec{c}_l \vec{t})\leq 0, \\
- &\sum_{l\in B_p}(\vec{\theta}^{\tranT}\vec{x}_{l}\vec{t}_l - \lambda \vec{c}_l \vec{t})\leq 0, \\
+ &\sum_{l\in A_p}(\vec{\theta}^{\tranT}\vec{x}_{l}{t_l} - \lambda {c}_l {t_l})\leq 0, \\
+ &\sum_{l\in B_p}(\vec{\theta}^{\tranT}\vec{x}_{l}{t_l} - \lambda {c}_l {t_l})\leq 0, \\
   &(\vec{\theta}-\tilde{\vec{\theta}})^{\tranT}(\vec{\theta}-\vec{y})\leq 0 \ (\changeXS{\bf Lemma  \ref{lem:uotrc}})
 \end{aligned}
 \right.\right.
@@ -318,28 +318,30 @@ For every single primal variable $t_p$, let $A_p = \{ i \| 0\leq i<nm, i\mid m =
 \end{split}
 \label{eq:divide}
 \end{equation}
-We have $\hat{\vec{t}} \in \mathcal{R}^{C}\cap\mathcal{R}^{D} \subset \mathcal{R}^{S}_{IJ}$ (A simple proof process might be required for the $\subset$ relationship in the Appendix).
+We have $\hat{\vec{t}} \in \mathcal{R}^{C}\cap\mathcal{R}^{D} \subset \mathcal{R}^{S}_{p}$ (A simple proof process might be required for the $\subset$ relationship in the Appendix).
 \end{thm}
 
 \note{How does $\mathcal{R}^{S}_{IJ}$ play in the following??? Is in Algorithm 1 only?}
 
-\changeXS{Our two planes area $\mathcal{R}^S_{IJ}$ is smaller than the relaxation in \citep{NEURIPS2021_7b5b23f4}. Benefiting from the structure of $\vec x_p$. As $\vec{x}_p^{\tranT}\vec{\theta} = \vec{u}_{I} + \vec{v}_{J}$, these two dual elements are the optimization directions, and only $m+n$ constraints are directly connected with them, dividing the constraints in two groups by the whether exists $\vec{u}_{I}$, and $\vec{v}_{J}$ can alleviate the huge relaxation influence of other secondary dual variables.\\
-Before we start to screening with the area we constructed by {\bf Lemma \ref{lem:uotrc}} and {\bf Theorem \ref{Thm:AreaScreeningUOT}}, we first have to find a dual variable $\tilde{\vec{\theta}}\in\mathcal{R}^{D}$. Although there exists a relationship between the primal variable and dual variable that $\vec{\theta} = \vec{y} - \mat{X}\vec{t}$, inevitably, we often get $\vec{\theta} \notin \mathcal{R}^{D}$. This requires us to project $\vec{\theta}$ onto $\mathcal{R}^{D}$. In the Standrad Lasso problem, the dual constraints in {Eq.(\ref{eq:uotdual})} is $\|\vec{x}_p \hat{\vec{\theta}}\|_1\leq \lambda$, $x_p$ is almost dense and irregular, one has to use a shrinking method to obtain a $\tilde{\vec{\theta}} \in \mathcal{R}^{D}$:
+\changeXS{We divide the constraints into two groups $A_p$ and $B_p$ for every single $p$, Our two-planes area $\mathcal{R}^S_{IJ}$ is smaller than the relaxation in \citep{NEURIPS2021_7b5b23f4}. Benefiting from the structure of $\vec x_p$. As $\vec{x}_p^{\tranT}\vec{\theta} = {u}_{I} + {v}_{J}$, these two dual elements are the optimization directions, and only $m+n$ constraints are directly connected with them, dividing the constraints in two groups by whether exists ${u}_{I}$, and ${v}_{J}$ can alleviate the huge relaxation influence of other secondary dual variables. This problem can be solved easily by the Lagrangian method in constant time, the computational process is in Appendix. A\\
+Before we start to screening with the area we constructed by {\bf Lemma \ref{lem:uotrc}} and {\bf Theorem \ref{Thm:AreaScreeningUOT}}, we first have to find a dual variable $\tilde{\vec{\theta}}\in\mathcal{R}^{D}$. Although there exists a relationship between the primal variable and dual variable that $\vec{\theta} = \vec{y} - \mat{X}\vec{t}$, inevitably, we often get $\vec{\theta} \notin \mathcal{R}^{D}$. This requires us to project $\vec{\theta}$ onto $\mathcal{R}^{D}$.  Dynamic Screening gets a more accurate screening outcome because the optimization algorithms gradually provide $\vec t^{k} \Rightarrow \hat{\vec t}$, and also the dual variable $\vec \theta^{k} \Rightarrow \hat{\vec \theta}$. If $\vec{ \tilde{\theta}}\Rightarrow \hat{\vec \theta}$, the area $\mathcal{R}^{C}\cap\mathcal{R}^{D}$ would get smaller and has a better screening outcome. As the $\mathcal{R}^{D}$ is a polytope combined with $nm$ hyperplanes, the real projection is solved no matter by Linear programming or Dykstra's projection algorithm cost too much. In the Standard Lasso problem, the dual constraints in {Eq.(\ref{eq:uotdual})} is $\|\vec{x}_p \hat{\vec{\theta}}\|_1\leq \lambda$, $x_p$ is almost dense and irregular, one use a  simple shrinking method to obtain a $\tilde{\vec{\theta}} \in \mathcal{R}^{D}$:
 \changeHK{\cite{xxxxx}}: 
 \begin{equation*}
 \tilde{\vec{\theta}} = \frac{\vec\theta}{\max(1, \|\frac{\mat{X}^{\tranT}\vec\theta}{\lambda}\|_{\infty})}
 \end{equation*}
 }
 %Unlike in the Lasso problem, 
-\changeXS{Dynamic Screening get more accurate screeing outcome because the optimization algorithms gradually provide $\vec t^{k} \Rightarrow \hat{\vec t}$, and also the dual variable $\vec \theta^{k} \Rightarrow \hat{\vec \theta}$. If $\tilde{\theta}\Rightarrow \hat{\vec \theta}$, the area $\mathcal{R}^{C}\cap\mathcal{R}^{D}$ would get smaller and has a better screening outcome. However, The Standard Lasso projection pushes the $\vec{\theta}$ far away from the optimum $\hat{\vec{\theta}}$, it suffers from the influence of small $\vec c_p$  as $$\tilde{\vec{\theta}} = \frac{\vec\theta}{\max(1, \|\frac{\mat{X}^{\tranT}\vec\theta}{\lambda \vec{c}^{T}}\|_{\infty})}$$, it will degenerate when one of the costs is $\vec{c}_p = 0$, and disable the screening process. Therefore, noting that, fo the UOT problem, it only allows $\vec{t}_p \geq 0$, and the $\vec{x}_p$ only consists of two non-zero elements, we can adapt a better projection method. The following theorem states this:}
+\changeXS{The Standard Lasso projection pushes the $\vec{\theta}$ far away from the optimum $\hat{\vec{\theta}}$, it suffers from the influence of small $\vec c_p$ in the UOT problem as 
+$$\tilde{\vec{\theta}} = \frac{\vec\theta}{\max(1, \|\frac{\mat{X}^{\tranT}\vec\theta}{\lambda \vec{c}^{T}}\|_{\infty})}$$ 
+It will degenerate when one of the costs is $c_p = 0$, and disable the screening process. Therefore, noting that, for the UOT problem, it only allows $t_p \geq 0$, and the $\vec{x}_p$ only consists of two non-zero elements, we can adapt a better and cheap projection method. The following theorem states this:}
 \begin{thm}[UOT shifting projection]
 \label{Thm:UOT_ShiftProjection}
 For any $\vec{\theta} = [{\vec{u}}^{\tranT},{\vec{v}}^{\tranT}]^{\tranT}$, we compute the projection $\tilde{\vec{\theta}} = [\tilde{\vec{u}}^{\tranT},\tilde{\vec{v}}^{\tranT}]^{\tranT} \in \mathcal{R}^{D}$ as
 \begin{eqnarray}
-\tilde{\vec{u}}_I &=& {\vec{u}}_I - \max_{0\leq j < n} \frac{{\vec{u}}_I +{\vec{v}}_j - \lambda\vec{c}_{p}}{2} \notag\\
-& =& \frac{{\vec{u}}_I +\lambda\vec{c}_{p}}{2} - \frac{1}{2}\max_{0\leq j < n} {\vec{v}}_j\\
-\tilde{\vec{v}}_J &=& {\vec{v}}_J - \max_{0 \leq i < m} \frac{{\vec{u}}_i +{\vec{v}}_J - \lambda\vec{c}_{p}}{2}\notag\\
-& =& \frac{{\vec{v}}_J +\lambda\vec{c}_{p}}{2} - \frac{1}{2}\max_{0 \leq i < m} {\vec{u}}_j
+\tilde{{u}}_I &=& {{u}}_I - \max_{0\leq j < n} \frac{{{u}}_I +{{v}}_j - \lambda{c}_{p}}{2} \notag\\
+& =& \frac{{{u}}_I +\lambda{c}_{p}}{2} - \frac{1}{2}\max_{0\leq j < n} {{v}}_j\\
+\tilde{{v}}_J &=& {{v}}_J - \max_{0 \leq i < m} \frac{{{u}}_i +{{v}}_J - \lambda{c}_{p}}{2}\notag\\
+& =& \frac{{{v}}_J +\lambda{c}_{p}}{2} - \frac{1}{2}\max_{0 \leq i < m} {{u}}_j
  \label{eq:uotproj}
 \end{eqnarray}
 \end{thm}
@@ -350,13 +352,10 @@ For any $\vec{\theta} = [{\vec{u}}^{\tranT},{\vec{v}}^{\tranT}]^{\tranT}$, we co
 	\end{center}	
 	\end{figure}
 
-
-Since we now obtain $\tilde{\vec{\theta}}$ in $\mathcal{R}^{D}$, we additionally consider $\mathcal{R}^{C}$ in {\bf Theorem \ref{thm:circle}} to satisfy $\hat{\vec{t}} \in \mathcal{R}^{C}\cap\mathcal{R}^{D}$. However, the intersection of a sphere and a polytope cannot be computed \note{(????)} in $O(knm)$, where $k$ is a constant. Therefore, we propose a relaxation method, denoted as {\it two plane screening}. This divides the constraints into two parts, then we maximize the intersection of two hyperplanes and a hyper-ball. The next theorem states this:
+\changeXS{We shift every single $u_I$, $v_J$ with half of the maximum differences in all of its constraints, this cheap projection method can get good accuracy with $O(nm)$ computational time. The proof process is in the Appendix}
 %
 
 
-
-We divide the constraints into two groups $A_p$ and $B_p$ for every single $p$, this problem can be solved easily by the Lagrangian method in constant time, the computational process is in Appendix. A
 
 	\begin{figure}[h]
 	\begin{center}	
@@ -373,28 +372,27 @@ We divide the constraints into two groups $A_p$ and $B_p$ for every single $p$, 
  \label{Alg:UOTDynamicScreening}
  \renewcommand{\algorithmicrequire}{\textbf{Input:}}
  \renewcommand{\algorithmicensure}{\textbf{Output:}}
- \REQUIRE $\vec{t}_0, S \in R^{n\times m}, S_{ij}=1, (i,j) = mi+j$
- \ENSURE $S$
+ \REQUIRE $\vec{t}_0,  \changeXS{\vec s \in R^{nm}, s_{p}=1}$
+ \ENSURE $s$
  \STATE \text{Choose a solver for the problem.}
- \FOR {$k = 0 \text{ to } K$}
- \STATE $\text{Projection } \tilde{\vec{\theta}} = \operatorname{Proj}(\vec{t}^k)$ 
- \FOR {$i = 0 \text{ to } m$}
-  \FOR {$j = 0 \text{ to } n$}
-  \STATE $\mathcal{R}^{S} \leftarrow \mathcal{R}_{ij}^S{(\tilde{\vec{\theta}},\vec{t}^k)}$
-   \STATE $S \leftarrow {S_{ij} = 0 \text{ if } \max_{\vec{\theta} \in \mathcal{R}^S} {x_{(i,j)}}^{\tranT}\vec{\theta} <\lambda c_{(i,j)} }$
- \ENDFOR
+ \FOR {$k = 0 \text{ to } K-1$}
+ \STATE $\text{Projection } \tilde{\vec{\theta}^{k}} = \operatorname{Proj}(\vec{t}^k) \changeXS{\quad \bf Theorem \ref{Thm:UOT_ShiftProjection}}$  
+ \FOR {$p = 0 \text{ to } mn -1$}
+  \STATE  \changeXS{$\mathcal{R}^{S} \leftarrow \mathcal{R}_{p}^S{(\tilde{\vec{\theta}^{k}},\vec{t}^k)}$}
+   \STATE  \changeXS{$\vec s \leftarrow {s_{p} = 0 \text{ if } \max_{\vec{\theta} \in \mathcal{R}^S} {\vec x_{p}}^{\tranT}\vec{\theta}^{k} <\lambda c_{p} }$ \bf Theorem \ref{Thm:AreaScreeningUOT}}
   \ENDFOR
- \FOR {$(i,j) \in \{(i,j)\|S_{ij}=0\}$}
-  \STATE $\vec{t}^k_{(i,j)} \leftarrow 0$
+ \FOR  { \changeXS{$p \in \{p\|s_{p}=0\}$}}
+  \STATE $\vec{t}^k_p \leftarrow 0$
+  
   \ENDFOR
   \STATE $\vec{t}^{k+1} = \operatorname{update}(\vec{t}^k)$
  \ENDFOR
-   \RETURN $\vec{t}^{K+1}, S $ 
+   \RETURN $\vec{t}^{K+1}, \vec s $
  \end{algorithmic} 
  \end{algorithm}
  \note{(Insert equation numbers in appropriate lines in {\bf Algorithm \ref{Alg:UOTDynamicScreening)}}}
 
-It should be emphasized that the proposed screening method is {\it independent} of the optimization solver that you choose. We give the specific algorithm for $L_2$ UOT problem to show the whole optimization process as in {\bf Algorithm \ref{Alg:UOTDynamicScreening}}. The $\operatorname{update}(\vec{t})$ operator in the algorithm indicates the updating process for $\vec{t}$ according to the adopted optimizer.\\
+It should be emphasized that the proposed screening method is {\it independent} of the optimization solver that you choose. We give the specific algorithm for $L_2$ UOT problem to show the whole optimization process as in {\bf Algorithm \ref{Alg:UOTDynamicScreening}}. The $\operatorname{update}(\vec{t})$ operator in the algorithm indicates the updating process for $\vec{t}$ according to the adopted optimizer. \changeXS{$\vec s$ is the screening mask vector for the transport vector $\vec t$, when $s_p = 0$, it means the $t_p$ should be screened out}.\\
 
 \subsection{Computational Cost Analysis}
 \note{XXXXXX}
