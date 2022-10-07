@@ -1,0 +1,49 @@
+This is pBibTeX, Version 0.99d-j0.34 (utf8.euc) (TeX Live 2022)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main_rev3.4.aux
+The style file: apalike.bst
+Database file #1: ref.bib
+Warning--I didn't find a database entry for "xxxxx"
+You've used 31 entries,
+            1935 wiz_defined-function locations,
+            672 strings with 9590 characters,
+and the built_in function-call counts, 13029 in all, are:
+= -- 1213
+> -- 649
+< -- 17
++ -- 222
+- -- 222
+* -- 1109
+:= -- 2289
+add.period$ -- 98
+call.type$ -- 31
+change.case$ -- 259
+chr.to.int$ -- 31
+cite$ -- 31
+duplicate$ -- 504
+empty$ -- 904
+format.name$ -- 263
+if$ -- 2552
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 33
+newline$ -- 159
+num.names$ -- 97
+pop$ -- 284
+preamble$ -- 1
+purify$ -- 261
+quote$ -- 0
+skip$ -- 331
+stack$ -- 0
+substring$ -- 744
+swap$ -- 55
+text.length$ -- 4
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 182
+warning$ -- 0
+while$ -- 86
+width$ -- 0
+write$ -- 397
+is.kanji.str$ -- 0
+(There was 1 warning)

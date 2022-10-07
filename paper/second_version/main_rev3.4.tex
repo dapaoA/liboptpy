@@ -1,0 +1,612 @@
+\documentclass[twoside]{article}
+
+%\usepackage{aistats2022}
+% If your paper is accepted, change the options for the package
+% aistats2022 as follows:
+%
+
+\usepackage{aistats2022}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb,bbm}
+\usepackage{algorithm,algorithmic}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{bm}
+
+%
+% This option will print headings for the title of your paper and
+% headings for the authors names, plus a copyright note at the end of
+% the first column of the first page.
+
+% If you set papersize explicitly, activate the following three lines:
+\special{papersize = 8.5in, 11in}
+\setlength{\pdfpageheight}{11in}
+\setlength{\pdfpagewidth}{8.5in}
+% If you use natbib package, activate the following three lines:
+%\usepackage[round]{natbib}
+%\renewcommand{\bibname}{References}
+%\renewcommand{\bibsection}{\subsubsection*{\bibname}}
+
+% If you use BibTeX in apalike style, activate the following line:
+%\bibliographystyle{apalike}
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}
+\newtheorem*{thm*}{Theorem}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{conj}[thm]{Conjecture}
+
+\newcommand{\calC} {\mathcal{C}}
+\newcommand{\bfP} {\mathbf{P}}
+\newcommand{\kl}{\mathbf {KL}}
+\newcommand{\kll}{\mathcal {KL}}
+\newcommand{\OTmp}[1]{\hat{\mathbf{P}}_{#1}}
+\newcommand{\prox}{\operatorname{prox}}
+\newcommand{\proj}{\operatorname{Proj}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\argmin}{\operatorname{argmin}}
+%\newcommandT{\mathsf T}
+%\newcommandT{T}
+\newcommand{\R}{\mathbbm{R}}
+\newcommand{\one}{\mathbbm{1}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+%\renewcommand{\vec}[1]{\mathbf{#1}}
+\renewcommand{\vec}[1]{\bm{#1}}
+
+\usepackage{xcolor}    
+\newcommand{\changeHK}[1]{\textcolor{red}{#1}}
+\newcommand{\changeXS}[1]{\textcolor{blue}{#1}}
+\newcommand{\note}[1]{\textcolor{magenta}{#1}}
+
+\begin{document}
+
+% If your paper is accepted and the title of your paper is very long,
+% the style will print as headings an error message. Use the following
+% command to supply a shorter title of your paper so that it can be
+% used as headings.
+%
+%\runningtitle{I use this title instead because the last one was very long}
+
+% If your paper is accepted and the number of authors is large, the
+% style will print as headings an error message. Use the following
+% command to supply a shorter version of the authors names so that
+% they can be used as headings (for example, use only the surnames)
+%
+%\runningauthor{Surname 1, Surname 2, Surname 3, ...., Surname n}
+
+\twocolumn[
+
+\aistatstitle{Dynamic Screening for $\ell_2$-norm Penalized Unbalanced Optimal Transport Problem}
+
+\aistatsauthor{ Xun Su \And Author 2 \And  Author 3 }
+
+\aistatsaddress{Waseda University \And  Institution 2 \And Institution 3 } ]
+
+%\input{Sec_abstract}
+%\input{Sec_introduction}
+%\input{Sec_background}
+%\input{Sec_UOT}
+%\input{Sec_experiments}
+%\input{Sec_conclusion}
+
+\begin{abstract}
+\note{HK comment:  We change the story: (OT and UOT $\rightarrow$ Lasso-type UOT $\rightarrow$ Propose Screening (No literature) $\rightarrow$ Evaluation)}
+The Safe Screening technique saves computational time by freezing the zero elements in the sparse solution of the Lasso problem. Recently, researchers have linked the UOT problem to the Lasso problem. In this paper, we apply the newest Dynamic Screening framework to the $\ell_2$-norm penalized Unbalanced Optimal Transport (UOT) problem. We first apply the Screening method to the UOT problem. We find out that the specific structure for the UOT problem allows it to get better screening results than the Lasso problem. We propose the new Dynamic Screening algorithm and demonstrate its extraordinary effectiveness and potential to benefit from the unique structure of the UOT problem, our algorithm substantially improves the screening efficiency compared to the standard Lasso Screening algorithm without significantly increasing the computational burden. We demonstrate the advantages of the algorithm through some experiments on the Gaussian distributions and the MNIST dataset.
+\end{abstract}
+
+
+\section{INTRODUCTION}
+\label{sec:int}
+Optimal \changeHK{transport} (OT) has a long history in mathematics and has recently become prevalent due to its extraordinary performances in machine learning and statistical learning fields for measuring distances between \changeHK{two probability measures}. It has outperformed traditional methods in many different areas such as domain adaptation \citep{7586038}, generative models \citep{arjovsky2017wasserstein}, graph machine learning \citep{Maretic_NIPS_2019} and natural language processing \citep{084adf2f555549c493e0331a00e4ecad}. The popularity of OT is attributed to the introduction of the Sinkhorn's algorithm \citep{10.2307/2040061} for the entropy\changeHK{-regularized} Kantorovich formulation problem \citep{NIPS2013_af21d0c9}, which alleviate\changeHK{s} the computational burden in large-scale problems. 
+
+Addressing one limitation that the standard OT problem handles only {\it balanced} samples, the unbalanced optimal transport (UOT) has been proposed envisioning a wider range of applications with {\it unbalanced} samples \citep{Caffarelli_AM_2010,chizat2017scaling}. This application fields include, for example, computational biology \citep{SCHIEBINGER2019928}, machine learning \citep{Janati_AISTATS_2019} and deep learning \citep{Yang_ICLR_2019}. Mathematically, UOT replaces the equality constraints with penalty functions on the marginal distributions with a divergence including KL divergence \citep{Liero:2018wo}, and $\ell_1$-norm \citep{Caffarelli_AM_2010} and $\ell_2$-norm distances \citep{refId0}. The KL-penalized UOT with an entropy regularizer can be solved by the Sinkhorn algorithm \citep{UOTSinkhorn2020}. It is fast, scalable, and differentiable, but suffers from a larger error of KL divergence, instability \citep{DBLP:journals/corr/Schmitzer16}, and a lack of sparsity in solution compared with other regularizers \citep{Blondel_AISTATS_2018}. In contrast, $\ell_2$-norm regularized UOT not only indicates a lower error, but also brings a sparse solution. This attracted the attention of researchers, and many algorithms have been developed \citep{Blondel_AISTATS_2018, Nguyen_arXiv_2022}.
+
+Despite of the success in the development of fast and efficient optimization algorithms for UOT, computational burden still remains as a bottleneck for the large-scale application. This paper tackles this issue from a different direction independent of optimization algorithms. Recently, \cite{Chapel_NeurIPS_2021} suggested a mutual connection between the UOT problem and the Lasso-like problem \citep{Tibshirani_JRSS_1996,Efron_AM_2004} and the non-negative matrix factorization problem \citep{Lee_NIPS_2000}. This motivates us to adapt {\it safe screening} \citep{ghaoui2010safe} in these fields to accelerate the computation of the UOT problem. In fact, the OT and UOT problems expect the solution to be sparse due to the effectiveness of their optimal transport cost, and thus shares the similar idea with the Lasso problem. 
+%Hence, we believe that it indicates the potential effectiveness of applying screening techniques in the Lasso problem to the UOT problem. 
+Safe screening in the Lasso problem is a promising technique to speed up the computation by exploiting the sparsity of the solution. It eliminates elements in the solution that are guaranteed to be zero without solving the optimization problem. However, this straightforward application is not trivial, and the standard Lasso screening method cannot be applied directly to the UOT problem because it has un-regularized elements \note{(what means?)}. 
+%Fortunately, the UOT problem has a particular structure compared to the Lasso problem. 
+Specifically, while the Lasso problem has a dense {\it constraint matrix}, that of the UOT problem is extremely sparse and has a unique transport matrix structure. This would benefit a design of specialized screening method and the outcome. 
+%
+
+
+In this paper, we propose a new dynamic screening method designated to the UOT problem. To this end, we first derive a dual formulation of the vectorized Lasso-like UOT problem. Then, particularly addressing the structure of the constraint matrix, a dynamic screening method is derived, which includes a new projection method and a screening region construction method. These are suitable for the UOT problem and could largely improve the effects. Different from the screening method in the Lasso problem, our proposed methods are .......
+
+
+
+\textbf{Contributions.}: 
+\begin{itemize}
+\item To the best of our knowledge, this work is a first dynamic screening method designated to the UOT problem, which is based on the Lasso-like formulation of the UOT problem and its dual formulation. Our proposed method is independent of optimization algorithms.
+\item We propose a projection method by leveraging the specific structure of the UOT problem, and it largely decreases the errors in the projection process. 
+We also propose a flexible two hyper-plane method  for every primal element to construct screening regions.
+\item Numerical evaluation reveals their effectiveness in terms of projection distances and screening ratios comparing several methods including state-of-the-art methods in the Lasso problem.
+\end{itemize}
+
+
+%\begin{itemize}
+%\item We apply the Screening technique in the Lasso community to the UOT problem and show its effectiveness. systematically constructed and applied the newest Dynamic Screening framework to the UOT problem.
+%\item We generalize the Lasso-like Dynamic screening framework to the UOT problem with a newly proposed projection method, which utilizes the specific structure of the UOT problem and largely decreased the error caused in the projection process.
+%\item We propose a new and specific Dynamic Screening method with a flexible Two hyper-plane construction method for every primal element, it largely improved the screening effectiveness without more computational burden. This method indicates that the Lasso-like problem with a specific structure like the UOT has the potential to design a better screening algorithm than the original Lasso problem.
+%\end{itemize}
+
+The paper is organized as follows. {\bf Section \ref{sec:pre}} presents preliminary descriptions of optimal transport and unbalanced optimal transport. The screening methods in Lasso-like problems are explained by addressing a dynamic screening framework. In {\bf Section \ref{sec:pro}}, our proposed screening method for the UOT problem is detailed. {\bf Section \ref{sec:exp}} shows numerical experiments.
+
+\section{PRELIMINARIES}
+\label{sec:pre}
+
+$\mathbb{R}^n$ denotes $n$-dimensional Euclidean space, and $\mathbb{R}^n_+$ denotes the set of vectors in which all elements are non-negative. $\mathbb{R}^{m \times n}$ represents the set of $m \times n$ matrices. Also, $\mathbb{R}^{m \times n}_+$ stands for the set of $m \times n$ matrices in which all elements are non-negative. We present vectors as bold lower-case letters $\vec{a},\vec{b},\vec{c},\dots$ and matrices as bold-face upper-case letters $\mat{A},\mat{B},\mat{C},\dots$. The $i$-th element of $\vec{a}$ and the element at the $(i,j)$ position of $\mat{A}$ are represented respectively as $a_i$ and $\mat{A}_{i,j}$. In addition, $\one_n \in \mathbb{R}^n$ is the $n$-dimensional vector in which all the elements are one. For $\vec{x}$ and $\vec{y}$ of the same size, $\langle \vec{x},\vec{y} \rangle = \vec{x}^T\vec{y}$ is the Euclidean dot-product between vectors. For two matrices of the same size $\mat{A}$ and $\mat{B}$, $\langle \mat{A},\mat{B}\rangle={\rm tr}(\mat{A}^T\mat{B})$ is the Frobenius dot-product. We use $\|\vec{a}\|_2$ and $\|\vec{a}\|_1$ to represent the $\ell_2$ norm and $\ell_1$ norm of $\vec{a}$, respectively. 
+%For a vector $\vec{x}$, the $i$-th element of $\exp (\vec{x})$ and $\log (\vec{x})$ respectively represent $\exp (\vec{x}_i)$ and $\log (\vec{x}_i)$. $\mathrm{KL}(\vec{x},\vec{y})$ stands for the KL divergence between $\vec{x} \in \mathbb{R}_+^n$ and $\vec{y} \in \mathbb{R}_+^n$, which is defined as $\sum_i \vec{x}_i \log {(\vec{x}_i/\vec{y}_i)} - \vec{x}_i + \vec{y}_i$. 
+$D_\phi$ is the Bregman divergence with the strictly convex and differentiable function $\phi$, i.e., $D_\phi(\vec{a},\vec{b})=\sum_{i} d_\phi(a_i, b_i)=\sum_i [\phi(a_i) - \phi(b_i) - \phi'(a_i)(a_i -b_i)]$. In addition, we suggests a vectorization for $\mat{A} \in \mathbb{R}^{m \times n}$ as a lowercase letters $\vec{a} \in \mathbb{R}^{mn}$ and $\vec{a}=\text{vec}(\mat{A})=[\mat{A}_{1,1}, \mat{A}_{1,2}, \cdots, \mat{A}_{m,n-1}, \mat{A}_{m,n}]$.
+ 
+
+
+\subsection{Optimal Transport and Unbalanced Optimal Transport}
+{\bf Optimal Transport (OT):} Given two discrete probability measures $\vec{a}\in \R^{m}$ and $\vec{b} \in \R^{n}$, the standard OT problem seeks a corresponding {\it transport matrix} $\mat{T} \in \R_{+}^{m \times n}$ that minimizes the total transport cost \citep{Kantorovich_1942}. This is a linear programming problem formulated as
+\begin{eqnarray}
+\label{Eq:Standard_OT}
+\operatorname{OT}(\vec{a},\vec{b}) &:=& \min_{ \mat{T} \in \R_{+}^{m \times n}} \langle \mat{C}, \mat{T} \rangle \\
+\text{subject\ to}&& \mat{T} \one_n= \vec{a}, \mat{T}^{T}\one_m = \vec{b}, \notag
+\end{eqnarray}
+where $\mat{C} \in \mathbbm{R_{+}}^{m \times n}$ is the {\it cost matrix}. The constraints in (\ref{Eq:Standard_OT}) are so-called {\it mass-conservation constraints} or {\it marginal constraints}, and assume $\|\vec{a}\|_1 = \|\vec{b}\|_1$. Thus, the solution $\hat{\vec{t}}$ does not exist when $\|\vec{a}\|_1 \neq \|\vec{b}\|_1$. The obtained OT matrix $\mat{T}^*$ brings powerful distances as $\mathcal{W}_p = \langle \mat{T}^*,\mat{C} \rangle^{\frac{1}{p}}$, which is known as the $p$-th order {\it Wasserstein distance} \citep{Villani_2008_OTBook}. 
+
+
+As $\vec{t} = \text{vec}({\mat{T}}) \in \mathbbm{R}^{mn}$ and $\vec{c} = \text{vec}({\mat{C}}) \in \mathbbm{R}^{mn}$, we reformulate Eq.(\ref{Eq:Standard_OT}) in a vector format as \citep{Chapel_NeurIPS_2021}
+\begin{eqnarray}
+\label{Eq:Vector_OT}
+\operatorname{OT}(\vec{a},\vec{b}) &:=& \min_{\vec{t} \in \R_{+}^{mn}} \vec{c}^T\vec{t} \\
+\text{subject\ to}&& \mat{N}\vec{t} = \vec{a}, \mat{M}\vec{t} = \vec{b}, \notag
+\end{eqnarray}
+where $\mat{N} \in \R^{m \times mn}$ and $\mat{M} \in \R^{n \times mn}$ are two matrices composed of ``0" and ``1". $\mat{N}$ and $\mat{M}$ in case of $m=n=3$ are given, respectively, as
+\begin{equation*}
+\begin{split}
+\mat{N}&=\begin{pmatrix}
+1&1&1& 0& 0& 0& 0& 0&0\\
+0 & 0& 0&1&1&1& 0& 0&0\\
+0 & 0& 0& 0& 0& 0&1&1&1\\
+\end{pmatrix},\\
+\mat{M}&=\begin{pmatrix}
+ 1& 0& 0&1& 0& 0&1& 0&0\\
+ 0&1& 0& 0&1& 0& 0&1&0\\
+ 0& 0&1& 0& 0&1& 0& 0&1\\
+ \end{pmatrix}.
+  \end{split}
+ \end{equation*}
+
+Note that $\mat{N}$ and $\mat{M}$ both have a specific structure, where each column has only one single non-zero element equal to $1$. 
+
+ 
+{\bf Unbalanced Optimal Transport (UOT):} The marginal constraints in (\ref{Eq:Standard_OT}) may exacerbate degradation of the performance of some applications where weights need not be strictly preserved. In contrast, the UOT problem {\it relaxes} them by replacing the equality constraints with penalty functions on the marginal distributions with a divergence. Formally, defining $\vec{y} = [\vec{a}, \vec{b}]^T \in \mathbb{R}^{mn}$ and $\mat{X} = [\mat{M}^T,\mat{N}^T]^T \in \mathbb{R}^{(m+n) \times mn}$, the UOT problem can be formulated introducing a penalty function for the histograms as \citep{Chapel_NeurIPS_2021}
+\begin{equation}
+\label{eq:uot}
+\operatorname{UOT}(\vec{a},\vec{b}) := \min_{\vec{t} \in \R_{+}^{mn}} \vec{c}^T\vec{t} + D_\phi(\mat{X}\vec{t},\vec{y}).
+\end{equation}
+
+It is worth mentioning that this function is convex due to the convexity of the Bregman divergence.
+
+{\bf Relationship with Lasso-like problem:} 
+The Lasso-like problem has a general formula:
+%
+\begin{eqnarray*}
+f(\vec{t}) &:=& g(\vec{t}) + D_\phi(\mat{X} \vec{t},\vec{y}).
+%, t\in \mathbbm{R}^{mn}.
+\end{eqnarray*}
+Substituting $g(\vec{t}) = \lambda \|\vec{t}\|_1~(\lambda > 0)$ and $D_\phi(\mat{X} \vec{t},\vec{y}) = \frac{1}{2}\|\mat{X} \vec{t}-\vec{y}\|_2^2$ into $f(\vec{t})$ above reduces to the standard $\ell_2$-norm regularized Lasso problem. On the other hand, addressing that $\vec{c}$ and $\vec{t}$ in (\ref{eq:uot}) are nonnegative, the term $\vec{c}^T\vec{t}$ is represented as $\vec{c}^T\vec{t}=\sum_i c_i t_i = \sum_ic_i |t_i|$. Therefore, the UOT problem in (\ref{eq:uot}) is equivalent to a weighted $\ell_1$-norm regularized Lasso-like problem. It is, however, that $\mat{X} = [\mat{M}^T,\mat{N}^T]^T$ in (\ref{eq:uot}) substantially differs from that of the Lasso problem. More concretely, the former $\mat{X}$ has a specific structure and has only two non-zero elements equal to $1$ in each row whereas the latter $\mat{X}$ in Lasso problem is non-structured and dense \citep{Chapel_NeurIPS_2021}.
+
+\subsection{Dynamic Screening Framework}
+Solutions of many large-scale optimization problems tend to be sparse, and a large amount of computation is wasted on updating the zero elements during the optimization process. Screening technique is a well-known technique in the Lasso problem and the SVM problem \citep{Ogawa_ICML_2013}, where the $\ell_1$-norm regularizer leads to a sparse solution for the problem \citep{ghaoui2010safe}. It can pre-select solutions that must be zero theoretically and freeze them before optimization computation, thus saving optimization time. Many safe screening methods have been proposed in this past decade \citep{Liu_ICML_2014,Wang_JMLR_2015}, and recent dynamic screening methods efficiently drop variable elements, which include Dynamic Screening \citep{7128732}, Gap Safe screening \citep{JMLR:v18:16-577} and Dynamic Sasvi \citep{NEURIPS2021_7b5b23f4}.
+
+Hereinafter, we briefly elaborate on the framework proposed in \citep{NEURIPS2021_7b5b23f4} to introduce the whole dynamic screening technique for the Lasso-like problem:
+\begin{equation}
+\label{eq:lassolike}
+\min_{\vec{t}} \left\{ f(\vec{t}) := g(\vec{t}) + h(\mat{X} \vec{t}) \right\}.
+\end{equation}
+
+The Fenchel-Rockafellar Duality yields the dual problem as presented below:
+\begin{thm}[Fenchel-Rockafellar Duality {\citep{Rockafellar_Springer_1998}}] 
+\label{Thm:FRD}
+If $d$ and $g$ are proper convex functions on $\mathbbm{R}^{m+n}$ and $\mathbbm{R}^{mn}$. Then we have the following:
+\begin{equation*}
+\min_{\vec{t}} g(\vec{t}) + h(\mat{X}\vec{t}) = \max_{\vec{\vec{\theta}}} -h^*(-\vec{\theta})-g^*(\mat{X}^T\vec{\theta}).
+\end{equation*}
+\end{thm}
+
+Because the primal function \changeHK{$h$} is always convex, the dual function \changeHK{$h^*$} is concave. Assuming \changeHK{$h^*$} is an $L$-strongly concave problem, we can design an area for any feasible $\tilde{\vec{\theta}}$ by the strongly concave property:
+
+\begin{thm}[$L$-strongly concave {\citep[Theorem 5]{NEURIPS2021_7b5b23f4}}]
+\label{thm:circle}
+Considering problem in Eq.(\ref{eq:lassolike}), if function $h$ and $g$ are both convex, for $\forall \ \tilde{\vec{\theta}}$ and satisfied the constraints on the dual problem, we have the following area constructed by its L-strongly concave property:  
+$$
+\begin{aligned}
+\mathcal{R}^{C}:=\vec{\theta} \in \left\{\frac{L}{2}\|\vec{\theta}-\tilde{\vec{\theta}}\|_2^2+h^*(-\tilde{\vec{\theta}}) \leq h^*(-\vec{\theta})\right\}.
+\end{aligned}
+$$
+\end{thm}
+
+We know that the optimal solution $\hat{\vec{\theta}}$ for the dual problem satisfied the inequality, so the set is not empty.
+
+\begin{lem}[The Circle Constraint {\citep[Theorem 8]{NEURIPS2021_7b5b23f4}}]
+\label{lem:uotrc}
+For the UOT problem in Eq.(\ref{eq:uot}), $\mathcal{R}^{C}$ in {\bf Theorem \ref{thm:circle}} is equal to a circle constraint:
+\begin{equation}
+\mathcal{R}^{C} =\{\vec\theta\|(\vec{\theta}-\tilde{\vec{\theta}})^T(\vec{\theta}-\vec{y})\leq 0\}
+\label{eq:uotcircle}
+\end{equation}
+The $\vec\theta$ and $\vec y$ are the endpoints of the diameter of this circle. and $\hat{ \vec\theta} \in \mathcal{R}^{C}$
+\end{lem}
+
+
+\section{PROPOSED UOT SCREENING}
+\label{sec:pro}
+
+\changeHK{This section proposes a dynamic screening method designated to the UOT problem. For this purpose, we first derive the dual formulation of the Lasso-like formulated UOT problem in Eq.(\ref{eq:uot}). Concrete proofs of lemma and theorems are provided in the supplementary file.}
+
+
+\subsection{Dual formulation of UOT}
+
+\changeHK{The UOT problem has the form of
+$h(\mat{X} \vec{t}) = \frac{1}{2}\|\mat{X} \vec{t}-\vec{y}\|_2^2$ and $g(\vec{\theta})=\lambda \vec{c}^{T}\vec{t}$, where $t_i \geq 0$ for $i \in [mn]$ in Eq.(\ref{eq:lassolike}). Also, $\vec{\theta} = [\vec{u}^T,\vec{v}^T]^T \in \mathbb{R}^{m+n}$, where $\vec{u}\in\R^{m}$ and $\vec{v}\in\R^{n}$}. We obtain the dual form by {\bf Theorem \ref{Thm:FRD}}:
+\begin{lem}[Dual form of UOT problem]
+For UOT problem in Eq.(\ref{eq:uot}), we obtain the following dual problem:
+\begin{equation}
+\begin{split}
+-h^*(-\vec{\theta}) - g^*(\mat{X}^T\vec{\theta})& = -\frac{1}{2}\|\vec{\theta}\|_2^2-\vec{y}^T\vec{\theta} \\
+\text{s.t.} \quad \quad \vec{x}_p^T\vec{\theta} -\lambda c_p &\leq 0, \quad \forall p \in [mn],
+\end{split}
+\label{eq:uotdual}
+\end{equation}
+where $\vec{x}_p $ corresponds to the $p$-th column of $\mat{X}$.
+\end{lem}
+The strongly concave coefficient $L$ for the dual function $d$ is 1. This inequality in Eq.(\ref{eq:uotdual}) specifies a dual variable feasible area, denoted as $\mathcal{R}^{D}$, and the optimal \changeXS{dual solution $\hat{\vec{\theta}} \in \mathcal{R}^{D}$ because of {\bf Theorem \ref{thm:circle}}.}\\
+\changeXS{The KKT condition of the UOT problem holds for the optimal primal and dual solutions $ \hat{\vec{t}}$ and $\hat{\vec{\theta}}$ that:}
+\begin{thm}[KKT condition] For the dual optimal solution $\hat{\vec{\theta}}$, we have the following relationship:
+ \begin{equation}
+\begin{split}
+\vec{x}_p^T\hat{\vec{\theta}} -\lambda c_p \left\{
+\begin{aligned}
+< 0 \quad& \Rightarrow \hat{t}_p = 0\\
+= 0 \quad& \Rightarrow \hat{t}_p \geq 0.
+\end{aligned}
+\right.
+ \end{split}
+ \label{eq:kkt}
+\end{equation}
+\end{thm}
+
+\subsection{Detailed Screening Method}
+
+{\bf Screening area construction:}
+Eq.(\ref{eq:kkt}) indicates a potential method to screen the primal variable $\vec{t}$. Since we do not know the \changeHK{optimal primal solution $\hat{\vec{t}}$ \note{(????not $\hat{\vec{\theta}}$????)} directly, we try to construct a screening area, denoted as $\mathcal{R}^{S}$, as small as possible that contains the $\hat{\vec{t}}$. In other words,} if
+\begin{equation*}
+\max_{\vec{t} \in \mathcal{R}^S} \vec{x}_p^T\vec{\theta} -\lambda c_p < 0.
+\end{equation*}
+then we assert that:
+\begin{equation}
+\vec{x}_p^T\hat{\vec{\theta}} -\lambda c_p < 0,
+\label{eq:kktineq}
+\end{equation}
+which means the corresponding $\hat{{t}}_p = 0$, and can be screened out. \changeHK{For this purpose, we focus on the special structure of $\vec{X}$ in the UOT problem, i.e., the $p$-th column of $\mat{X}$ has only two nonzero elements equal to 1}. Therefore, assuming $p=(I,J)$ where $I = p \mid n, J = p \mod n$, we rewrite Eq.(\ref{eq:kktineq}) as
+%
+\begin{equation}
+u_{I} + v_{J}-\lambda c_p < 0.
+\end{equation}
+
+If we have $\tilde{\vec{\theta}} \in \mathcal{R}^{D}$, knowing from {\bf Theorem \ref{thm:circle}}, we can construct the area $\mathcal{R}^{C}$ for the UOT problem:
+
+\changeHK{***********}
+
+
+If we obtain $\tilde{\vec{\theta}}$ in $\mathcal{R}^{D}$, combining $\mathcal{R}^{D}$ with $\mathcal{R}^{C}$ in {\bf Lemma \ref{lem:uotrc}}, we can use $\mathcal{R}^{C}\cap\mathcal{R}^{D}$ as the area $R^{S}$ in Eq.(\ref{eq:kktineq}). However, maximizing on the intersection of a hyper-ball and a polytope cannot be computed easily cause the $(n+m)$-polytope has $nm$ Facets, \note{(????)} which costs too much for a screening operation.\\
+The most direct method for dealing with the problem is to relax the polytope into a hyper-plane. Considering the specific structure of the $\mat X$ in the UOT problem, Our proposed method relaxes the polytope into two planes by combining the $nm$ dual constraints with a positive weight $t_p \geq 0$, If the constraint is relevant to the dual elements $I$ and $j$, which would influence the screening of $t_p$, we add it in the group $A$, and the rest constraints are added in the group $B$.
+
+\begin{thm}[Two Plane Screening for UOT]
+\label{Thm:AreaScreeningUOT}
+For every single primal variable $t_p$, let $A_p = \{ i \| 0\leq i<nm, i\mid n = I \vee i\mod n = J\}$, and $B_p = \{ i \| 0\leq i<nm, i \notin A_p\}$. Then, we construct a specific area $\mathcal{R}^{S}_{p}$ as presented below:
+ \begin{equation}
+\begin{split} 
+\mathcal{R}^S_{p} = \left\{\vec{\theta} \ \left|\!\left| \ 
+\begin{aligned}
+ &\sum_{l\in A_p}(\vec{\theta}^T\vec{x}_{l}{t_l} - \lambda {c}_l {t_l})\leq 0, \\
+ &\sum_{l\in B_p}(\vec{\theta}^T\vec{x}_{l}{t_l} - \lambda {c}_l {t_l})\leq 0, \\
+  &(\vec{\theta}-\tilde{\vec{\theta}})^T(\vec{\theta}-\vec{y})\leq 0 \ (\changeXS{\bf Lemma  \ref{lem:uotrc}})
+\end{aligned}
+\right.\right.
+\right\}.
+\end{split}
+\label{eq:divide}
+\end{equation}
+We have $\hat{\vec{t}} \in \mathcal{R}^{C}\cap\mathcal{R}^{D} \subset \mathcal{R}^{S}_{p}$ (A simple proof process might be required for the $\subset$ relationship in the Appendix).
+\end{thm}
+
+We divide the constraints into two groups $A_p$ and $B_p$ for every single $p$, Our two-planes area $\mathcal{R}^S_{IJ}$ is smaller than the relaxation in \citep{NEURIPS2021_7b5b23f4}. Benefiting from the structure of $\vec x_p$. As $\vec{x}_p^T\vec{\theta} = {u}_{I} + {v}_{J}$, these two dual elements are the optimization directions, and only $m+n$ constraints are directly connected with them, dividing the constraints in two groups by whether exists ${u}_{I}$, and ${v}_{J}$ can alleviate the huge relaxation influence of other secondary dual variables. This problem can be solved easily by the Lagrangian method in constant time, the computational process is in Appendix. A
+
+{\bf Projection method:}
+Before we start to screening with the screening area that is constructed by {\bf Lemma \ref{lem:uotrc}} and {\bf Theorem \ref{Thm:AreaScreeningUOT}}, we first have to find a dual variable $\tilde{\vec{\theta}}\in\mathcal{R}^{D}$. Although there exists a relationship between the primal variable and dual variable that $\vec{\theta} = \vec{y} - \mat{X}\vec{t}$, inevitably, we often get $\vec{\theta} \notin \mathcal{R}^{D}$. This requires us to project $\vec{\theta}$ onto $\mathcal{R}^{D}$.  Dynamic Screening gets a more accurate screening outcome because the optimization algorithms gradually provide $\vec t^{k} \Rightarrow \hat{\vec t}$, and also the dual variable $\vec \theta^{k} \Rightarrow \hat{\vec \theta}$. If $\vec{ \tilde{\theta}}\Rightarrow \hat{\vec \theta}$, the area $\mathcal{R}^{C}\cap\mathcal{R}^{D}$ would get smaller and has a better screening outcome. As the $\mathcal{R}^{D}$ is a polytope combined with $nm$ hyperplanes, the real projection is solved no matter by Linear programming or Dykstra's projection algorithm cost too much. In the Standard Lasso problem, the dual constraints in {Eq.(\ref{eq:uotdual})} is $\|\vec{x}_p \hat{\vec{\theta}}\|_1\leq \lambda$, $x_p$ is almost dense and irregular, one use a  simple shrinking method to obtain a $\tilde{\vec{\theta}} \in \mathcal{R}^{D}$:
+\changeHK{\cite{xxxxx}}: 
+\begin{equation*}
+\tilde{\vec{\theta}} = \frac{\vec\theta}{\max(1, \|\frac{\mat{X}^T\vec\theta}{\lambda}\|_{\infty})}
+\end{equation*}
+
+
+The Standard Lasso projection pushes the $\vec{\theta}$ far away from the optimum $\hat{\vec{\theta}}$, it suffers from the influence of small $\vec c_p$ in the UOT problem as
+$$\tilde{\vec{\theta}} = \frac{\vec\theta}{\max(1, \|\frac{\mat{X}^T\vec\theta}{\lambda \vec{c}^{T}}\|_{\infty})}$$
+It will degenerate when one of the costs is $c_p = 0$, and disable the screening process. Therefore, noting that, the UOT problem, only allows $t_p \geq 0$, and the $\vec{x}_p$ only consists of two non-zero elements, we can adapt a better and cheap projection method. The following theorem states this:
+\begin{thm}[UOT shifting projection]
+\label{Thm:UOT_ShiftProjection}
+For any $\vec{\theta} = [{\vec{u}}^T,{\vec{v}}^T]^T$, we compute the projection $\tilde{\vec{\theta}} = [\tilde{\vec{u}}^T,\tilde{\vec{v}}^T]^T \in \mathcal{R}^{D}$ as
+\begin{eqnarray}
+\tilde{{u}}_I &=& {{u}}_I - \max_{0\leq j < n} \frac{{{u}}_I +{{v}}_j - \lambda{c}_{In+j}}{2} \notag\\
+\tilde{{v}}_J &=& {{v}}_J - \max_{0 \leq i < m} \frac{{{u}}_i +{{v}}_J - \lambda{c}_{in+J}}{2}\notag\\
+\label{eq:uotproj}
+\end{eqnarray}
+\end{thm}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width = \linewidth]{pic/shifting}
+\caption{Shifting on a 2$\times$2 matrix}
+\end{center}
+\end{figure}
+
+\changeXS{We shift every single $u_I$, $v_J$ with half of the maximum differences in all of its constraints, this cheap projection method can get good accuracy with $O(knm)$ computational time. The proof process is in the Appendix}
+%
+
+
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width = 0.7\linewidth]{pic/divide}
+\caption{Selection of group $A_{IJ}$(red) and $B_{IJ}$(grey)}
+\end{center}
+\end{figure}
+
+\subsection{Screening Algorithms}
+
+ \begin{algorithm}
+ \caption{UOT Dynamic Screening Algorithm}
+ \begin{algorithmic}[h]
+ \label{Alg:UOTDynamicScreening}
+ \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+ \renewcommand{\algorithmicensure}{\textbf{Output:}}
+ \REQUIRE $\vec{t}_0,  \changeXS{\vec s \in R^{nm}, s_{p}=1, r}$
+ \ENSURE $\vec t^{k+1}$
+ \STATE \text{Choose a solver for the problem.}
+ \FOR {$k = 0 \text{ to } K-1$}
+ \IF{$k\mod r =0$}
+
+ \STATE $\text{Projection } \tilde{\vec{\theta}^{k}} = \operatorname{Proj}(\vec{t}^k) \changeXS{\quad \bf Theorem \ref{Thm:UOT_ShiftProjection}}$  
+ \FOR {$p = 0 \text{ to } mn -1$}
+  \STATE  \changeXS{$\mathcal{R}^{S} \leftarrow \mathcal{R}_{p}^S{(\tilde{\vec{\theta}^{k}},\vec{t}^k)}$}
+   \STATE  \changeXS{$\vec s \leftarrow {s_{p} = 0 \text{ if } \max_{\vec{\theta} \in \mathcal{R}^S} {\vec x_{p}}^T\vec{\theta}^{k} <\lambda c_{p} }$ \bf Theorem \ref{Thm:AreaScreeningUOT}}
+  \ENDFOR
+   \FOR  { \changeXS{$p \in \{p\|s_{p}=0\}$}}
+  \STATE $\text{Freeze     }\vec{t}^k_p $
+  \ENDFOR
+   \ENDIF
+  \STATE $\vec{t}^{k+1} = \operatorname{update}(\vec{t}^k)$
+ \ENDFOR
+   \RETURN $\vec{t}^{K+1} $
+ \end{algorithmic} 
+ \end{algorithm}
+\note{(Insert equation numbers in appropriate lines in {\bf Algorithm \ref{Alg:UOTDynamicScreening)}}}
+
+It should be emphasized that the proposed screening method is {\it independent} of the optimization solver that you choose. We give the specific algorithm for $L_2$ UOT problem to show the whole optimization process as in {\bf Algorithm \ref{Alg:UOTDynamicScreening}}. The $\operatorname{update}(\vec{t})$ operator in the algorithm indicates the updating process for $\vec{t}$ according to the adopted optimizer. \changeXS{$\vec s$ is the screening mask vector for the transport vector $\vec t$, when $s_p = 0$, it means the $t_p$ should be screened out}.\\
+
+\subsection{Computational Cost Analysis}
+\changeXS{Our proposed method needs to construct different plans for every single primal element $p$, however, thanks to the special structure of the $\mat X$, For every single $t_p$, the data required for maximizing (by Lagrange method in Appendix) can be summarized as some specific sum, which can be computed together and reuse for other elements have the same $t \mod m $ or $t \mid m$. It helps us to preserve the whole optimization complexity to $O(kmn)$, $k$ is a constant.}
+\note{XXXXXX}
+
+
+\section{EXPERIMENTS}
+\label{sec:exp}
+In this section, \changeXS{we organize some experiments on randomly generated gaussian distributions and MNIST dataset. We proved the projection effectiveness of our method by measuring the distance between the dual variable and the projected point. We compared our proposed Two-plane Dynamic Screening with some state-of-the-art methods. We also applied our Screening method on some famous $l_2$ norm UOT problem solvers like FISTA, BFGS, Lasso(celer), Multiplicative update, and Regularization path to test its speed-up ratio.} 
+\subsection{Projection Method}
+To prove the effectiveness of our projection method compared with the traditional projection method in the Lasso problem, we compared the projection distance and screening ratio with randomly generated Gaussian measures by two projection methods. We set the $\lambda = \frac{\|\mathbf{X}^Ty\|}{100}$ and test for 10 different pairs. We choose the FISTA for solving the $L_2$ penalized UOT problems. \changeXS{Because the standard Lasso projection method would degenerated when $c_p=0$, we add a small constant $\epsilon=0.01$ on the cost matrix }Our projection method has only moved the dual point by a very small order of magnitude. It ensures that the points are kept at a smaller distance from the optimal solution and cause better screening effects.
+	\begin{figure}[h]
+	\begin{center}	
+	\includegraphics[width = \linewidth]{pic/projdis}
+	\caption{Distance of different projection method}
+	\end{center}	
+	\end{figure}
+	\begin{figure}[htbp]
+	\begin{center}	
+	\includegraphics[width = \linewidth]{pic/sparse_proj}
+	\caption{Screening ratio of different projection method}
+	\end{center}	
+	\end{figure}
+
+\subsection{Divide Method}
+We compared the screening ratio with three different methods, including our Divide method, Dynamic Sasvi method, and Gap method. Every method would use our projection method to get a better outcome, which also makes sure the difference in performance is only in the construction of the feasible domain. 
+	\begin{figure}[h]
+	\begin{center}	
+	\includegraphics[width = \linewidth]{pic/screening_divide_ratio_long}
+	\caption{Screening ratio of dividing method}
+	\end{center}	
+	\end{figure}
+
+\subsection{Best Divide Method}
+We compared the screening ratio with three different methods, including our Divide method, the Dynamic Sasvi method, and a random divide method. 
+	\begin{figure}[h]
+	\begin{center}	
+	\includegraphics[width = \linewidth]{pic/divide}
+	\caption{Comparing of our separation method with random separation method}
+	\end{center}	
+	\end{figure}
+
+\subsection{Speed up Ratio}
+
+We choose the FISTA method, Newton method, and Language method to test the screening ratio. 
+	\begin{figure}[h]
+	\begin{center}	
+	\includegraphics[width = \linewidth]{pic/divide}
+	\caption{speed up ratio for different solver}
+	\end{center}	
+	\end{figure}
+
+
+
+\section{CONCLUSION}
+Our algorithm is great, we are going to apply the method onto Sinkhorn
+
+
+\clearpage
+\bibliographystyle{apalike}
+\bibliography{ref}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% SUPPLEMENT (OPTIONAL) %%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+\appendix
+
+\thispagestyle{empty}
+
+
+% For one-column format, uncomment the following:
+\onecolumn \makesupplementtitle
+% For two-column format, uncomment the following:
+%\twocolumn[ \makesupplementtitle ]
+
+\section{PROOFS}
+\subsection{Proof of Theorem \ref{Thm:UOT_ShiftProjection}}
+For any $p \in {0,1,...,nm -1}$ we assume that $p = (I,J)$, then we can compute that:
+ \begin{equation}
+\begin{split} 
+\vec{x}_p^T\tilde{\vec{\theta}} &= \tilde{\vec{u}}_{I} + \tilde{\vec{v}}_J \\
+				    &= {\vec{u}}_{I} + {\vec{v}}_J - \max_{0\geq j\geq n} \frac{{\vec{u}}_I +{\vec{v}}_j - \lambda \vec{c}_{p}}{2} - \max_{0 \geq i \geq m} \frac{{\vec{u}}_i +{\vec{v}}_J - \lambda \vec{c}_{p}}{2}\\
+				    &= \frac{{\vec{u}}_{I} + {\vec{v}}_J}{2} - \max_{0\geq j\geq n} \frac{{\vec{v}}_j}{2} - \max_{0 \geq i \geq m} \frac{{\vec{u}}_i }{2} + \lambda \vec{c}_{p}\\
+				    &= \frac{1}{2}\vec{x}_p^T{\vec{\theta}} - \max_{0\geq j\geq n} \frac{{\vec{v}}_j}{2} - \max_{0 \geq i \geq m} \frac{{\vec{u}}_i }{2} +\lambda \vec{c}_{p} \\
+				    &\leq \lambda \vec{c}_{p} 
+ \end{split} 
+\end{equation}
+For $\forall p$, we have $\tilde{\vec{\theta}} \in \mathcal{R}^{D}$
+
+\subsection{Proof of Theorem \ref{Thm:AreaScreeningUOT}}
+We Generalize the problem as 
+\begin{equation}
+\max_{\vec{\theta} \in \mathcal{R}^{S}_{I}}{ \vec{\theta}_{I_1} +\vec{\theta}_{I_2} }
+\end{equation}
+Considering the center of the circle as $\vec{\theta}^o$, we define $\vec{\theta} = \vec{\theta}^{o} + q$, as ${ \vec{\theta}^{o}_{I_1} +\vec{\theta}^{o}_{I_2} }$ is a constant, the problem is equal to $\min_{\vec{\theta} \in \mathcal{R}^{S}_{I}}{- ( \vec{q}_{I_1} +\vec{q}_{I_2} )}$, we compute the Lagrangrian function of later:
+\begin{equation}
+\min_{\vec{q}} \max_{\eta,\mu,\nu \geq 0} L(\vec{q},\eta,\mu,\nu) =\min_{\vec{q}}\max_{\eta,\mu,\nu\geq0} - {\vec{q}_{I_1} - \vec{q}_{I_2} + \eta( \vec{q}^T\vec{q} - r^2)+\mu( a^T\vec{q} - e_a ) + \nu( b^T\vec{q} - e_b )}
+\end{equation}
+
+ \begin{equation}
+\begin{split} 
+\frac{\partial L}{\partial \vec{q}_i} = \left\{
+\begin{aligned}
+-1 + 2\eta \vec{q}_i +\mu a_i + \nu b_i \quad& i = I_1, I_2\\
+ 2\eta \vec{q}_i +\mu a_i + \nu b_i \quad& i \neq I_1, I_2
+\end{aligned}
+\right.
+ \end{split}
+\label{eq:lang1}
+\end{equation}
+
+ \begin{equation}
+\begin{split} 
+{\vec{q}_i}^{*} = \left\{
+\begin{aligned}
+\frac{1- \mu a_i - \nu b_i}{2\eta} \quad& i = I_1, I_2\\
+-\frac{\mu a_i + \nu b_i}{2\eta} \quad& i \neq I_1, I_2
+\end{aligned}
+\right.
+ \end{split}
+\label{eq:lang1}
+\end{equation}
+
+We can get the Lagrangian dual problem:
+\begin{equation}
+\max_{\eta,\mu,\nu\geq0} L(\eta,\mu,\nu) = \max_{\eta,\mu,\nu\geq0} \frac{\mu a_{I_1} + \nu b_{I_1}-1}{2\eta} +\frac{\mu a_{I_2} + \nu b_{I_2}-1}{2\eta}+ \eta({\vec{q}^{*}}^T\vec{q}^{*}-r^2 )+\mu( a^T\vec{q}^{*} - e_a ) + \nu( b^T\vec{q}^{*} - e_b )
+\end{equation}
+From the KKT optimum condition, we know that if
+\begin{equation}
+\begin{split} 
+ \eta ({\vec{q}^{*}}^T\vec{q}^{*} -r^2) &= 0\\
+ \mu( a^T\vec{q}^{*} - e_a)&= 0\\
+ \nu(b^T\vec{q}^{*} - e_b) &=0
+ \end{split}
+\end{equation}
+We set $\eta^{*}, \mu^{*}, \nu^{*}$ as the solution of the equations, which is also the solution of the dual problem. Firstly, we assume that $\eta^{*}, \mu^{*}, \nu^{*} \neq 0$, then the solution is equal to compute the following equations:
+
+\begin{equation}
+\begin{split} 
+ & (1-\mu a_{I_1}-\nu b_{I_1})^2 + (1-\mu a_{I_2}-\nu b_{I_2})^2 + \sum^{m+n}_{i\neq I_1,I_2}(a_i\mu+b_i\nu)^2 - 4\eta^2 r^2 = 0 \\
+ & a_{I_1}-\mu a_{I_1}^2-\nu b_{I_1}a_{I_1} + a_{I_2}-\mu a_{I_2}^2-\nu b_{I_2}a_{I_2} - \sum^{m}_{i\neq I_1,I_2}(a_i^2\mu +b_i a_i\nu) - 2\eta {e_a} = 0 \\
+ & b_{I_1}-\nu b_{I_1}^2-\mu b_{I_1}a_{I_1} + b_{I_2}-\nu b_{I_2}^2-\mu b_{I_2}a_{I_2} - \sum^{m}_{i\neq I_1,I_2}(b_i^2\nu +b_i a_i\mu) - 2\eta {e_b} = 0 
+ \end{split}
+\end{equation}
+Rearranged as:
+\begin{equation}
+\begin{split} 
+ & 2-2\mu (a_{I_1}+a_{I_2})-2\nu(b_{I_1}+b_{I_2})+ \|a\|^2\mu^2+\|b\|^2\nu^2+2\mu\nu a^Tb - 4\eta^2 r^2 = 0 \\
+ & (a_{I_1}+ a_{I_1}) - \|a\|^2\mu - a^Tb\nu - 2\eta {e_a} = 0 \\
+ & (b_{I_1}+ b_{I_2}) - \|b\|^2\nu - a^Tb \mu - 2\eta {e_b} = 0 
+ \end{split}
+\end{equation}
+
+we have 
+\begin{equation}
+\begin{split} 
+\mu &= \frac{2( e_ba^Tb - e_a\|b\|^2 )\eta + (a_{I_1}+a_{I_2}) \|b\|^2 - (b_{I_1} + b_{I_2}) (a^Tb)}{ \|a\|^2 \|b\|^2 -a^Tb}\\
+\nu &=\frac{2( e_aa^Tb - e_b\|a\|^2 )\eta + (b_{I_1}+b_{I_2}) \|a\|^2 - (a_{I_1} + a_{I_2}) (a^Tb)}{ \|a\|^2 \|b\|^2 -a^Tb}\\
+ \end{split}
+\end{equation}
+set it as:
+\begin{equation}
+\begin{split} 
+\mu &= s_1 \eta + s_2\\ 
+\nu &= u_1 \eta + u_2
+ \end{split}
+ \label{eq:final}
+\end{equation}
+
+Then we can solve the $\eta$ as a quadratic equation:
+\begin{equation}
+\begin{split} 
+0&=a\eta^2+b\eta+c\\
+ a&= 4r^2 - s_1^2\|a\|^2 - u_1^2\|b\|^2 -2s_1 u_1a^Tb\\
+b&=2(a_{I_1} + a_{I_2})s_1 +2(b_{I_1} + b_{I_2})u_1 - 2s_1s_2 \|a\|^2 - 2u_1u_2\|b\|^2 - 2(s_1u_2+s_2u_1)a^Tb \\
+ c&=2(a_{I_1} + a_{I_2})s_2 +2(b_{I_1} + b_{I_2})u_2 -s_2^2\|a\|_1 -u_2^2\|b\|_1 - 2s_2u_2a^Tb -2
+ \end{split}
+\end{equation}
+
+Then we can put it back into \ref{eq:final} and get $\mu, \nu$.
+
+If the solution satisfied the constraints $\eta^{*}, \mu^{*}, \nu^{*} > 0$, then it is the solution.
+However, if one of the dual variables is less than 0, the problem would degenerate into a simpler question. 
+
+If only $\eta^{*}$ is larger than 0, 
+ $\min_{\vec{\theta} \in \mathcal{R}^{S}_{I}}{- ( \vec{q}_{I_1} +\vec{q}_{I_2} )} = -\sqrt{2}r$
+
+If only $\mu^{*}$ or $\nu^{*}$ is less than 0, we are optimizing on a sphere cap, the solution can be found in \cite[Appendix B]{NEURIPS2021_7b5b23f4}
+
+if only $\eta^{*} \leq 0$:
+As the sphere is inactivated, the problem gets maximum at every point of the intersection of two planes.
+\begin{equation}
+\min_{\vec{q}} \max_{\mu,\nu \geq 0} L(\vec{q},\mu,\nu) =\min_{\vec{q}}\max_{\mu,\nu\geq0} - {\vec{q}_{I_1} - \vec{q}_{I_2} +\mu( a^T\vec{q} - e_a ) + \nu( b^T\vec{q} - e_b )}
+\end{equation}
+To have a solution, the equations satisfied
+ \begin{equation}
+\begin{split} 
+\frac{\partial L}{\partial q} = \left\{
+\begin{aligned}
+-1+\mu a_i + \nu b_i =0 \quad& i = I_1, I_2\\
+-\mu a_i -\nu b_i \quad =0& i \neq I_1, I_2
+\end{aligned}
+\right.
+ \end{split}
+\end{equation}
+
+As the equation satisfied, we can just set $\vec{q}_i^{*} = 0, i \neq I_1,I_2$, then we compute the  
+ \begin{equation}
+ \min_{\vec{\theta} \in \mathcal{R}^{S}_{I}}{- ( \vec{q}_{I_1} +\vec{q}_{I_2} )} = \frac{a_{I_2}e_b - b_{I_2}e_a -a_{I_1}e_b +b_{I_1}e_a}{a_{I_1}b_{I_2}-a_{I_2}b_{I_1}}
+\end{equation}
+
+
+\end{document}
+
+
+
