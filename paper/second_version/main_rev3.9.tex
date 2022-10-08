@@ -130,7 +130,7 @@ The paper is organized as follows. {\bf Section \ref{sec:pre}} presents prelimin
 \section{PRELIMINARIES}
 \label{sec:pre}
 
-$\mathbb{R}^n$ denotes $n$-dimensional Euclidean space, and $\mathbb{R}^n_+$ denotes the set of vectors in which all elements are non-negative. $\mathbb{R}^{m \times n}$ represents the set of $m \times n$ matrices. Also, $\mathbb{R}^{m \times n}_+$ stands for the set of $m \times n$ matrices in which all elements are non-negative. We present vectors as bold lower-case letters $\vec{a},\vec{b},\vec{c},\dots$ and matrices as bold-face upper-case letters $\mat{A},\mat{B},\mat{C},\dots$. The $i$-th element of $\vec{a}$ and the element at the $(i,j)$ position of $\mat{A}$ are represented respectively as $a_i$ and \changeHK{${A}_{i,j}$. The $i$-th column of $\mat{A}$ is represented as $\vec{a}_i$.} In addition, $\one_n \in \mathbb{R}^n$ is the $n$-dimensional vector in which all the elements are one. For $\vec{x}$ and $\vec{y}$ of the same size, $\langle \vec{x},\vec{y} \rangle = \vec{x}^T\vec{y}$ is the Euclidean dot-product between vectors. For two matrices of the same size $\mat{A}$ and $\mat{B}$, $\langle \mat{A},\mat{B}\rangle={\rm tr}(\mat{A}^T\mat{B})$ is the Frobenius dot-product. We use $\|\vec{a}\|_2$ and $\|\vec{a}\|_1$ to represent the \changeXS{$\ell_2$-norm} and \changeXS{$\ell_1$-norm} of $\vec{a}$, respectively. 
+$\mathbb{R}^n$ denotes $n$-dimensional Euclidean space, and $\mathbb{R}^n_+$ denotes the set of vectors in which all elements are non-negative. $\mathbb{R}^{m \times n}$ represents the set of $m \times n$ matrices. Also, $\mathbb{R}^{m \times n}_+$ stands for the set of $m \times n$ matrices in which all elements are non-negative. We present vectors as bold lower-case letters $\vec{a},\vec{b},\vec{c},\dots$ and matrices as bold-face upper-case letters $\mat{A},\mat{B},\mat{C},\dots$. The $i$-th element of $\vec{a}$ and the element at the $(i,j)$ position of $\mat{A}$ are represented respectively as $a_i$ and ${A}_{i,j}$. The $i$-th column of $\mat{A}$ is represented as $\vec{a}_i$. In addition, $\one_n \in \mathbb{R}^n$ is the $n$-dimensional vector in which all the elements are one. For $\vec{x}$ and $\vec{y}$ of the same size, $\langle \vec{x},\vec{y} \rangle = \vec{x}^T\vec{y}$ is the Euclidean dot-product between vectors. For two matrices of the same size $\mat{A}$ and $\mat{B}$, $\langle \mat{A},\mat{B}\rangle={\rm tr}(\mat{A}^T\mat{B})$ is the Frobenius dot-product. We use $\|\vec{a}\|_2$ and $\|\vec{a}\|_1$ to represent the \changeXS{$\ell_2$-norm} and \changeXS{$\ell_1$-norm} of $\vec{a}$, respectively. 
 %For a vector $\vec{x}$, the $i$-th element of $\exp (\vec{x})$ and $\log (\vec{x})$ respectively represent $\exp (\vec{x}_i)$ and $\log (\vec{x}_i)$. $\mathrm{KL}(\vec{x},\vec{y})$ stands for the KL divergence between $\vec{x} \in \mathbb{R}_+^n$ and $\vec{y} \in \mathbb{R}_+^n$, which is defined as $\sum_i \vec{x}_i \log {(\vec{x}_i/\vec{y}_i)} - \vec{x}_i + \vec{y}_i$. 
 $D_\phi$ is the Bregman divergence with the strictly convex and differentiable function $\phi$, i.e., $D_\phi(\vec{a},\vec{b})=\sum_{i} d_\phi(a_i, b_i)=\sum_i [\phi(a_i) - \phi(b_i) - \phi'(a_i)(a_i -b_i)]$. In addition, we suggests a vectorization for $\mat{A} \in \mathbb{R}^{m \times n}$ as a lowercase letters $\vec{a} \in \mathbb{R}^{mn}$ and $\vec{a}=\text{vec}(\mat{A})=[\mat{A}_{1,1}, \mat{A}_{1,2}, \cdots, \mat{A}_{m,n-1}, \mat{A}_{m,n}]$.
  
@@ -207,10 +207,10 @@ If \changeXS{$h$} and $g$ are proper convex functions on $\mathbb{R}^{m+n}$ and 
 \end{equation}
 \end{thm}
 
-Because the primal function \changeHK{$h$} is always convex, the dual function \changeHK{$h^*$} is concave. Assuming \changeHK{$h^*$} is an $L$-strongly concave problem, we can design an area for any feasible $\tilde{\vec{\theta}}$ by the strongly concave property:
+Because the primal function $h$ is always convex, the dual function $h^*$ is concave. Assuming $h^*$ is an $L$-strongly concave problem, we can design an area for any feasible $\tilde{\vec{\theta}}$ by the strongly concave property:
 
 \begin{thm}[$L$-strongly concave {\citep[Theorem 5]{Yamada_NIPS_2021}}]
-\label{thm:circle}
+\label{Thm:circle}
 Considering problem in Eq.(\ref{eq:lassolike}), if function $h$ and $g$ are both convex, for $\forall \ \tilde{\vec{\theta}}$ and satisfied the constraints on the dual problem, we have the following area constructed by its L-strongly concave property:
 $$
 \begin{aligned}
@@ -219,19 +219,18 @@ $$
 $$
 \end{thm}
 
-%{\bf Theorem \ref{thm:circle}} yield the following circle constraint.
+%{\bf Theorem \ref{Thm:circle}} yield the following circle constraint.
 \begin{thm}[Circle constraint for Lasso-like problem {\citep[Theorem 8]{Yamada_NIPS_2021}}]
 \label{Thm:CC}
-Consider the Lasso-like problem and Fenchel-Rockafellar Duality by Eq.(\ref{Eq:FRD}). We assume that $\tilde{\vec{\theta}}$ is inside the domain of the dual problem. Then, $\mathcal{R}$ in {\bf Theorem \ref{thm:circle}} is equivalent to the following circle constraint $\mathcal{R}^{C}$:
+Consider the Lasso-like problem and Fenchel-Rockafellar Duality by Eq.(\ref{Eq:FRD}). We assume that $\tilde{\vec{\theta}}$ is inside the domain of the dual problem. Then, $\mathcal{R}$ in {\bf Theorem \ref{Thm:circle}} is equivalent to the following circle constraint $\mathcal{R}^{C}$:
 \begin{equation}
 \mathcal{R}^{C} :=\{\vec\theta\ |\ (\vec{\theta}-\tilde{\vec{\theta}})^T(\vec{\theta}-\vec{y})\leq 0\}.
 \label{eq:uotcircle}
 \end{equation}
 $\vec\theta$ and $\vec y$ are the endpoints of the diameter of this circle, and $\hat{ \vec\theta} \in \mathcal{R}^{C}$.
 \end{thm}
-\changeXS{As the dual optimal solution $\hat{\vec{\theta}}$ satisfies the {\bf Theorem \ref{thm:circle}} as a corollary of $L$-strongly concave property. The area $\mathcal{R}^{C}$ is not empty. }
+\changeXS{As the dual optimal solution $\hat{\vec{\theta}}$ satisfies the {\bf Theorem \ref{Thm:circle}} as a corollary of $L$-strongly concave property. The area $\mathcal{R}^{C}$ is not empty. }
 
-\note{??We know that the optimal solution $\hat{\vec{\theta}}$ for the dual problem satisfied the inequality, so the set is not empty.??}
 
 
 \section{PROPOSED UOT SCREENING}
@@ -258,10 +257,11 @@ where $\vec{x}_p $ corresponds to the $p$-th column of $\mat{X}$.
 The strongly concave coefficient $L$ for the dual function $f$ is 1. 
 
 {\bf Dual feasible region $\mathcal{R}^D$:} 
-The constraint in Eq.(\ref{eq:uotdual}) specifies a dual variable feasible area, denoted as $\mathcal{R}^{D}$, and the optimal dual solution $\hat{\vec{\theta}} \in \mathcal{R}^{D}$ because of {\bf Theorem \ref{thm:circle}}.
+The constraint in Eq.(\ref{eq:uotdual}) specifies a dual variable feasible area, denoted as $\mathcal{R}^{D}$, and the optimal dual solution $\hat{\vec{\theta}} \in \mathcal{R}^{D}$ because of {\bf Theorem \ref{Thm:circle}}.
 
-The KKT condition of the UOT problem holds for the optimal primal and dual solutions $ \hat{\vec{t}}$ and $\hat{\vec{\theta}}$ that:
-\begin{thm}[KKT condition] For the primal optimal solution $\hat{\vec{t}}$ and the dual optimal solution $\hat{\vec{\theta}}$, we have the following relationship:
+\changeXS{According to the the KKT condition of the Fenchel-Rockafellar Duality in {\bf Theorem \ref{Thm:FRD}}, there is a connection between the optimal primal and dual solutions $ \hat{\vec{t}}$ and $\hat{\vec{\theta}}$ that:}
+\begin{thm}\changeXS{From the }KKT condition] For the primal optimal solution $\hat{\vec{t}}$ and the dual optimal solution $\hat{\vec{\theta}}$, we have the following relationship:
+\label{Thm:KKT}
  \begin{equation}
 \begin{split}
 \vec{x}_p^T\hat{\vec{\theta}} -\lambda c_p \left\{
@@ -274,8 +274,7 @@ The KKT condition of the UOT problem holds for the optimal primal and dual solut
  \label{eq:kkt}
 \end{equation}
 \end{thm}
-
-Eq.(\ref{eq:kkt}) indicates a potential method to screen the primal variable $\vec{t}$. However, since we do not know the optimal dual solution $\hat{\vec{\theta}}$ directly, this paper seeks a safe screening region for sceening, denoted as $\mathcal{R}^{S}$, as small as possible that contains the $\hat{\vec{t}}$. In other words, if
+\changeXS{The proof of {\bf Theorem \ref{Thm:KKT}} is given in the Appendix.} Eq.(\ref{eq:kkt}) indicates a potential method to screen the primal variable $\vec{t}$. However, since we do not know the optimal dual solution $\hat{\vec{\theta}}$ directly, this paper seeks a safe screening region for sceening, denoted as $\mathcal{R}^{S}$, as small as possible that contains the $\hat{\vec{t}}$. In other words, if
 \begin{equation}
 \label{eq:kktineq}
 \max_{\vec{\theta} \in \mathcal{R}^S}\quad  \vec{x}_p^T\vec{\theta} -\lambda c_p < 0.
@@ -286,31 +285,31 @@ $\vec{x}_p^T\hat{\vec{\theta}} -\lambda c_p < 0$,
 %\end{equation}
 which means the corresponding $\hat{{t}}_p = 0$, and can be screened out. 
 
-For this purpose, we focus on the special structure of $\mat{X}$ in the UOT problem, i.e., the $p$-th column of $\mat{X}$ has only two nonzero elements equal to 1. Defining $(u,v)=(p \mid n,v= p \mod n)$, we rewrite $\vec{x}_p^T\hat{\vec{\theta}} -\lambda c_p < 0$ as
+For this purpose, we focus on the special structure of $\mat{X}$ in the UOT problem, i.e., the $p$-th column of $\mat{X}$ has only two nonzero elements equal to 1. Defining  \changeXS{$\vec{\theta} = [{\vec{\alpha}}^T,{\vec{\beta}}^T]^T$}, and $(u,v)=(p \mid n,v= p \mod n)$, we rewrite $\vec{x}_p^T\hat{\vec{\theta}} -\lambda c_p < 0$ as
 %
 \begin{equation}
 \alpha_{u} + \beta_{v}-\lambda c_p < 0.
 \end{equation}
 
-If we obtain $\tilde{\vec{\theta}}$ in $\mathcal{R}^{D}$, combining $\mathcal{R}^{D}$ with $\mathcal{R}^{C}$ in {\bf Theorem \ref{Thm:CC}}, we can use $\mathcal{R}^{C}\cap\mathcal{R}^{D}$ as the area $\mathcal{R}^{S}$ in Eq.(\ref{eq:kktineq}). The problems difficulties are (i) $\mathcal{R}^{D}$ is hard to calculate, and (ii) we need $\tilde{\vec{\theta}}$ is inside $\mathcal{R}^{D}$. We address two issues below:
+\changeXS{The $nm$ inequalities can be reorgnized as a  $m \times n$ matrix like Fig.~\ref{Fig:structure}, every elements of the matrix is an inequality} If we obtain $\tilde{\vec{\theta}}$ in $\mathcal{R}^{D}$, combining $\mathcal{R}^{D}$ with $\mathcal{R}^{C}$ in {\bf Theorem \ref{Thm:CC}}, we can use $\mathcal{R}^{C}\cap\mathcal{R}^{D}$ as the area $\mathcal{R}^{S}$ in Eq.(\ref{eq:kktineq}). The problems' difficulties are (i) \changeXS{maximizing on the $\mathcal{R}^{D}$ is time consuming}, and (ii) we need a $\tilde{\vec{\theta}} \in \mathcal{R}^{D}$ first to construct the $\mathcal{R^{C}}$. We address two issues below:
 
 {\bf Relaxed feasible region $\mathcal{R}^D$ and safe screening region $\mathcal{R}^S$:} 
-However, maximizing on the intersection of a hyper-ball and a polytope cannot be computed easily cause the $(n+m)$-polytope has $nm$ Facets, \note{(????)} which costs too much for a screening operation. 
+\changeXS{As $\mathcal{R}^D$ is a $(n+m)$-polytope with $nm$ Facets, it is time-consuming to maximize one time on the intersection of a hyper-ball and a polytope with simplex or Lagrange method not that than for every primal element $t_p$}
 
-The most direct method for dealing with the problem is to {\it relax} the polytope constraint into a hyper-plane constraint. Thus, considering the specific structure of the $\mat X$ in the UOT problem, our proposed method relaxes the polytope into two planes by combining the $nm$ dual constraints with a positive weight $t_p \geq 0$, If the constraint is relevant to the dual elements $u$ and $v$, which would influence the screening of $t_p$, we add it in the group $A$, and the rest constraints are added in the group $B$. 
+The most direct method for dealing with the problem is to {\it relax} the polytope constraint into a hyper-plane constraint. Thus, considering the specific structure of the $\mat X$ in the UOT problem, our proposed method relaxes the polytope into two planes by combining the $nm$ dual constraints with a positive weight $t_p \geq 0$, \changeXS{not like \citep{7469344}, we can design 2 specific planes for every single element in the UOT problem and maximizing on them without adding extra computational burden.} If the constraint is relevant to the dual elements \changeXS{$\alpha_u$ and $\beta_v$}, which would largely influence the screening of $t_p$, we add it to the group \changeXS{1}, and the rest of constraints are added to the group \changeXS{2}. 
 %
-More concretely, we divide the polytope constraints into two groups $\changeHK{I_p}$ and $\changeXS{{I}^{C}_p}$ for every $p$, Our two-planes area $\mathcal{R}^S_{p}$ is smaller than the relaxation in \citep{Yamada_NIPS_2021}. Benefiting from the structure of $\vec{x}_p$ and $\vec{x}_p^T\vec{\theta} = {\alpha}_{v} + {\beta}_{v}$, these two dual elements are the optimization directions \note{(???)}, and only $m+n$ constraints are directly connected with them. Dividing the constraints in two groups by whether exists $\alpha_{u}$ and ${\beta}_{v}$ can \note{????alleviate the huge relaxation influence of other secondary dual variables???}. 
+More concretely, we divide the polytope constraints into two groups $I_p$ and $\changeXS{{I}^{C}_p}$ for every $p$, two-planes area are $\mathcal{R}^S_{p}$ is smaller than the relaxation in \citep{Yamada_NIPS_2021}, Moreover, benefiting from the structure of $\vec{x}_p^T\vec{\theta} = {\alpha}_{v} + {\beta}_{v}$, \changeXS{we can put $m+n$ constraints that are directly connected with the optimization direction together, to alleviate the relaxation influence caused by the secondary dual variables.}
 
-\begin{thm}[Two-plane safe screening region for UOT]
+\begin{thm}[\changeXS{Cruciform} Two-plane safe screening region for UOT]
 \label{Thm:AreaScreeningUOT}
-For every single primal variable $t_p$, let $\changeHK{I_p} = \{ i \ | \  0\leq i<nm, \changeHK{u = i\mid n \vee v = i\mod n}\}$, and $\changeXS{{I}^{C}_p} = \{ i \ | \  0\leq i<nm, i \notin \changeHK{I_p}\}$. Then, we construct a specific area $\mathcal{R}^{S}_{p}$ as presented below:
+For every \changeXS{primal variable $\vec t$, $t_l \geq  0$, $l \in [mn]$ }, let $I_p = \{ i \ | \  0\leq i<nm, u = i\mid n \vee v = i\mod n\}$, and $\changeXS{{I}^{C}_p} = \{ i \ | \  0\leq i<nm, i \notin I_p\}$. Then, we construct a specific area $\mathcal{R}^{S}_{p}$ as presented below:
 \changeXS{
 \begin{equation}
 \label{Eq:FinalRS}
 \begin{split} 
 \mathcal{R}^S_{p}(\vec{\theta}, \vec{t}):= \left\{\vec{\theta} \ \left|\ 
 \begin{aligned}
- &\sum_{l\in \changeHK{I_p}}(\vec{x}_{l}^{T}\vec{\theta} - \lambda {c}_l)t_l\leq 0, \\
+ &\sum_{l\in I_p}(\vec{x}_{l}^{T}\vec{\theta} - \lambda {c}_l)t_l\leq 0, \\
  &\sum_{l\in \changeXS{{I}^{C}_p}}(\vec{x}_{l} ^{T}\vec{\theta}- \lambda {c}_l)t_l\leq 0, \\
   &(\vec{\theta}-\tilde{\vec{\theta}})^T(\vec{\theta}-\vec{y})\leq 0
 \end{aligned}
@@ -322,20 +321,30 @@ For every single primal variable $t_p$, let $\changeHK{I_p} = \{ i \ | \  0\leq 
 
 \end{thm}
 
-Consequently, we have $\hat{\vec{t}} \note{\ (not\ \hat{\vec{\theta}}????)} \in \mathcal{R}^{C}\cap\mathcal{R}^{D} \subset \mathcal{R}^{S}_{p}$ \note{(A simple proof process might be required for the $\subset$ relationship in the supplementary material)}.
-We designate this as {\it two-plane screening} in this paper. This problem can be solved easily by the Lagrangian method in constant time. Its computational process is detailed in supplementary material. A.
+Consequently, we have $\hat{\vec{\theta}}  \in \mathcal{R}^{C}\cap\mathcal{R}^{D} \subset \mathcal{R}^{S}_{p}$ \changeXS{(The proof is given in the Appendix)}.
+We designate this as {\it cruciform two-plane screening (CTP)} in this paper. \changeXS{As $\mathcal{R}^{C}$ is a circle, we assume its center is $\theta_o$, then we rewrite $\vec \theta = \vec \theta_o + \vec q$, $r = \frac{\|\vec y - \vec \theta\|_2}{2}$, the Lagrange function of the optimization problem is  } 
+
+\changeXS{
+\begin{equation}
+\begin{split}
+\min_{\vec{q}} \max_{\eta,\mu,\nu \geq 0} &L(\vec{q},\eta,\mu,\nu) =\min_{\vec{q}}\max_{\eta,\mu,\nu\geq0} - \vec x_p^{T}\vec \theta_o \\
+&- \vec{q}_{u} - \vec{q}_{u+v+1} + \eta( \vec{q}^T\vec{q} - r^2)\\
+&+\mu( (\sum_{l\in I_p}\vec{x}_{l})^T(\vec{q}+\vec\theta_o) -  \lambda\sum_{l\in I_p}c_lt_l)) \\
+&+ \nu( (\sum_{l\in I^{C}_p}\vec{x}_{l})^T(\vec{q}+\vec{\theta_o}) -\lambda\sum_{l\in I^{C}_p}c_lt_l)
+\end{split}
+\end{equation}}
 
 
-\note{(Lagrangian function is around here. )}
+This problem can be solved easily by the Lagrangian method in constant time. Its computational process is detailed in the supplementary material. A.
 
-\subsection{Projection method}
+\subsection{Projection \changeXS{M}ethod}
 
-Before we start to screening with the safe screening region $\mathcal{R}^S$ that is constructed by {\bf Theorem \ref{Thm:AreaScreeningUOT}}, we first have to find a dual variable $\tilde{\vec{\theta}}\in\mathcal{R}^{D}$. Although there exists a relationship between the primal variable and dual variable that $\vec{\theta} = \vec{y} - \mat{X}\vec{t}$, inevitably, we often get $\vec{\theta} \notin \mathcal{R}^{D}$. This requires us to project $\vec{\theta}$ onto $\mathcal{R}^{D}$. Our dynamic screening gets a more accurate screening outcome because the optimization algorithm gradually provides $\vec t^{k} \rightarrow \hat{\vec t}$, and also the dual variable $\vec \theta^{k} \rightarrow \hat{\vec \theta}$. If $\vec{ \tilde{\theta}}\rightarrow \hat{\vec \theta}$, the safe screening region $\mathcal{R}^{C}\cap\mathcal{R}^{D}$ would get smaller and has a better screening outcome. As $\mathcal{R}^{D}$ is a polytope combined with $nm$ hyperplanes, the real projection is solved no matter by Linear programming or Dykstra's projection algorithm. However, its cost is nontrivial. To this issue, in the Standard Lasso problem, the dual constraints in {Eq.(\ref{eq:uotdual})} is $\|\vec{x}_p \hat{\vec{\theta}}\|_1\leq \lambda$, where $\vec{x}_p$ is almost dense and non-structured, one uses a simple shrinking method to obtain a $\tilde{\vec{\theta}} \in \mathcal{R}^{D}$ as 
+Before we start to screening with the safe screening region $\mathcal{R}^S$ that is constructed by {\bf Theorem \ref{Thm:AreaScreeningUOT}}, we first have to find a dual variable $\tilde{\vec{\theta}}\in\mathcal{R}^{D}$. Although there exists a relationship between the primal variable and dual variable that $\vec{\theta} = \vec{y} - \mat{X}\vec{t}$, inevitably, we often get $\vec{\theta} \notin \mathcal{R}^{D}$. This requires us to project $\vec{\theta}$ onto $\mathcal{R}^{D}$. Dynamic screening gets a more accurate screening outcome because the optimization algorithm gradually provides $\vec t^{k} \rightarrow \hat{\vec t}$, and also the dual variable $\vec \theta^{k} \rightarrow \hat{\vec \theta}$. If $\vec{ \tilde{\theta}}\rightarrow \hat{\vec \theta}$, the safe screening region $\mathcal{R}^{C}\cap\mathcal{R}^{D}$ would get smaller and has a better screening outcome. As $\mathcal{R}^{D}$ is a polytope combined with $nm$ hyperplanes, \changeXS{the cost of a real projection is expensive whether you choose Linear programming or Dykstra's projection algorithm.} To this issue, in the Standard Lasso problem, the dual constraints in {Eq.(\ref{eq:uotdual})} is $\|\vec{x}_p \hat{\vec{\theta}}\|_1\leq \lambda$, where $\vec{x}_p$ is almost dense and non-structured, \changeXS{researchers} always uses a simple shrinking method to obtain a $\tilde{\vec{\theta}} \in \mathcal{R}^{D}$ as 
 $
 %\begin{equation*}
 \tilde{\vec{\theta}} = \frac{\vec\theta}{\max(1, \|{\mat{X}^T\vec\theta}/{\lambda}\|_{\infty})}
 %\end{equation*}
-$ {\citep[Theorem 11]{Yamada_NIPS_2021}}. 
+$ { \changeXS{\citep[Proposition 11]{JMLR:v18:16-577}} \citep[Theorem 11]{Yamada_NIPS_2021}}. 
 One straightforward extension of this into the UOT problem could be  
 \begin{equation*}
 \tilde{\vec{\theta}} = \frac{\vec\theta}{\max(1, \|\frac{\mat{X}^T\vec\theta}{\lambda \vec{c}^{T}}\|_{\infty})}, 
@@ -356,24 +365,23 @@ For any $\vec{\theta} = [{\vec{\alpha}}^T,{\vec{\beta}}^T]^T$, we define the pro
 \label{eq:uotproj}
 \end{eqnarray}
 }
-Then, the calculated $\tilde{\vec{\theta}} = [\tilde{\vec{\alpha}}^T,\tilde{\vec{\beta}}^T]^T$ is inside $\mathcal{R}^{D}$.
+Then, the calculated $\tilde{\vec{\theta}} = [\tilde{\vec{\alpha}}^T,\tilde{\vec{\beta}}^T]^T \in \mathcal{R}^{D}$.
 \end{thm}
 The proof is in the supplementary material. Note that this cheap projection method can get good accuracy with $O(knm)$ computational time. 
 
 \begin{figure}[h]
-\begin{center}
+\centering
 \includegraphics[width = \linewidth]{pic/matrix}
-\caption{\changeXS{Shifting Projection on a 4$\times$5 matrix.}}
-\end{center}
+\caption{\changeXS{Example of Shifting Projection on a 4$\times$5 matrix.}}
+\label{Fig:structure}
 \end{figure}
 
 
 
 \begin{figure}[h]
-\begin{center}
+\centering
 \includegraphics[width = \linewidth]{pic/area}
-\caption{Selection of group $A_{IJ}$(red) and $B_{IJ}$(grey)}
-\end{center}
+\caption{\changeXS{Comparision of Dynamic Sasvi's region (green) and the CTP method's region (yellow), the blue part is the $\mathcal{R}^{D}$}}
 \end{figure}
 
 
@@ -413,27 +421,24 @@ The proof is in the supplementary material. Note that this cheap projection meth
  \label{Alg:UOTDynamicScreening}
  \renewcommand{\algorithmicrequire}{\textbf{Input:}}
  \renewcommand{\algorithmicensure}{\textbf{Output:}}
- \REQUIRE $\vec{t}_0,  \vec s \in \mathbb{R}^{nm}, s_{p}=1\ \forall p \in [mn], r$
+ \REQUIRE $\vec{t}_0,  \vec s \in \mathbb{R}^{nm}, s_{p}=1\ \forall p \in [mn], \changeXS{w}$
  \ENSURE $\vec t^{K}$
  %\STATE \text{Choose a solver for the problem.}
  \FOR {$k = 0 \text{ to } K-1$}
- \IF{$k\mod r =0$}
+ \IF{$k\mod \changeXS{w} =0$}
  \STATE $\tilde{\vec{\theta}^{k}} = \operatorname{Projection}(\vec{\theta}^k)$ \hfill Eq.(\ref{eq:uotproj})
  \FOR {$p = 0 \text{ to } mn -1$}
  \STATE $\mathcal{R}^{S} \leftarrow \mathcal{R}_{p}^S{(\tilde{\vec{\theta}^{k}},\vec{t}^k)}$ \hfill Eq.(\ref{Eq:FinalRS})
    \STATE{$\vec s \leftarrow {s_{p} = 0 \text{ if} {\displaystyle \max_{\vec{\theta} \in \mathcal{R}^S} {\vec x_{p}}^T\vec{\theta}^{k} <\lambda c_{p} }}$ \hfill Eq.(\ref{eq:kktineq})}
  \ENDFOR
-  \FOR { $p \in \{p \ |\ s_{p}=0\}$}
- \STATE $\text{Freeze\ }{t}^k_p $
- \ENDFOR
   \ENDIF
-  \STATE $\vec{t}^{k+1} = \operatorname{update}(\vec{t}^k)$ \hfill \text{(Optimization process)}
+  \STATE $\vec{t}^{k+1} = \operatorname{update}(\vec{t}^k,\vec s)$ \hfill \text{(Optimization process)}
  \ENDFOR
   \RETURN $\vec{t}^{K} $
  \end{algorithmic}
  \end{algorithm}
 
-The purpose of screening methods is to remove variable elements that are ignored at the optimization process in the adopted optimization algorithm. For this, we denote $\vec{s} \in \mathbb{R}^{mn}$ as the {\it screening mask vector} for the transport vector $\vec{t}$. Thus, $s_p = 0$ implies that the corresponding $t_p$ should be screened out. We summarize a specific algorithm for $\ell_2$-norm penalized UOT problem to show the entire optimization process as in {\bf Algorithm \ref{Alg:UOTDynamicScreening}}. The $\operatorname{update}(\vec{t})$ operator in the algorithm indicates the updating process for $\vec{t}$ by using an adopted optimizer. $r \in \mathbb{N}$ specifies the period of the screening because the change in screening ratio is not huge if we screen every time. The period $f$ is decided by a user, and the faster converging the optimizer is, the smaller period $r$ is. It should be emphasized that the proposed screening method is {\it independent} of the adopted optimization algorithm. 
+The purpose of screening methods is to remove variable elements that are ignored at the optimization process in the adopted optimization algorithm. For this, we denote $\vec{s} \in \mathbb{R}^{mn}$ as the {\it screening mask vector} for the transport vector $\vec{t}$. Thus, $s_p = 0$ implies that the corresponding $t_p$ should be screened out. We summarize a specific algorithm for $\ell_2$-norm penalized UOT problem to show the entire optimization process as in {\bf Algorithm \ref{Alg:UOTDynamicScreening}}. The $\operatorname{update}(\vec{t},\vec s)$ operator in the algorithm indicates the updating process for $\vec{t}$ by using an adopted optimizer, \changeXS{the optimizer would ignore the variables $t_p$ that has been screened out that $s_p =0$}. $r\changeXS{w} \in \mathbb{N}$ specifies the period of the screening \changeXS{to update the mask $\vec s$, because the change in screening ratio is acturally small if we update $\vec s$ every time}. The period \changeXS{$w$} is decided by a user, and the faster converging the optimizer is, the smaller period $r$ is. It should be emphasized that the proposed screening method is {\it independent} of the adopted optimization algorithm. 
 
 \subsection{Computational Cost Analysis}
 \changeXS{Our proposed method needs to construct different plans for every single primal element $p$, however, thanks to the special structure of the $\mat X$, For every single $t_p$, the data required for maximizing (by Lagrange method in supplementary material) can be summarized as some specific sum, which can be computed together and reuse for other elements have the same $t \mod m $ or $t \mid m$. It helps us to preserve the whole optimization complexity to $O(kmn)$, $k$ is a constant.}

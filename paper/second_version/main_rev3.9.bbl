@@ -168,6 +168,12 @@ Wang, J., Wonka, P., and Ye, J. (2015).
 \newblock Lasso screening rules via dual polytope projection.
 \newblock {\em Journal of Machine Learning Research}, 16:1063--1101.
 
+\bibitem[Xiang et~al., 2017]{7469344}
+Xiang, Z.~J., Wang, Y., and Ramadge, P.~J. (2017).
+\newblock Screening tests for lasso problems.
+\newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  39(5):1008--1027.
+
 \bibitem[Yamada and Yamada, 2021]{Yamada_NIPS_2021}
 Yamada, H. and Yamada, M. (2021).
 \newblock Dynamic sasvi: Strong safe screening for norm-regularized least
