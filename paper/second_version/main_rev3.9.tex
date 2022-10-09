@@ -260,7 +260,7 @@ The strongly concave coefficient $L$ for the dual function $f$ is 1.
 The constraint in Eq.(\ref{eq:uotdual}) specifies a dual variable feasible area, denoted as $\mathcal{R}^{D}$, and the optimal dual solution $\hat{\vec{\theta}} \in \mathcal{R}^{D}$ because of {\bf Theorem \ref{Thm:circle}}.
 
 \changeXS{According to the the KKT condition of the Fenchel-Rockafellar Duality in {\bf Theorem \ref{Thm:FRD}}, there is a connection between the optimal primal and dual solutions $ \hat{\vec{t}}$ and $\hat{\vec{\theta}}$ that:}
-\begin{thm}\changeXS{From the }KKT condition] For the primal optimal solution $\hat{\vec{t}}$ and the dual optimal solution $\hat{\vec{\theta}}$, we have the following relationship:
+\begin{thm}(\changeXS{From the }KKT condition) For the primal optimal solution $\hat{\vec{t}}$ and the dual optimal solution $\hat{\vec{\theta}}$, we have the following relationship:
 \label{Thm:KKT}
  \begin{equation}
 \begin{split}
@@ -381,7 +381,7 @@ The proof is in the supplementary material. Note that this cheap projection meth
 \begin{figure}[h]
 \centering
 \includegraphics[width = \linewidth]{pic/area}
-\caption{\changeXS{Comparision of Dynamic Sasvi's region (green) and the CTP method's region (yellow), the blue part is the $\mathcal{R}^{D}$}}
+\caption{\changeXS{Comparision of Gap region (yellow), Dynamic Sasvi's region (red) and CTP method's region (green), the blue part is the $\mathcal{R}^{D}$}}
 \end{figure}
 
 
@@ -507,14 +507,22 @@ We compared the proposed screening ratio with three different methods, \changeXS
 %\twocolumn[ \makesupplementtitle ]
 
 \section{PROOFS}
+
+\subsection{Proof of Theorem \ref{Thm:KKT}}
+
+\changeXS{From the \citep[Proposition 3]{Yamada_NIPS_2021} we know that:
+ \begin{equation}
+\mat X \vec {\hat{t}} \in \partial h^{*}(-\vec {\hat{\theta}}) \land \vec {\hat t} \in \partial g^{*}(\mat X^{T}\vec {\hat{\theta}})
+\end{equation}
+where $\partial$ is the subgradient, then we know that $\mat X^{T}\vec{\hat{\theta}} \in \partial g({\vec {\hat{t}}}) $, compute and you can get the {\bf Theorem \ref{Thm:KKT}}.}
+
 \subsection{Proof of Theorem \ref{Thm:UOT_ShiftProjection}}
-For any $p \in {0,1,...,nm -1}$ we assume that $p = (I,J)$, then we can compute that:
+For any $p \in {0,1,...,nm -1}$, then we can compute that:
  \begin{equation}
 \begin{split} 
-\vec{x}_p^T\tilde{\vec{\theta}} &= \tilde{\vec{\alpha}}_{I} + \tilde{\vec{\beta}}_v \\
-				    &= {\vec{\alpha}}_{I} + {\vec{\beta}}_v - \max_{0\geq j\geq n} \frac{{\vec{\alpha}}_u +{\vec{\beta}}_j - \lambda \vec{c}_{p}}{2} - \max_{0 \geq i \geq m} \frac{{\vec{\alpha}}_i +{\vec{\beta}}_v - \lambda \vec{c}_{p}}{2}\\
-				    &= \frac{{\vec{\alpha}}_{I} + {\vec{\beta}}_J}{2} - \max_{0\geq j\geq n} \frac{{\vec{\beta}}_j}{2} - \max_{0 \geq i \geq m} \frac{{\vec{\alpha}}_i }{2} + \lambda \vec{c}_{p}\\
-				    &= \frac{1}{2}\vec{x}_p^T{\vec{\theta}} - \max_{0\geq j\geq n} \frac{{\vec{\beta}}_j}{2} - \max_{0 \geq i \geq m} \frac{{\vec{\alpha}}_i }{2} +\lambda \vec{c}_{p} \\
+\vec{x}_p^T\tilde{\vec{\theta}} &= \tilde{\vec{\alpha}}_{u} + \tilde{\vec{\beta}}_v \\
+				    &= {\vec{\alpha}}_{u} + {\vec{\beta}}_v - \max_{0\changeXS{\leq j< n}} \frac{{\vec{\alpha}}_u +{\vec{\beta}}_j - \lambda \vec{c}_{un+j}}{2} - \max_{0 \changeXS{\leq i < m}} \frac{{\vec{\alpha}}_i +{\vec{\beta}}_v - \lambda \vec{c}_{in+v}}{2}\\
+				    &\leq{\vec{\alpha}}_{u} + {\vec{\beta}}_v - \frac{{\vec{\alpha}}_u +{\vec{\beta}}_v - \lambda \vec{c}_{p}}{2} -  \frac{{\vec{\alpha}}_u +{\vec{\beta}}_v - \lambda \vec{c}_{p}}{2}\\
 				    &\leq \lambda \vec{c}_{p} 
  \end{split} 
 \end{equation}
