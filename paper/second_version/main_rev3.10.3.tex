@@ -15,6 +15,7 @@
 \usepackage{graphicx}
 \usepackage{bm}
 \usepackage{dsfont}
+\usepackage{multirow}
 %
 % This option will print headings for the title of your paper and
 % headings for the authors names, plus a copyright note at the end of
@@ -442,7 +443,30 @@ We compared the proposed screening ratio with three different methods, including
 
 \subsection{Speed up Ratio}
 
-\changeXS{We applied the CTP in different UOT optimizers like FISTA, BFGS, Lasso(celer), Multiplicative update, and Regularization path method, and use them to solve the UOT problem between random number figure pairs in the MNIST dataset, we compared the consuming time for different accuracy and showed in the table, Our Screening method can get a good speed up ratio for almost every optimizer, and performs especially good on Multiplicative update algorithms}
+\changeXS{We applied the CTP in different UOT optimizers like FISTA, BFGS, and Coordinate descent method, and use them to solve the UOT problem between random number figure pairs in the MNIST dataset. assuming $\lambda_{\max} = \|\mat X^{T}{\vec y}\|_{\infty} $, we compared the consuming time for $\|\vec t_k - \vec t_{k-1}\|_2 = \epsilon = 10^{-7}$ for Gaussian and  $\|\vec t_k - \vec t_{k-1}\|_2 = \epsilon = 10^{-15}$ for MNIST with different $\lambda$ and showed in the table, we screening every 5000 rounds for FISTA in Gaussian and 10000 in MNIST. the Our Screening method can get a good speed-up ratio for almost every optimizer. A smaller $\lambda$ can help with the speed up ratio.}
+
+
+
+\begin{table}[htbp]        % 使用table浮\UTF{52A8}体，会\UTF{663E}示\UTF{5E26}\UTF{6807}号的表格
+                           % htbp表示表格可在任意位置
+    \centering             % 使表格居中\UTF{5BF9}\UTF{9F50}         % \UTF{8F93}入\UTF{6807}\UTF{9898}%
+    \label{tab:speedup}           % \UTF{8F93}入\UTF{6807}\UTF{7B7E}，引用\UTF{65F6}可用
+    
+\begin{tabular}[h]{ |p{1.5cm}|p{1.5cm}||p{1.8cm}|p{1.8cm}|  }
+
+ \hline
+ Optimizer&${\lambda/ \lambda_{\max}}$&Gaussian& MNIST\\
+ \hline
+ FISTA   &0.1& 1.65    & 2.01\\
+              &0.01&   1.53  & 1.02 \\
+ BFGS   &0.1&   1.02  & ASM\\
+              &0.01&  2.16  & AND   \\
+ \hline
+\end{tabular}
+\caption{Average speedups (time with screening/ time without screening)}
+\end{table}
+
+
 	\begin{figure}[h]
 	\begin{center}	
 	\includegraphics[width = \linewidth]{pic/divide}
