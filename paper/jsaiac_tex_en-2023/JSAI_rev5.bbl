@@ -1,0 +1,80 @@
+\begin{thebibliography}{}
+
+\bibitem[Arjovsky 17]{arjovsky2017wasserstein}
+Arjovsky,~M., Chintala,~S., and Bottou,~L.: {W}asserstein Generative
+  Adversarial Networks, in Precup,~D. and Teh,~Y.~W. eds., {\em Proceedings of
+  the 34th International Conference on Machine Learning}, Vol.~70 of {\em
+  Proceedings of Machine Learning Research}, pp. 214--223, PMLR (2017)
+
+\bibitem[Birgin 14]{doi:10.1137/1.9781611973365}
+Birgin,~E.~G. and Mart{\'\i}nez,~J.~M.: {\em Practical Augmented Lagrangian
+  Methods for Constrained Optimization}, Society for Industrial and Applied
+  Mathematics, Philadelphia, PA (2014)
+
+\bibitem[Caffarelli 10]{Caffarelli_AM_2010}
+Caffarelli,~L.~A. and McCann,~R.~J.: Free boundaries in optimal transport and
+  {M}onge-{A}mp{\`e}re obstacle problems, {\em Annals of Mathematics}, Vol.
+  171, No.~2, pp. 673--730 (2010)
+
+\bibitem[Chapel 21]{Chapel_NeurIPS_2021}
+Chapel,~L., Flamary,~R., Wu,~H., F\'{e}votte,~C., and Gasso,~G.: Unbalanced
+  Optimal Transport through Non-negative Penalized Linear Regression, in {\em
+  NeurIPS} (2021)
+
+\bibitem[Chizat 17]{chizat2017scaling}
+Chizat,~L., Peyr{\'e},~G., Schmitzer,~B., and Vialard,~F.-X.: Scaling
+  Algorithms For Unbalanced Transport Problems, {\em arXiv preprint:
+  arXiv:1607.05816} (2017)
+
+\bibitem[Courty 17]{Courty_PAMI_2017}
+Courty,~N.: Optimal Transport for Domain Adaptation, {\em IEEE Transactions on
+  Pattern Analysis and Machine Intelligence}, Vol.~39, No.~9, pp. 1853--1865
+  (2017)
+
+\bibitem[Cuturi 13]{Cuturi_NIPS_2013}
+Cuturi,~M.: Sinkhorn Distances: Lightspeed Computation of Optimal Transport, in
+  {\em NeurIPS} (2013)
+
+\bibitem[Fang 23]{Fang_AAAI_2023}
+Fang,~Z., Huang,~S.~X., Jianming, and Kasai,~H.: Wasserstein Graph Distance
+  based on {L1}-Approximated Tree Edit Distance between {W}eisfeiler-{L}ehman
+  Subtrees, in {\em AAAI-23} (2023)
+
+\bibitem[Ferradans 13]{ferradans2013regularized}
+Ferradans,~S., Papadakis,~N., Rabin,~J., Peyr{\'e},~G., and Aujol,~J.-F.:
+  Regularized Discrete Optimal Transport, {\em SIAM}, Vol.~7, No.~3, pp.
+  1853--1882 (2013)
+
+\bibitem[Fukunaga 22a]{fukunaga_icassp2022}
+Fukunaga,~T. and Kasai,~H.: Block-coordinate Frank-Wolfe algorithm and
+  convergence analysis for semi-relaxed optimal transport problem, in {\em
+  ICASSP} (2022)
+
+\bibitem[Fukunaga 22b]{fukunaga_srsinkhorn}
+Fukunaga,~T. and Kasai,~H.: On the Convergence of Semi-Relaxed Sinkhorn with
+  Marginal Constraint and OT Distance Gaps, {\em arXiv preprint:
+  arXiv:2205.13846} (2022)
+
+\bibitem[Horie 22]{Horie_EUSIPCO_2022}
+Horie,~M. and Kasai,~H.: Auto-weighted Sequential {W}asserstein Distance and
+  Application to Sequence Matching, in {\em European Signal Processing
+  Conference (EUSIPCO)} (2022)
+
+\bibitem[Huang 21a]{Huang_SigPro_2020}
+Huang,~J., Fang,~Z., and Kasai,~H.: {LCS} graph kernel based on {W}asserstein
+  distance in longest common subsequence metric space, {\em Digital Signal
+  Processing}, Vol. 189, p. 108281 (2021)
+
+\bibitem[Huang 21b]{Huang_ICASSP_2021}
+Huang,~J. and Kasai,~H.: Graph embedding using multi-layer adjacent point
+  merging model, in {\em IEEE International Conference on Acoustics, Speech and
+  Signal Processing (ICASSP)} (2021)
+
+\bibitem[Xie 20]{pmlr-v115-xie20b}
+Xie,~Y., Wang,~X., Wang,~R., and Zha,~H.: A Fast Proximal Point Method for
+  Computing Exact Wasserstein Distance, in Adams,~R.~P. and Gogate,~V. eds.,
+  {\em Proceedings of The 35th Uncertainty in Artificial Intelligence
+  Conference}, Vol. 115 of {\em Proceedings of Machine Learning Research}, pp.
+  433--453, PMLR (2020)
+
+\end{thebibliography}

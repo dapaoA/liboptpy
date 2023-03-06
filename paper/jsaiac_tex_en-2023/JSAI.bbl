@@ -1,0 +1,32 @@
+\begin{thebibliography}{}
+
+\bibitem[a]{arjovsky2017wasserstein} Wasserstein
+  Generative Adversarial Networks, pp. 214--223, PMLR (2017)
+
+\bibitem[b]{doi:10.1137/1.9781611973365}
+Practical Augmented Lagrangian Methods for Constrained Optimization, Society
+  for Industrial and Applied Mathematics, Philadelphia, PA (2014)
+
+\bibitem[c]{Caffarelli_AM_2010}
+Free boundaries in optimal transport and Monge-Amp{\`e}re obstacle
+  problems, year, Annals of Mathematics, pp. 673--730 (2010)
+
+\bibitem[d]{Chapel_NeurIPS_2021} Unbalanced Optimal Transport through Non-negative
+  Penalized Linear Regression, NIPS (2021)
+
+\bibitem[e]{chizat2017scaling}
+Scaling Algorithms For Unbalanced Transport Problems, arXiv preprint:
+  arXiv:1607.05816 (2017)
+
+\bibitem[f]{Courty_PAMI_2017}
+Optimal Transport for Domain Adaptation, year, IEEE Transactions on Pattern
+  Analysis and Machine Intelligence, pp. 1853--1865 (2017)
+
+\bibitem[g]{Cuturi_NIPS_2013}
+year, Sinkhorn Distances: Lightspeed Computation of Optimal Transport, NIPS (2013)
+
+\bibitem[h]{pmlr-v115-xie20b}
+year, year, year, A Fast Proximal Point Method for Computing Exact Wasserstein
+  Distance, pp. 433--453, PMLR (2020)
+
+\end{thebibliography}
