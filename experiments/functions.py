@@ -8,13 +8,12 @@ import scipy.sparse as sp
 
 
 def standard_ot(t, m):
-
-
     return np.dot(t,m)
 
 
-def KL(x,y):
-    return np.dot(x,np.log(x)-np.log(y))-np.sum(x-y)
+def KL(x, y):
+    return np.dot(x, np.log(x)-np.log(y))-np.sum(x-y)
+
 
 def l2(x,y):
     a = x-y
@@ -56,7 +55,11 @@ def grad_semi_kl(t, a, b, m, tau, Hc, dim_a,dim_b):
 
 def UOT_kl(t,a,b,m,tau,Hc,Hr):
 
-    return np.dot(t,m)+ tau * (KL(Hc.dot(t),b)+KL(Hr.dot(t),a))
+    return np.dot(t, m) + tau * (KL(Hc.dot(t), b)+KL(Hr.dot(t), a))
+
+def UOT_kl_2(T, a, b, M,tau):
+
+    return np.einsum('ij,ij', T, M) + tau * (KL(T.sum(axis=0), b)+KL(T.sum(axis=1), a))
 
 def grad_uot_kl(t, a, b,  Hc,Hr, dim_a,dim_b):
 # proximal algorithm don't contain c^T t part!!!!!!!!!!!!!
@@ -71,9 +74,9 @@ def uot_kl_proximal_K_entropy(ctau, x, h, grad):
     return x / np.exp(h*(ctau-grad))
 
 
-def UOT_l2(t,a,b,m,tau,Hc,Hr):
+def UOT_l2(t, a, b, m, tau, Hc, Hr):
 
-    return np.dot(t,m)+ tau/2 * ( l2(Hc.dot(t),b)+(l2(Hr.dot(t),a)))
+    return np.dot(t, m)+ tau/2 * ( l2(Hc.dot(t),b)+(l2(Hr.dot(t),a)))
 
 def grad_uot_l2(t, a, b, HcHc,HrHr,Hcb,Hra, dim_a,dim_b):
     # proximal algorithm don't contain c^T t part!!!!!!!!!!!!!
@@ -138,7 +141,7 @@ def marginal_kl(t,a,b,Hc,Hr):
     return KL(Hc.dot(t),b)+KL(Hr.dot(t),a)
 
 def marginal_kl_a(t,a,Hr):
-    return KL(Hr.dot(t),a)
+    return KL(Hr.dot(t), a)
 
 def marginal_kl_b(t,a,b,Hc,Hr):
     return KL(Hc.dot(t),b)+KL(Hr.dot(t),a)

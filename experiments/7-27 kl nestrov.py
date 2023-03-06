@@ -37,7 +37,7 @@ sns.set_context("talk")
 n = 100
 a,b,M = making_gausses(n)
 epsilon = 0.01
-round = 10000
+round = 1000
 tau = 1000
 
 dim_a = np.shape(a)[0]
@@ -60,11 +60,9 @@ Hcb = Hc.T.dot(b)
 
 
 def func_opt(t, m):
+    return np.dot(t, m)
 
-
-    return np.dot(t,m)
-
-f_opt = lambda x: func_opt(x, m,)
+f_opt = lambda x: func_opt(x, m)
 
 
 
@@ -75,7 +73,7 @@ timee = time.time()
 print("lp time: ",timee-times)
 opt = f_opt(G0.flatten())
 
-f = lambda x: UOT_kl(x,a,b,m,tau,Hc,Hr)
+f = lambda x: UOT_kl(x, a, b, m, tau, Hc,Hr)
 
 
 grad = lambda x: g(x, a, b, Hc,Hr, dim_a,dim_b)
@@ -132,7 +130,7 @@ tol = 1e-6
 
 epsilon = 1e-3 # entropy parameter
   # Unbalanced KL relaxation parameter
-round = 5000
+round = 1000
 
 stopThr = 1e-15
 
@@ -244,7 +242,7 @@ convergence = {
 
 pot_names = {
     'uot-tau': Gs,
-    'mmkl-tau-tau': Gtau,
+    'mmkl-tau': Gtau,
     "mmkl-1-tau-100-2": G1_tau_100_2,
 
     "q000005": G1_q000005,

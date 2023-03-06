@@ -20,6 +20,40 @@ def making_gausses(n):
     M /= M.max()
     return a,b,M
 
+def making_gausses_times(n, times):
+
+    # bin positions
+    x = np.arange(n, dtype=np.float64)
+
+    # Gaussian distributions
+    a_list = []
+    b_list = []
+    M_list = []
+    for i in range(times):
+        np.random.seed(i+1)
+        stdr1 = np.random.rand(1)/2.0 + 0.25
+        stdr2 = np.random.rand(1)/2.0 + 0.25
+        meanr1 = np.random.rand(1)/2.0 + 0.25
+        meanr2 = np.random.rand(1)/2.0 + 0.25
+        a = gauss(n, m=n * stdr1/2.5, s=n * meanr1/2)  # m= mean, s= std
+        b = gauss(n, m=n * stdr2/2.5 * 3, s=n * meanr2)
+        # np.random.seed(i+1)
+        # stdr1 = np.random.rand(1)/2.0 + 0.25
+        # stdr2 = np.random.rand(1)/2.0 + 0.25
+        # meanr1 = np.random.rand(1)/2.0 + 0.25
+        # meanr2 = np.random.rand(1)/2.0 + 0.25
+        # a = gauss(n, m=n / 5, s=n / 5)  # m= mean, s= std
+        # b = gauss(n, m=n / 5 * 3, s=n / 2)
+    # make distributions unbalanced
+
+    # loss matrix
+        M = ot.dist(x.reshape((n, 1)), x.reshape((n, 1)))
+        M /= M.max()
+        a_list.append(a)
+        b_list.append(b)
+        M_list.append(M)
+    return a_list, b_list, M_list
+
 def making_uot_gausses(n,vol_of_a=1,vol_of_b=0.5):
 
     # bin positions
@@ -114,7 +148,7 @@ def making_mnist(a_digit,b_digit,a_num,b_num):
     return a,b,M
 
 
-def making_mnist_uot(a_digit,b_digit,a_num,b_num):
+def making_mnist_uot(a_digit, b_digit, a_num, b_num):
     col = 28
     row = 28
     max_rgb = 255

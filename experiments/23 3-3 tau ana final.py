@@ -3,12 +3,12 @@ import liboptpy.base_optimizer as base
 import liboptpy.constr_solvers as cs
 import liboptpy.step_size as ss
 from liboptpy.data_preparing import making_mnist_with_noise
-from liboptpy.data_preparing import making_gausses
+from liboptpy.data_preparing import making_gausses, making_mnist_uot
 import ot
 import matplotlib.pyplot as plt
 import scipy.sparse as sp
 import time
-from Plot_Function import f_speed_log,f_speed_linear,f_time_log
+from Plot_Function import f_speed_log, f_speed_linear, f_time_log
 from functions import UOT_kl
 from functions import grad_uot_kl as g
 from functions import uot_kl_proximal_K_entropy as pk
@@ -21,7 +21,7 @@ from functions import marginal_l2 as mal2
 
 
 class Sinkhornalg:
-    def __init__(self,log):
+    def __init__(self, log):
         self.log = log
     def get_convergence(self):
         return self.log['primal']
@@ -36,7 +36,7 @@ sns.set_context("talk")
 #from tqdm import tqdm
 
 n = 100
-a,b,M = making_gausses(n)
+a, b, M = making_mnist_uot('1', '4', 1, 1)
 epsilon = 0.01
 tau = 100
 round = 1000
@@ -52,66 +52,45 @@ Hr = sp.csc_matrix((np.ones(dim_a * dim_b), (iHr, jHr)),
 Hc = sp.csc_matrix((np.ones(dim_a * dim_b), (iHc, jHc)),
                    shape=(dim_b, dim_a * dim_b))
 Hra = Hr.T.dot(a)
-Hrb = Hr.T.dot(b)
 HrHr = Hr.T.dot(Hr)
 HcHc = Hc.T.dot(Hc)
-Hca = Hc.T.dot(a)
 Hcb = Hc.T.dot(b)
 
-
 def func_opt(t, m):
+    return np.dot(t, m)
 
-
-    return np.dot(t,m)
-
-f_opt = lambda x: func_opt(x, m,)
-
-
+f_opt = lambda x: func_opt(x, m)
 
 # linear programming
 times = time.time()
-G0 = ot.emd(a, b, M)
+# G0 = ot.emd(a, b, M)
+a = a * 1.1
 timee = time.time()
-print("lp time: ",timee-times)
-opt = f_opt(G0.flatten())
+print("lp time: ", timee-times)
+# opt = f_opt(G0.flatten())
 
-f = lambda x: UOT_kl(x,a,b,m,tau,Hc,Hr)
+f = lambda x: UOT_kl(x, a, b, m, tau, Hc, Hr)
 
-
-grad = lambda x: g(x, a, b, Hc,Hr, dim_a,dim_b)
-
-
-proximalB = lambda x,h,grad: pb(m/tau,x,h,grad)
-
-proximalK = lambda x,h,grad: pk(m/tau,x,h,grad)
-
-
-
-mkl = lambda x: makl(x, a, b,Hc,Hr)
-ml2 = lambda x: mal2(x, a, b,Hc,Hr)
+mkl = lambda x: makl(x, a, b, Hc, Hr)
+ml2 = lambda x: mal2(x, a, b, Hc, Hr)
 def sparsity(t):
-    return np.count_nonzero(t==0)/len(t)
-
+    return np.count_nonzero(t == 0)/len(t)
 spa = lambda x: sparsity(x)
 
-max_iter = 10000
+# n =100 tau =100
+# Best convergence for FISTA is 0.01
+# Best convergence for AMD is 1
+# Best convergence for AMD_E is 1
+# Best convergence for PGD is 0.001
+max_iter = 1000
 tol = 1e-6
 
-
-# for m_name in methods:
-#     print("\t", m_name)
-#     time_s = time.time()
-#     x = methods[m_name].solve(x0=x0, max_iter=max_iter, tol=tol, disp=1)
-#     time_e = time.time()
-#     print(m_name,"time costs: ", time_e - time_s, " s")
-
-
-
-epsilon = 1e-3 # entropy parameter
-  # Unbalanced KL relaxation parameter
+epsilon = 1e-3  # entropy parameter
 
 times = time.time()
-Gs, loguot = ot.unbalanced.sinkhorn_unbalanced(a, b, M, epsilon, tau, numItermax=round, stopThr=tol, verbose=True,log=True)
+Gs, loguot = ot.unbalanced.sinkhorn_unbalanced(a, b, M,
+                                               epsilon, tau, numItermax=round, stopThr=tol,
+                                               verbose=True, log=True)
 timee = time.time()
 print("uot time: ", timee - times)
 
@@ -123,48 +102,44 @@ for i in range(len(loguot['u'])):
 
 
 time_s = time.time()
-Gtau,log_tau = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl',numItermax=round,log=True)
+Gtau, log_tau = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl', numItermax=round, log=True)
 time_e = time.time()
 print("time costs: ", time_e - time_s, " s")
 
 stopThr = 1e-15
 
 time_s = time.time()
-G1_tau_100_2, log1_tau_100_2 = ot.unbalanced.mm_unbalanced_dynamic2(a, b, M,1, tau,100,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
+G1_tau_100_2, log1_tau_100_2 = ot.unbalanced.mm_unbalanced_dynamic2(a, b, M, 1, tau, 100, 2, div='kl',numItermax=round,log=True,stopThr=stopThr)
 time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-time_s = time.time()
-G1_tau_100_2a, log1_tau_100_2a = ot.unbalanced.mm_unbalanced_dynamic2_nestrov(a, b, M,1, tau,100,2, div='kl',numItermax=round,log=True,stopThr=stopThr)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
+print("time costs: ", time_e - time_s, " s")
+
 
 time_s = time.time()
-Gexptau_1000,logexptau_1000 = ot.unbalanced.mm_unbalanced_dynamic3(a, b, M, 1, tau, 1000, div='kl',numItermax=round,log=True,stopThr=stopThr)
+Gexptau_1000, logexptau_1000 = ot.unbalanced.mm_unbalanced_dynamic3(a, b, M, 1, tau, 1000, div='kl',numItermax=round,log=True,stopThr=stopThr)
+time_e = time.time()
+print("time costs: ", time_e - time_s, " s")
+
+
+
+time_s = time.time()
+Gexp2tau_1000, logexp2tau_1000 = ot.unbalanced.mm_unbalanced_dynamic3(a, b, M, 1, 2*tau, 1000, div='kl',numItermax=round,log=True,stopThr=stopThr)
 time_e = time.time()
 print("time costs: ", time_e - time_s, " s")
 
 time_s = time.time()
-Gexptau_1000a,logexptau_1000a = ot.unbalanced.mm_unbalanced_dynamic3_nestrov(a, b, M, 1, tau, 1000, div='kl',numItermax=round,log=True,stopThr=stopThr)
+G_d_tau, log_d_tau = ot.unbalanced.mm_unbalanced_inexact(a, b, M, tau, div='kl', numItermax=round, log=True, verbose=True)
 time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
-
-
-time_s = time.time()
-Gexp05tau_1000a,logexp05tau_1000a = ot.unbalanced.mm_unbalanced_dynamic3_nestrov(a, b, M,1, 0.5*tau,1000, div='kl',numItermax=round,log=True,stopThr=stopThr)
-time_e = time.time()
-print( "time costs: ", time_e - time_s, " s")
+print("time costs: ", time_e - time_s, " s")
 
 
 
 convergence = {
-    'uot-(tau)':loguot,
+    'uot-(tau)': loguot,
     'mmkl-tau': log_tau,
     "mmkl-1-tau-100-2": log1_tau_100_2,
-    "mmkl-1-tau-100-2a": log1_tau_100_2a,
     "exp tau 1000":logexptau_1000,
-    "exp tau 1000a": logexptau_1000a,
-
-    "exp 05tau 1000a": logexp05tau_1000a,
+    "exp 2tau 1000": logexp2tau_1000,
+    'mmkl-d_tau': log_d_tau,
              }
 
 
@@ -172,16 +147,22 @@ pot_names = {
     'uot-tau': Gs,
     'mmkl-tau-tau': Gtau,
     "mmkl-1-tau-100": G1_tau_100_2,
-    "mmkl-1-tau-100a": G1_tau_100_2a,
-    "exp tau 1000":Gexptau_1000,
-    "exp tau 1000a": Gexptau_1000a,
-    "exp 05tau 1000a": Gexp05tau_1000a,
-
-
+    "exp tau 1000": Gexptau_1000,
+    "exp 2tau 1000": Gexp2tau_1000,
+    'mmkl-d_tau-tau': G_d_tau,
              }
-plt.figure(figsize=(13,10))
+plt.figure(figsize=(13, 10))
 
-
+for con in convergence:
+    a1 = np.asarray([f(x.flatten()) for x in convergence[con]['G'][::10]])
+    b1 = np.asarray([mkl(x.flatten()) for x in convergence[con]['G'][::10]])
+    plt.plot(a1/(tau * b1), label=con)
+    plt.xlabel(r'$iterations \times 100$')
+    plt.ylabel(r'$\ln((f(x)+\tau(D(Mx,b)+D(Nx,a)))$')
+    plt.title(r'Convergence ratio for $\tau=1000$')
+plt.legend()
+plt.show()
+plt.figure(figsize=(13, 10))
 
 for con in convergence:
     plt.plot([np.log(f(x.flatten())) for x in convergence[con]['G'][::10]], label=con)
@@ -208,7 +189,7 @@ for con in convergence:
     plt.title(r'Convergence spped for $\tau=1000$')
 plt.legend()
 plt.show()
-plt.figure(figsize=(13,10))
+plt.figure(figsize=(13, 10))
 for con in convergence:
     plt.loglog([mkl(x.flatten()) for x in convergence[con]['G'][::10]], label=con)
     plt.xlabel(r'$iterations \times 100$')
@@ -245,6 +226,9 @@ for con in convergence:
     plt.title(r'sparcity for $\tau=1000$')
 plt.legend()
 plt.show()
+
+
+
 # plt.figure(figsize=(13,10))
 # for con in convergence:
 #     plt.plot([(ml2(x.flatten())) for x in convergence[con]['G'][::100]], label=con)
