@@ -19,8 +19,6 @@ mpl.rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
 #this file is used to disscuss about the convergence of the algorithm according to the tau
 # 关于nestrov加速要不要重启
 #貌似重启了下降快，但是不准，不重启下降慢，但是准。。。
-
-
 class Sinkhornalg:
     def __init__(self,log):
         self.log = log
@@ -28,7 +26,6 @@ class Sinkhornalg:
         return self.log['primal']
     def get_time(self):
         return self.log['time']
-
 
 plt.rc("text", usetex=True)
 fontsize = 24
@@ -140,7 +137,7 @@ f = lambda x, a, b, m: UOT_kl_2(x, a, b, m, tau)
 paint_iteration = 10
 plt.rcParams["font.family"] = "Times New Roman"
 fig, axs = plt.subplots(figsize=(12.0, 9.0), nrows=1, ncols=1)
-colors = colors = ["#3366FF", "#C00000", "#28D82B", "#990099"]
+colors = ["#3366FF", "#C00000", "#28D82B", "#990099"]
 for con, c in zip(convergence, colors):
     error[con] = np.zeros((Ex_times, len(convergence[con][0]['G'][::paint_iteration])))
     for j in range(Ex_times):

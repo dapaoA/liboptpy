@@ -5,6 +5,7 @@ import liboptpy.step_size as ss
 from liboptpy.data_preparing import making_mnist_with_noise
 from liboptpy.data_preparing import making_gausses, making_mnist_uot
 import ot
+import script_mm_unbalanced2 as sot
 import matplotlib.pyplot as plt
 import scipy.sparse as sp
 import time
@@ -88,7 +89,7 @@ tol = 1e-6
 epsilon = 1e-3  # entropy parameter
 
 times = time.time()
-Gs, loguot = ot.unbalanced.sinkhorn_unbalanced(a, b, M,
+Gs, loguot = sot.sinkhorn_unbalanced(a, b, M,
                                                epsilon, tau, numItermax=round, stopThr=tol,
                                                verbose=True, log=True)
 timee = time.time()
@@ -102,32 +103,32 @@ for i in range(len(loguot['u'])):
 
 
 time_s = time.time()
-Gtau, log_tau = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl', numItermax=round, log=True)
+Gtau, log_tau = sot.mm_unbalanced(a, b, M, tau, div='kl', numItermax=round, log=True)
 time_e = time.time()
 print("time costs: ", time_e - time_s, " s")
 
 stopThr = 1e-15
 
 time_s = time.time()
-G1_tau_100_2, log1_tau_100_2 = ot.unbalanced.mm_unbalanced_dynamic2(a, b, M, 1, tau, 100, 2, div='kl',numItermax=round,log=True,stopThr=stopThr)
+G1_tau_100_2, log1_tau_100_2 = sot.mm_unbalanced_dynamic2(a, b, M, 1, tau, 100, 2, div='kl',numItermax=round,log=True,stopThr=stopThr)
 time_e = time.time()
 print("time costs: ", time_e - time_s, " s")
 
 
 time_s = time.time()
-Gexptau_1000, logexptau_1000 = ot.unbalanced.mm_unbalanced_dynamic3(a, b, M, 1, tau, 1000, div='kl',numItermax=round,log=True,stopThr=stopThr)
+Gexptau_1000, logexptau_1000 = sot.mm_unbalanced_dynamic3(a, b, M, 1, tau, 1000, div='kl',numItermax=round,log=True,stopThr=stopThr)
 time_e = time.time()
 print("time costs: ", time_e - time_s, " s")
 
 
 
 time_s = time.time()
-Gexp2tau_1000, logexp2tau_1000 = ot.unbalanced.mm_unbalanced_dynamic3(a, b, M, 1, 2*tau, 1000, div='kl',numItermax=round,log=True,stopThr=stopThr)
+Gexp2tau_1000, logexp2tau_1000 = sot.mm_unbalanced_dynamic3(a, b, M, 1, 2*tau, 1000, div='kl',numItermax=round,log=True,stopThr=stopThr)
 time_e = time.time()
 print("time costs: ", time_e - time_s, " s")
 
 time_s = time.time()
-G_d_tau, log_d_tau = ot.unbalanced.mm_unbalanced_inexact(a, b, M, tau, div='kl', numItermax=round, log=True, verbose=True)
+G_d_tau, log_d_tau = sot.mm_unbalanced_inexact(a, b, M, tau, div='kl', numItermax=round, log=True, verbose=True)
 time_e = time.time()
 print("time costs: ", time_e - time_s, " s")
 

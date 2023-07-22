@@ -5,6 +5,7 @@ import liboptpy.step_size as ss
 from liboptpy.data_preparing import making_mnist_with_noise
 from liboptpy.data_preparing import making_gausses_times
 import ot
+import script_mm_unbalanced2 as sot
 import matplotlib.pyplot as plt
 import scipy.sparse as sp
 import time
@@ -14,6 +15,8 @@ import copy
 #this file is used to disscuss about the convergence of the algorithm according to the tau
 # 关于nestrov加速要不要重启
 #貌似重启了下降快，但是不准，不重启下降慢，但是准。。。
+
+
 class Sinkhornalg:
     def __init__(self,log):
         self.log = log
@@ -21,6 +24,7 @@ class Sinkhornalg:
         return self.log['primal']
     def get_time(self):
         return self.log['time']
+
 
 plt.rc("text", usetex=True)
 fontsize = 24
@@ -67,7 +71,7 @@ for i in range(Ex_times):
     M = M_list[i]
 
     times = time.time()
-    Gs, loguot = ot.unbalanced.sinkhorn_unbalanced(a, b, M, epsilon, tau, numItermax=round, stopThr=tol, verbose=True,log=True)
+    Gs, loguot = sot.sinkhorn_unbalanced(a, b, M, epsilon, tau, numItermax=round, stopThr=tol, verbose=True,log=True)
     timee = time.time()
     print("uot time: ", timee - times)
     nx = ot.backend.get_backend(M, a, b)
@@ -78,13 +82,13 @@ for i in range(Ex_times):
     loguot_list.append(copy.deepcopy(loguot))
 
     time_s = time.time()
-    Gtau, log_tau = ot.unbalanced.mm_unbalanced(a, b, M, tau, div='kl', numItermax=round, log=True)
+    Gtau, log_tau = sot.mm_unbalanced(a, b, M, tau, div='kl', numItermax=round, log=True)
     time_e = time.time()
     print("time costs: ", time_e - time_s, " s")
     log_mm_list.append(copy.deepcopy(log_tau))
 
     time_s = time.time()
-    G1_q000005, log_q000005 = ot.unbalanced.mm_unbalanced_dynamic2_stop(a, b, M, 0.1, tau,
+    G1_q000005, log_q000005 = sot.mm_unbalanced_dynamic2_stop(a, b, M, 0.1, tau,
                                                                         0.0001, 2, div='kl', numItermax=round,
                                                                         log=True, stopThr=stopThr)
     time_e = time.time()
@@ -93,7 +97,7 @@ for i in range(Ex_times):
     log_mm_d_list.append(copy.deepcopy(log_q000005))
 
     time_s = time.time()
-    G1_q000005a2, log_q000005a2 = ot.unbalanced.mm_unbalanced_dynamic2_stop_nestrov2(a, b, M, 0.1, tau,
+    G1_q000005a2, log_q000005a2 = sot.mm_unbalanced_dynamic2_stop_nestrov2(a, b, M, 0.1, tau,
                                                                                      0.0001, 2, div='kl',
                                                                                      numItermax=round, log=True,
                                                                                      stopThr=stopThr)
@@ -137,31 +141,31 @@ for con, c in zip(convergence, colors):
         error[con][j, :] = np.asarray([np.log(f(x, a_list[j], b_list[j], M_list[j]))
                                        for x in convergence[con][j]['G'][::paint_iteration]])
 
-paint_iteration = 10
-plt.rcParams["font.family"] = "Times New Roman"
-fig, axs = plt.subplots(figsize=(8.0, 6.0), nrows=1, ncols=1)
-for con, c in zip(convergence, colors):
-    avg = np.mean(error[con], axis=0)
-    std = np.std(error[con], axis=0)
-    r1 = list(map(lambda x: (x[0] - x[1]), zip(avg, std)))
-    r2 = list(map(lambda x: (x[0] + x[1]), zip(avg, std)))
-    axs.fill_between(range(len(convergence[con][j]['G'][::paint_iteration])), r1, r2, color=c, alpha=0.2)
-    axs.plot(range(len(convergence[con][j]['G'][::paint_iteration])), avg, c=c, label=con)
-axs.set_xlabel(r'$Iterations \times$ %i' %paint_iteration)
-axs.set_ylabel(r'$\ln(UOT(T^{k}))$')
-axs.set_title(r'Convergence speed for $\tau=$ %i.' %tau)
-fig.legend(bbox_to_anchor=(0.82, 0.56), loc=4, ncol=1, facecolor='white', edgecolor='black')
-plt.show()
-# - opt_list[j]
-plt.figure(figsize=(13, 10))
-fig, axs = plt.subplots(figsize=(8.0, 8.5), nrows=2, ncols=2)
-for j, m_name in enumerate(pot_names):
-    x = pot_names[m_name]
-    axs[j//2, j%2].imshow(x, cmap='hot', interpolation='nearest')
-    axs[j//2, j%2].set_xticks([0,50,100])
-    axs[j//2, j%2].set_yticks([0,50,100])
-    axs[j//2, j%2].set_title(m_name)
-fig.savefig('ex4.pdf', format='pdf', bbox_inches='tight')
+# paint_iteration = 10
+# plt.rcParams["font.family"] = "Times New Roman"
+# fig, axs = plt.subplots(figsize=(8.0, 6.0), nrows=1, ncols=1)
+# for con, c in zip(convergence, colors):
+#     avg = np.mean(error[con], axis=0)
+#     std = np.std(error[con], axis=0)
+#     r1 = list(map(lambda x: (x[0] - x[1]), zip(avg, std)))
+#     r2 = list(map(lambda x: (x[0] + x[1]), zip(avg, std)))
+#     axs.fill_between(range(len(convergence[con][j]['G'][::paint_iteration])), r1, r2, color=c, alpha=0.2)
+#     axs.plot(range(len(convergence[con][j]['G'][::paint_iteration])), avg, c=c, label=con)
+# axs.set_xlabel(r'$\text{Iterations} \times$ %i' %paint_iteration)
+# axs.set_ylabel(r'$\ln(UOT(T^{k}))$')
+# axs.set_title(r'Convergence speed for $\tau=$ %i.' %tau)
+# fig.legend(bbox_to_anchor=(0.82, 0.56), loc=4, ncol=1, facecolor='white', edgecolor='black')
+# plt.show()
+# # - opt_list[j]
+# plt.figure(figsize=(13, 10))
+# fig, axs = plt.subplots(figsize=(8.0, 8.5), nrows=2, ncols=2)
+# for j, m_name in enumerate(pot_names):
+#     x = pot_names[m_name]
+#     axs[j//2, j%2].imshow(x, cmap='hot', interpolation='nearest')
+#     axs[j//2, j%2].set_xticks([0,50,100])
+#     axs[j//2, j%2].set_yticks([0,50,100])
+#     axs[j//2, j%2].set_title(m_name)
+# fig.savefig('ex4.pdf', format='pdf', bbox_inches='tight')
 # time_s = time.time()
 # t2, t_list2, g_list2 = ot.regpath.regularization_path(a, b, M, reg=1/tau,
 #                                                       semi_relaxed=True)
@@ -173,6 +177,8 @@ fig.savefig('ex4.pdf', format='pdf', bbox_inches='tight')
 # plt.title("nips")
 # plt.show()
 
+plt.rc("text", usetex=True)
+plt.rcParams['text.latex.preamble'] = r"\usepackage{amsmath}"
 
 paint_iteration = 10
 plt.rcParams["font.family"] = "Times New Roman"
@@ -184,11 +190,10 @@ for con, c in zip(convergence, colors):
     r2 = list(map(lambda x: (x[0] + x[1]), zip(avg, std)))
     axs[0].fill_between(range(len(convergence[con][j]['G'][::paint_iteration])), r1, r2, color=c, alpha=0.2)
     axs[0].plot(range(len(convergence[con][j]['G'][::paint_iteration])), avg, c=c)
-axs[0].set_xlabel(r'$Iterations \times$ %i' %paint_iteration)
+axs[0].set_xlabel(rf'$\text{{Iterations}} \times$ {paint_iteration}')
 axs[0].set_ylim(2.220, 2.24)
 axs[0].set_yticks([2.220, 2.225, 2.230, 2.235, 2.240])
-
-axs[0].set_ylabel(r'$\ln(UOT(T^{k}))$')
+axs[0].set_ylabel(r'$\ln(\textbf{P}_{\text{UOT}}(\textbf{T}^{k}))$')
 axs[0].set_xlim(0, 250)
 for con, c in zip(convergence, colors):
     avg = np.mean(error[con], axis=0)
@@ -197,7 +202,7 @@ for con, c in zip(convergence, colors):
     r2 = list(map(lambda x: (x[0] + x[1]), zip(avg, std)))
     axs[1].fill_between(range(len(convergence[con][j]['G'][::paint_iteration])), r1, r2, color=c, alpha=0.2)
     axs[1].plot(range(len(convergence[con][j]['G'][::paint_iteration])), avg, c=c, label=con)
-axs[1].set_xlabel(r'$Iterations \times$ %i' %paint_iteration)
+axs[0].set_xlabel(rf'$\text{{Iterations}} \times$ {paint_iteration}')
 axs[1].set_xlim(0, 100)
 fig.legend(bbox_to_anchor=(0.90, 0.56), loc=4, ncol=1, facecolor='white', edgecolor='black')
 fig.savefig('ex3.pdf', format='pdf', bbox_inches='tight')

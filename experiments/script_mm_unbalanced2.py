@@ -10,8 +10,8 @@ Regularized Unbalanced OT solvers
 from __future__ import division
 import warnings
 
-from .backend import get_backend
-from .utils import list_to_array
+from ot.backend import get_backend
+from ot.utils import list_to_array
 import math
 import time
 import copy
@@ -543,9 +543,8 @@ def sinkhorn_knopp_unbalanced(a, b, M, reg, reg_m, numItermax=1000,
             log['time'].append(timeacc)
             if verbose:
                 if i % 50 == 0:
-                    print(
-                        '{:5s}|{:12s}'.format('It.', 'Err') + '\n' + '-' * 19)
-                print('{:5d}|{:8e}|'.format(i, err))
+                    print('{:5d}|{:8e}|'.format(i, err))
+                # print('{:5d}|{:8e}|'.format(i, err))
         if err < stopThr:
             break
 
@@ -3706,7 +3705,7 @@ def mm_unbalanced_dynamic2_stop_nestrov2(a, b, M, sreg_m,ereg_m,Q_para, mult,div
             v = nx.sqrt(b / (nx.sum(G, 0) + 1e-16))
             G = G * K * u[:, None] * v[None, :]
             t_knew = (1 + math.sqrt(1 + 4 * tk ** 2)) / 2
-            G  = G + ((tk - 1) / t_knew) * (G - Gprev)
+            G = G + ((tk - 1) / t_knew) * (G - Gprev)
             tk = (1 + math.sqrt(1 + 4 * tk ** 2)) / 2
         elif div == 'l2':
             Gd = nx.sum(G, 0, keepdims=True) + nx.sum(G, 1, keepdims=True) + 1e-16
