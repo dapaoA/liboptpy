@@ -182,7 +182,7 @@ plt.rcParams['text.latex.preamble'] = r"\usepackage{amsmath}"
 
 paint_iteration = 10
 plt.rcParams["font.family"] = "Times New Roman"
-fig, axs = plt.subplots(figsize=(8.0, 6.0), nrows=1, ncols=2)
+fig, axs = plt.subplots(figsize=(12.0, 7.0), nrows=1, ncols=2)
 for con, c in zip(convergence, colors):
     avg = np.mean(error[con], axis=0)
     std = np.std(error[con], axis=0)
