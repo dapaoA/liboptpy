@@ -99,6 +99,29 @@ Y.~Xie, X.~Wang, R.~Wang, and H.~Zha, ``A fast proximal point method for
   [Online]. Available: \url{https://proceedings.mlr.press/v115/xie20b.html}
 \BIBentrySTDinterwordspacing
 
+\bibitem{doi:10.1137/1027074}
+\BIBentryALTinterwordspacing
+C.~Blair, ``Problem complexity and method efficiency in optimization (a. s.
+  nemirovsky and d. b. yudin),'' \emph{SIAM Review}, vol.~27, no.~2, pp.
+  264--265, 1985. [Online]. Available: \url{https://doi.org/10.1137/1027074}
+\BIBentrySTDinterwordspacing
+
+\bibitem{BECK2003167}
+\BIBentryALTinterwordspacing
+A.~Beck and M.~Teboulle, ``Mirror descent and nonlinear projected subgradient
+  methods for convex optimization,'' \emph{Operations Research Letters},
+  vol.~31, no.~3, pp. 167--175, 2003. [Online]. Available:
+  \url{https://www.sciencedirect.com/science/article/pii/S0167637702002316}
+\BIBentrySTDinterwordspacing
+
+\bibitem{DBLP:journals/coap/HanzelyRX21}
+\BIBentryALTinterwordspacing
+F.~Hanzely, P.~Richt{\'{a}}rik, and L.~Xiao, ``Accelerated bregman proximal
+  gradient methods for relatively smooth convex optimization,'' \emph{Comput.
+  Optim. Appl.}, vol.~79, no.~2, pp. 405--440, 2021. [Online]. Available:
+  \url{https://doi.org/10.1007/s10589-021-00273-8}
+\BIBentrySTDinterwordspacing
+
 \bibitem{bauschke2017descent}
 H.~H. Bauschke, J.~Bolte, and M.~Teboulle, ``A descent lemma beyond lipschitz
   gradient continuity: first-order methods revisited and applications,''
@@ -112,6 +135,17 @@ H.~Lu, R.~M. Freund, and Y.~Nesterov, ``Relatively smooth convex optimization
   Optimization}, vol.~28, no.~1, pp. 333--354, 2018. [Online]. Available:
   \url{https://doi.org/10.1137/16M1099546}
 \BIBentrySTDinterwordspacing
+
+\bibitem{349995}
+J.~Joines and C.~Houck, ``On the use of non-stationary penalty functions to
+  solve nonlinear constrained optimization problems with ga's,'' in
+  \emph{Proceedings of the First IEEE Conference on Evolutionary Computation.
+  IEEE World Congress on Computational Intelligence}, 1994, pp. 579--584 vol.2.
+
+\bibitem{adaptive_p}
+D.~Coit, A.~Smith, and D.~Tate, ``Adaptive penalty methods for genetic
+  optimization of constrained combinatorial problems,'' \emph{INFORMS Journal
+  on Computing}, vol.~8, 06 1998.
 
 \bibitem{doi:10.1137/1.9781611973365}
 \BIBentryALTinterwordspacing

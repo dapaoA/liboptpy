@@ -27,14 +27,8 @@ N.~Courty, ``Optimal transport for domain adaptation,'' \emph{IEEE Transactions
   1853--1865, 2017.
 
 \bibitem{arjovsky2017wasserstein}
-\BIBentryALTinterwordspacing
 M.~Arjovsky, S.~Chintala, and L.~Bottou, ``{W}asserstein generative adversarial
-  networks,'' in \emph{Proceedings of the 34th International Conference on
-  Machine Learning}, ser. Proceedings of Machine Learning Research, D.~Precup
-  and Y.~W. Teh, Eds., vol.~70.\hskip 1em plus 0.5em minus 0.4em\relax PMLR,
-  06--11 Aug 2017, pp. 214--223. [Online]. Available:
-  \url{https://proceedings.mlr.press/v70/arjovsky17a.html}
-\BIBentrySTDinterwordspacing
+  networks,'' in \emph{ICML}, 2017.
 
 \bibitem{Huang_SigPro_2020}
 J.~Huang, Z.~Fang, and H.~Kasai, ``{LCS} graph kernel based on {W}asserstein
@@ -43,8 +37,7 @@ J.~Huang, Z.~Fang, and H.~Kasai, ``{LCS} graph kernel based on {W}asserstein
 
 \bibitem{Huang_ICASSP_2021}
 J.~Huang and H.~Kasai, ``Graph embedding using multi-layer adjacent point
-  merging model,'' in \emph{IEEE International Conference on Acoustics, Speech
-  and Signal Processing (ICASSP)}, 2021.
+  merging model,'' in \emph{ICASSP}, 2021.
 
 \bibitem{Fang_AAAI_2023}
 Z.~Fang, S.~X. Huang, Jianming, and H.~Kasai, ``Wasserstein graph distance
@@ -53,8 +46,7 @@ Z.~Fang, S.~X. Huang, Jianming, and H.~Kasai, ``Wasserstein graph distance
 
 \bibitem{Horie_EUSIPCO_2022}
 M.~Horie and H.~Kasai, ``Auto-weighted sequential {W}asserstein distance and
-  application to sequence matching,'' in \emph{European Signal Processing
-  Conference (EUSIPCO)}, 2022.
+  application to sequence matching,'' in \emph{EUSIPCO}, 2022.
 
 \bibitem{Cuturi_NIPS_2013}
 M.~Cuturi, ``Sinkhorn distances: Lightspeed computation of optimal transport,''
@@ -66,7 +58,7 @@ S.~Ferradans, N.~Papadakis, J.~Rabin, G.~Peyr{\'e}, and J.-F. Aujol,
   1853--1882, 2013.
 
 \bibitem{fukunaga_icassp2022}
-T.~Fukunaga and H.~Kasai, ``Block-coordinate frank-wolfe algorithm and
+T.~Fukunaga and H.~Kasai, ``Block-coordinate {F}rank-{W}olfe algorithm and
   convergence analysis for semi-relaxed optimal transport problem,'' in
   \emph{ICASSP}, 2022.
 
@@ -90,36 +82,44 @@ L.~Chapel, R.~Flamary, H.~Wu, C.~F\'{e}votte, and G.~Gasso, ``Unbalanced
   \emph{NeurIPS}, 2021.
 
 \bibitem{pmlr-v115-xie20b}
-\BIBentryALTinterwordspacing
 Y.~Xie, X.~Wang, R.~Wang, and H.~Zha, ``A fast proximal point method for
-  computing exact wasserstein distance,'' in \emph{Proceedings of The 35th
-  Uncertainty in Artificial Intelligence Conference}, ser. Proceedings of
-  Machine Learning Research, R.~P. Adams and V.~Gogate, Eds., vol. 115.\hskip
-  1em plus 0.5em minus 0.4em\relax PMLR, 22--25 Jul 2020, pp. 433--453.
-  [Online]. Available: \url{https://proceedings.mlr.press/v115/xie20b.html}
-\BIBentrySTDinterwordspacing
+  computing exact {W}asserstein distance,'' in \emph{UAI}, 2020.
+
+\bibitem{BECK2003167}
+A.~Beck and M.~Teboulle, ``Mirror descent and nonlinear projected subgradient
+  methods for convex optimization,'' \emph{Operations Research Letters},
+  vol.~31, no.~3, pp. 167--175, 2003.
+
+\bibitem{DBLP:journals/coap/HanzelyRX21}
+F.~Hanzely, P.~Richt{\'{a}}rik, and L.~Xiao, ``Accelerated {B}regman proximal
+  gradient methods for relatively smooth convex optimization,''
+  \emph{Computational Optimization and Applications}, vol.~79, no.~2, pp.
+  405--440, 2021.
 
 \bibitem{bauschke2017descent}
-H.~H. Bauschke, J.~Bolte, and M.~Teboulle, ``A descent lemma beyond lipschitz
+H.~H. Bauschke, J.~Bolte, and M.~Teboulle, ``A descent lemma beyond {L}ipschitz
   gradient continuity: first-order methods revisited and applications,''
   \emph{Mathematics of Operations Research}, vol.~42, no.~2, pp. 330--348,
   2017.
 
 \bibitem{doi:10.1137/16M1099546}
-\BIBentryALTinterwordspacing
 H.~Lu, R.~M. Freund, and Y.~Nesterov, ``Relatively smooth convex optimization
   by first-order methods, and applications,'' \emph{SIAM Journal on
-  Optimization}, vol.~28, no.~1, pp. 333--354, 2018. [Online]. Available:
-  \url{https://doi.org/10.1137/16M1099546}
-\BIBentrySTDinterwordspacing
+  Optimization}, vol.~28, no.~1, pp. 333--354, 2018.
+
+\bibitem{349995}
+J.~Joines and C.~Houck, ``On the use of non-stationary penalty functions to
+  solve nonlinear constrained optimization problems with {GA}'s,'' in
+  \emph{CEC}, 1994.
+
+\bibitem{adaptive_p}
+D.~Coit, A.~Smith, and D.~Tate, ``Adaptive penalty methods for genetic
+  optimization of constrained combinatorial problems,'' \emph{INFORMS Journal
+  on Computing}, vol.~8, 06 1998.
 
 \bibitem{doi:10.1137/1.9781611973365}
-\BIBentryALTinterwordspacing
 E.~G. Birgin and J.~M. Mart{\'\i}nez, \emph{Practical Augmented Lagrangian
   Methods for Constrained Optimization}.\hskip 1em plus 0.5em minus 0.4em\relax
-  Philadelphia, PA: Society for Industrial and Applied Mathematics, 2014.
-  [Online]. Available:
-  \url{https://epubs.siam.org/doi/abs/10.1137/1.9781611973365}
-\BIBentrySTDinterwordspacing
+  Society for Industrial and Applied Mathematics, 2014.
 
 \end{thebibliography}

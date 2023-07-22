@@ -1,7 +1,7 @@
 %% This BibTeX bibliography file was created using BibDesk.
 %% https://bibdesk.sourceforge.io/
 
-%% Created for Hiroyuki Kasai at 2023-03-03 08:58:48 +0900 
+%% Created for Hiroyuki KASAI at 2023-03-07 18:31:42 +0900 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
@@ -29,9 +29,9 @@
 
 @inproceedings{Huang_ICASSP_2021,
 	author = {Huang, J. and Kasai, H.},
-	booktitle = {IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+	booktitle = {ICASSP},
 	date-added = {2023-03-03 08:53:36 +0900},
-	date-modified = {2023-03-03 08:53:36 +0900},
+	date-modified = {2023-03-07 18:26:10 +0900},
 	title = {Graph embedding using multi-layer adjacent point merging model},
 	year = {2021}}
 
@@ -47,9 +47,9 @@
 
 @conference{Horie_EUSIPCO_2022,
 	author = {Horie, M. and Kasai, H.},
-	booktitle = {European Signal Processing Conference (EUSIPCO)},
+	booktitle = {EUSIPCO},
 	date-added = {2023-03-03 08:53:19 +0900},
-	date-modified = {2023-03-03 08:53:19 +0900},
+	date-modified = {2023-03-07 18:26:38 +0900},
 	title = {Auto-weighted Sequential {W}asserstein Distance and Application to Sequence Matching},
 	year = {2022}}
 
@@ -73,8 +73,8 @@
 	author = {Takumi Fukunaga and Hiroyuki Kasai},
 	booktitle = {ICASSP},
 	date-added = {2023-03-03 08:47:14 +0900},
-	date-modified = {2023-03-03 08:51:14 +0900},
-	title = {Block-coordinate Frank-Wolfe algorithm and convergence analysis for semi-relaxed optimal transport problem},
+	date-modified = {2023-03-07 18:31:39 +0900},
+	title = {Block-coordinate {F}rank-{W}olfe algorithm and convergence analysis for semi-relaxed optimal transport problem},
 	year = {2022}}
 
 @article{10.5555/3546258.3546494,
@@ -125,12 +125,11 @@
 @article{bauschke2017descent,
 	author = {Bauschke, Heinz H and Bolte, J{\'e}r{\^o}me and Teboulle, Marc},
 	date-added = {2022-10-21 19:27:55 +0900},
-	date-modified = {2022-10-21 19:27:55 +0900},
+	date-modified = {2023-03-07 18:30:48 +0900},
 	journal = {Mathematics of Operations Research},
 	number = {2},
 	pages = {330--348},
-	publisher = {Informs},
-	title = {A descent lemma beyond Lipschitz gradient continuity: first-order methods revisited and applications},
+	title = {A descent lemma beyond {L}ipschitz gradient continuity: first-order methods revisited and applications},
 	volume = {42},
 	year = {2017}}
 
@@ -420,15 +419,11 @@ Understanding the molecular programs that guide differentiation during developme
 @inproceedings{arjovsky2017wasserstein,
 	abstract = {We introduce a new algorithm named WGAN, an alternative to traditional GAN training. In this new model, we show that we can improve the stability of learning, get rid of problems like mode collapse, and provide meaningful learning curves useful for debugging and hyperparameter searches. Furthermore, we show that the corresponding optimization problem is sound, and provide extensive theoretical work highlighting the deep connections to different distances between distributions.},
 	author = {Martin Arjovsky and Soumith Chintala and L{\'e}on Bottou},
-	booktitle = {Proceedings of the 34th International Conference on Machine Learning},
-	editor = {Precup, Doina and Teh, Yee Whye},
-	month = {06--11 Aug},
-	pages = {214--223},
-	publisher = {PMLR},
-	series = {Proceedings of Machine Learning Research},
+	booktitle = {ICML},
+	date-modified = {2023-03-07 18:21:50 +0900},
 	title = {{W}asserstein Generative Adversarial Networks},
-	volume = {70},
-	year = {2017},}
+	year = {2017},
+	bdsk-url-1 = {https://proceedings.mlr.press/v70/arjovsky17a.html}}
 
 @inproceedings{Chen_ICLR_2019,
 	abstract = {Sequence-to-sequence models are commonly trained via maximum likelihood estimation (MLE). However, standard MLE training considers a word-level objective, predicting the next word given the previous ground-truth partial sentence. This procedure focuses on modeling local syntactic patterns, and may fail to capture long-range semantic structure. We present a novel solution to alleviate these issues. Our approach imposes global sequence-level guidance via new supervision based on optimal transport, enabling the overall characterization and preservation of semantic features. We further show that this method can be understood as a Wasserstein gradient flow trying to match our model to the ground truth sequence distribution. Extensive experiments are conducted to validate the utility of the proposed approach, showing consistent improvements over a wide variety of NLP tasks, including machine translation, abstractive text summarization, and image captioning.},
@@ -522,8 +517,7 @@ Understanding the molecular programs that guide differentiation during developme
 
 @article{doi:10.1137/16M1099546,
 	author = {Lu, Haihao and Freund, Robert M. and Nesterov, Yurii},
-	doi = {10.1137/16M1099546},
-	eprint = {https://doi.org/10.1137/16M1099546},
+	date-modified = {2023-03-07 18:24:32 +0900},
 	journal = {SIAM Journal on Optimization},
 	number = {1},
 	pages = {333-354},
@@ -616,24 +610,15 @@ Understanding the molecular programs that guide differentiation during developme
 @inproceedings{pmlr-v115-xie20b,
 	abstract = {Wasserstein distance plays increasingly important roles in machine learning, stochastic programming and image processing. Major efforts have been under way to address its high computational complexity, some leading to approximate or regularized variations such as Sinkhorn distance. However, as we will demonstrate, regularized variations with large regularization parameter will degradate the performance in several important machine learning applications, and small regularization parameter will fail due to numerical stability issues with existing algorithms. We address this challenge by developing an Inexact Proximal point method for exact Optimal Transport problem (IPOT) with the proximal operator approximately evaluated at each iteration using projections to the probability simplex. The algorithm (a) converges to exact Wasserstein distance with theoretical guarantee and robust regularization parameter selection, (b) alleviates numerical stability issue, (c) has similar computational complexity to Sinkhorn, and (d) avoids the shrinking problem when applies to generative models. Furthermore, a new algorithm is proposed based on IPOT to obtain sharper Wasserstein barycenter.},
 	author = {Xie, Yujia and Wang, Xiangfeng and Wang, Ruijia and Zha, Hongyuan},
-	booktitle = {Proceedings of The 35th Uncertainty in Artificial Intelligence Conference},
-	editor = {Adams, Ryan P. and Gogate, Vibhav},
-	month = {22--25 Jul},
-	pages = {433--453},
-
-	publisher = {PMLR},
-	series = {Proceedings of Machine Learning Research},
-	title = {A Fast Proximal Point Method for Computing Exact Wasserstein Distance},
-
-	volume = {115},
+	booktitle = {UAI},
+	date-modified = {2023-03-07 18:23:33 +0900},
+	title = {A Fast Proximal Point Method for Computing Exact {W}asserstein Distance},
 	year = {2020},
-}
+	bdsk-url-1 = {https://proceedings.mlr.press/v115/xie20b.html}}
 
 @book{doi:10.1137/1.9781611973365,
-	address = {Philadelphia, PA},
 	author = {Birgin, E. G. and Mart{\'\i}nez, J. M.},
-	doi = {10.1137/1.9781611973365},
-	eprint = {https://epubs.siam.org/doi/pdf/10.1137/1.9781611973365},
+	date-modified = {2023-03-07 18:25:29 +0900},
 	publisher = {Society for Industrial and Applied Mathematics},
 	title = {Practical Augmented Lagrangian Methods for Constrained Optimization},
 	year = {2014},
@@ -656,79 +641,45 @@ Understanding the molecular programs that guide differentiation during developme
 	publisher = {SIAM-Society for Industrial and Applied Mathematics},
 	title = {MM Optimization Algorithms},
 	year = {2016}}
-	
+
 @article{DBLP:journals/coap/HanzelyRX21,
-  author    = {Filip Hanzely and
-               Peter Richt{\'{a}}rik and
-               Lin Xiao},
-  title     = {Accelerated Bregman proximal gradient methods for relatively smooth
-               convex optimization},
-  journal   = {Comput. Optim. Appl.},
-  volume    = {79},
-  number    = {2},
-  pages     = {405--440},
-  year      = {2021},
-  doi       = {10.1007/s10589-021-00273-8},
-  timestamp = {Sun, 02 Oct 2022 15:31:07 +0200},
-  biburl    = {https://dblp.org/rec/journals/coap/HanzelyRX21.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
-}
+	author = {Filip Hanzely and Peter Richt{\'{a}}rik and Lin Xiao},
+	date-modified = {2023-03-07 18:27:56 +0900},
+	journal = {Computational Optimization and Applications},
+	number = {2},
+	pages = {405--440},
+	title = {Accelerated {B}regman proximal gradient methods for relatively smooth convex optimization},
+	volume = {79},
+	year = {2021},
+	bdsk-url-1 = {https://doi.org/10.1007/s10589-021-00273-8}}
+
 @article{BECK2003167,
-title = {Mirror descent and nonlinear projected subgradient methods for convex optimization},
-journal = {Operations Research Letters},
-volume = {31},
-number = {3},
-pages = {167-175},
-year = {2003},
-issn = {0167-6377},
-author = {Amir Beck and Marc Teboulle},
-keywords = {Nonsmooth convex minimization, Projected subgradient methods, Nonlinear projections, Mirror descent algorithms, Relative entropy, Complexity analysis, Global rate of convergence},
-abstract = {The mirror descent algorithm (MDA) was introduced by Nemirovsky and Yudin for solving convex optimization problems. This method exhibits an efficiency estimate that is mildly dependent in the decision variables dimension, and thus suitable for solving very large scale optimization problems. We present a new derivation and analysis of this algorithm. We show that the MDA can be viewed as a nonlinear projected-subgradient type method, derived from using a general distance-like function instead of the usual Euclidean squared distance. Within this interpretation, we derive in a simple way convergence and efficiency estimates. We then propose an Entropic mirror descent algorithm for convex minimization over the unit simplex, with a global efficiency estimate proven to be mildly dependent in the dimension of the problem.}
-}
-@INPROCEEDINGS{349995,
-  author={Joines, J.A. and Houck, C.R.},
-  booktitle={Proceedings of the First IEEE Conference on Evolutionary Computation. IEEE World Congress on Computational Intelligence}, 
-  title={On the use of non-stationary penalty functions to solve nonlinear constrained optimization problems with GA's}, 
-  year={1994},
-  volume={},
-  number={},
-  pages={579-584 vol.2},
-  doi={10.1109/ICEC.1994.349995}}
-  
+	abstract = {The mirror descent algorithm (MDA) was introduced by Nemirovsky and Yudin for solving convex optimization problems. This method exhibits an efficiency estimate that is mildly dependent in the decision variables dimension, and thus suitable for solving very large scale optimization problems. We present a new derivation and analysis of this algorithm. We show that the MDA can be viewed as a nonlinear projected-subgradient type method, derived from using a general distance-like function instead of the usual Euclidean squared distance. Within this interpretation, we derive in a simple way convergence and efficiency estimates. We then propose an Entropic mirror descent algorithm for convex minimization over the unit simplex, with a global efficiency estimate proven to be mildly dependent in the dimension of the problem.},
+	author = {Amir Beck and Marc Teboulle},
+	date-modified = {2023-03-07 18:23:59 +0900},
+	journal = {Operations Research Letters},
+	number = {3},
+	pages = {167-175},
+	title = {Mirror descent and nonlinear projected subgradient methods for convex optimization},
+	volume = {31},
+	year = {2003},
+	bdsk-url-1 = {https://www.sciencedirect.com/science/article/pii/S0167637702002316},
+	bdsk-url-2 = {https://doi.org/10.1016/S0167-6377(02)00231-6}}
+
+@inproceedings{349995,
+	author = {Joines, J.A. and Houck, C.R.},
+	booktitle = {CEC},
+	date-modified = {2023-03-07 18:28:59 +0900},
+	title = {On the use of non-stationary penalty functions to solve nonlinear constrained optimization problems with {GA}'s},
+	year = {1994},
+	bdsk-url-1 = {https://doi.org/10.1109/ICEC.1994.349995}}
+
 @article{adaptive_p,
-author = {Coit, David and Smith, Alice and Tate, David},
-year = {1998},
-month = {06},
-pages = {},
-title = {Adaptive Penalty Methods For Genetic Optimization Of Constrained Combinatorial Problems},
-volume = {8},
-journal = {INFORMS Journal on Computing},
-doi = {10.1287/ijoc.8.2.173}
-}
-
-@article{doi:10.1137/1027074,
-author = {A. S. Nemirovsky and D. B. Yudin},
-title = {Problem Complexity and Method Efficiency in Optimization},
-journal = {SIAM Review},
-volume = {27},
-number = {2},
-pages = {264-265},
-year = {1985},
-doi = {10.1137/1027074},
-
-URL = { 
-    
-        https://doi.org/10.1137/1027074
-    
-    
-
-},
-eprint = { 
-    
-        https://doi.org/10.1137/1027074
-    
-    
-
-}
-
-}
+	author = {Coit, David and Smith, Alice and Tate, David},
+	doi = {10.1287/ijoc.8.2.173},
+	journal = {INFORMS Journal on Computing},
+	month = {06},
+	title = {Adaptive Penalty Methods For Genetic Optimization Of Constrained Combinatorial Problems},
+	volume = {8},
+	year = {1998},
+	bdsk-url-1 = {https://doi.org/10.1287/ijoc.8.2.173}}

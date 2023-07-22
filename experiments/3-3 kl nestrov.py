@@ -11,6 +11,10 @@ import time
 from Plot_Function import f_speed_log,f_speed_linear,f_time_log
 from functions import UOT_kl_2
 import copy
+import matplotlib as mpl
+mpl.rcParams['text.usetex'] = True
+mpl.rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
+
 #this file is used to disscuss about the convergence of the algorithm according to the tau
 # 关于nestrov加速要不要重启
 #貌似重启了下降快，但是不准，不重启下降慢，但是准。。。
@@ -104,8 +108,8 @@ convergence = {
     'Sinkhorn': loguot_list,
     'MM': log_mm_list,
 
-    "MM-IP": log_mm_d_list,
-    "AMM-IP": log_amm_d_list,
+    "DPMM": log_mm_d_list,
+    "DPAMM": log_amm_d_list,
 
              }
 
@@ -113,16 +117,16 @@ error = {
     'Sinkhorn': loguot,
     'MM': log_tau,
 
-    "MM-IP": log_q000005,
-    "AMM-IP": log_q000005a2,
+    "DPMM": log_q000005,
+    "DPAMM": log_q000005a2,
 
              }
 pot_names = {
     'Sinkhorn': Gs,
     'MM': Gtau,
 
-    "MM-IP": G1_q000005,
-    "AMM-IP": G1_q000005a2,
+    "DPMM": G1_q000005,
+    "DPAMM": G1_q000005a2,
              }
 
 f = lambda x, a, b, m: UOT_kl_2(x, a, b, m, tau)
@@ -144,19 +148,22 @@ for con, c in zip(convergence, colors):
     r2 = list(map(lambda x: (x[0] + x[1]), zip(avg, std)))
     axs.fill_between(range(len(convergence[con][j]['G'][::paint_iteration])), r1, r2, color=c, alpha=0.2)
     axs.plot(range(len(convergence[con][j]['G'][::paint_iteration])), avg, c=c, label=con)
-axs.set_xlabel(r'$iterations \times$ %i' %paint_iteration)
+axs.set_xlabel(r'$Iterations \times$ %i' %paint_iteration)
 axs.set_ylabel(r'$\ln(UOT(T^{k}) - OT(T^{*}))$')
-axs.set_title(r'Convergence speed for $\tau=$ %i' %tau)
+axs.set_xlim(0,100)
+axs.set_title(r'Convergence speed for $\tau=$ %i.' %tau)
 fig.legend(bbox_to_anchor=(0.82, 0.56), loc=4, ncol=1, facecolor='white', edgecolor='black')
-plt.show()
+fig.savefig('ex1.pdf', format='pdf', bbox_inches='tight')
 # - opt_list[j]
 plt.figure(figsize=(13, 10))
-fig, axs = plt.subplots(figsize=(8.0, 8.0), nrows=2, ncols=2)
+fig, axs = plt.subplots(figsize=(8.0, 8.5), nrows=2, ncols=2)
 for j, m_name in enumerate(pot_names):
     x = pot_names[m_name]
     axs[j//2, j%2].imshow(x, cmap='hot', interpolation='nearest')
+    axs[j//2, j%2].set_xticks([0,50,100])
+    axs[j//2, j%2].set_yticks([0,50,100])
     axs[j//2, j%2].set_title(m_name)
-plt.show()
+fig.savefig('ex2.pdf', format='pdf', bbox_inches='tight')
 # time_s = time.time()
 # t2, t_list2, g_list2 = ot.regpath.regularization_path(a, b, M, reg=1/tau,
 #                                                       semi_relaxed=True)

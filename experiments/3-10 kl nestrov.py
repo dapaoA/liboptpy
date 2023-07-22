@@ -29,7 +29,7 @@ import seaborn as sns
 sns.set_context("talk")
 #from tqdm import tqdm
 
-Ex_times = 5
+Ex_times = 1
 n = 100
 a_list, b_list, M_list = making_gausses_times(n, Ex_times)
 epsilon = 0.01
@@ -46,7 +46,7 @@ tol = 1e-8
 
 epsilon = 1e-3 # entropy parameter
   # Unbalanced KL relaxation parameter
-round = 2500
+round = 2000
 
 stopThr = 1e-15
 
@@ -84,12 +84,14 @@ for i in range(Ex_times):
     log_mm_list.append(copy.deepcopy(log_tau))
 
     time_s = time.time()
-    G1_q000005, log_q000005 = ot.unbalanced.mm_unbalanced_dynamic2_stop(a, b, M, 0.1, tau,
-                                                                        0.0001, 2, div='kl', numItermax=round,
-                                                                        log=True, stopThr=stopThr)
+    G1_q000005, log_q000005 = ot.unbalanced.sinkhorn_unbalanced(a, b, M, epsilon, tau, numItermax=round, Q_para=7e-1,
+                                                                method='sinkhorn_d', stopThr=tol, verbose=True, log=True)
     time_e = time.time()
     print("time costs: ", time_e - time_s, " s")
     time_s = time.time()
+    log_q000005['G'] = []
+    for i in range(len(log_q000005['u'])):
+         log_q000005['G'].append((log_q000005['u'][i][:, None] * K * log_q000005['v'][i][None, :]))
     log_mm_d_list.append(copy.deepcopy(log_q000005))
 
     time_s = time.time()
